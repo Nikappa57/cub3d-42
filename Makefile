@@ -1,10 +1,10 @@
 NAME 				=	cub3D
 
-INCLUDES			=	-I includes -I $(LIBFT_DIR)/includes/
+INCLUDES			=	-I includes -I $(LIBFT_DIR)/includes/ -I mlx_linux
 
 LIBFT				=	$(LIBFT_DIR)libft.a
 LIBFT_DIR			=	libft/
-LIB_FLAGS			=	-L $(LIBFT_DIR) -lft
+LIB_FLAGS			=	-L $(LIBFT_DIR) -lft Lmlx_linux -lmlx_Linux -L/usr/lib -Imlx_linux -lXext -lX11 -lm -lz
 
 CC					=	gcc
 CFLAGS				=	-Wall -Wextra -Werror
