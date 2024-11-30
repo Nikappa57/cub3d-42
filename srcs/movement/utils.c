@@ -1,25 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/23 12:11:01 by lorenzogaud       #+#    #+#             */
-/*   Updated: 2024/11/30 23:46:07 by lgaudino         ###   ########.fr       */
+/*   Created: 2024/11/30 19:44:21 by lgaudino          #+#    #+#             */
+/*   Updated: 2024/11/30 20:29:50 by lgaudino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3D.h"
 
-
-
-int	main(void)
+void	get_dir_vector(t_dir dir, t_vector *v)
 {
-	t_cub3d	cube;
-
-	init_cube(&cube);
-	set_hook(&cube);
-	show_cube(&cube);
-	return (mlx_loop(cube.mlx.mlx));
+	v->x = 0;
+	v->y = 0;
+	if (dir == UP)
+		v->y = 1;
+	else if (dir == DOWN)
+		v->y = -1;
+	else if (dir == LEFT)
+		v->x = -1;
+	else if (dir == RIGHT)
+		v->x = 1;
 }

@@ -1,25 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/23 12:11:01 by lorenzogaud       #+#    #+#             */
-/*   Updated: 2024/11/30 23:46:07 by lgaudino         ###   ########.fr       */
+/*   Created: 2024/11/28 20:24:01 by lgaudino          #+#    #+#             */
+/*   Updated: 2024/11/28 20:27:14 by lgaudino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cub3D.h"
+# include "cub3D.h"
 
-
-
-int	main(void)
+void	exit_error(t_cub3d *cube, char *message)
 {
-	t_cub3d	cube;
+	ft_putstr_fd("Error:", 2);
+	ft_putstr_fd(message, 2);
+	ft_putchar_fd('\n', 2);
+	clear_exit(cube, 1);
+}
 
-	init_cube(&cube);
-	set_hook(&cube);
-	show_cube(&cube);
-	return (mlx_loop(cube.mlx.mlx));
+void	exit_perror(t_cub3d *cube, char *message)
+{
+	perror(message);
+	clear_exit(cube, 1);
 }

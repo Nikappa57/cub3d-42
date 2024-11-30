@@ -1,19 +1,31 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2024/11/28 17:04:44 by lgaudino          #+#    #+#              #
+#    Updated: 2024/11/30 22:56:26 by lgaudino         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
 NAME 				=	cub3D
 
-INCLUDES			=	-I includes -I $(LIBFT_DIR)/includes/ -I mlx_linux
+INCLUDES			=	-I includes -I $(LIBFT_DIR)/includes/ -I mlx_linux/
 
 LIBFT				=	$(LIBFT_DIR)libft.a
 LIBFT_DIR			=	libft/
-LIB_FLAGS			=	-L $(LIBFT_DIR) -lft Lmlx_linux -lmlx_Linux -L/usr/lib -Imlx_linux -lXext -lX11 -lm -lz
+LIB_FLAGS			=	-L $(LIBFT_DIR) -lft -L mlx_linux -lmlx_Linux -L /usr/lib -lXext -lX11 -lm -lz
 
 CC					=	gcc
-CFLAGS				=	-Wall -Wextra -Werror
+CFLAGS				=	-Wall -Wextra -Werror -g
 RM					=	/bin/rm -f
 NORM				=	norminette
 
 DIR_SRCS			=	srcs
 DIR_OBJS			=	objs
-SUBDIRS				=	main
+SUBDIRS				=	main mlx_utils cube movement utils
 
 SRCS_PATHS			=	$(foreach dir, $(SUBDIRS), $(addprefix $(DIR_SRCS)/, $(dir)))
 OBJS_PATHS			=	$(foreach dir, $(SUBDIRS), $(addprefix $(DIR_OBJS)/, $(dir)))
@@ -44,6 +56,6 @@ fclean:				clean
 re:					fclean all
 
 norm:
-					$(NORM) */*.h */*/*.c
+					$(NORM) includes/*.h srcs/*/*.c
 
 .PHONY:				all clean fclean re norm
