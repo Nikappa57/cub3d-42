@@ -6,7 +6,7 @@
 /*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 19:38:11 by lgaudino          #+#    #+#             */
-/*   Updated: 2024/12/01 00:34:56 by lgaudino         ###   ########.fr       */
+/*   Updated: 2024/12/03 00:07:11 by lgaudino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static int	position(t_cub3d *cube)
 		v_sum(&state->pos, state->pos, mov);
 	else if (state->move_y == DOWN)
 		v_sub(&state->pos, state->pos, mov);
-	v_perp(&mov, mov);
+	v_rotate(&mov, mov, to_rad(90));
 	if (state->move_x == RIGHT)
 		v_sum(&state->pos, state->pos, mov);
 	else if (state->move_x == LEFT)
@@ -45,14 +45,14 @@ static int	rotate(t_state *state)
 {
 	if (state->rot == LEFT_ROT)
 	{
-		v_rotate(&state->dir, state->dir, ROT_VEL);
-		v_rotate(&state->plane, state->plane, ROT_VEL);
+		v_rotate(&state->dir, state->dir, -ROT_VEL);
+		v_rotate(&state->plane, state->plane, -ROT_VEL);
 		return (1);
 	}
 	if (state->rot == RIGHT_ROT)
 	{
-		v_rotate(&state->dir, state->dir, -ROT_VEL);
-		v_rotate(&state->plane, state->plane, -ROT_VEL);
+		v_rotate(&state->dir, state->dir, ROT_VEL);
+		v_rotate(&state->plane, state->plane, ROT_VEL);
 		return (1);
 	}
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 18:27:42 by lgaudino          #+#    #+#             */
-/*   Updated: 2024/11/30 23:58:29 by lgaudino         ###   ########.fr       */
+/*   Updated: 2024/12/03 20:50:44 by lgaudino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,17 +54,21 @@ static int	init_map(t_map *map)
 				map->m[i][j] = 1;
 		}
 	}
+	map->m[3][3] = 1;
+
 	return (0);
 }
 
-static int	init_state(t_state *state, t_map *map)
+static int	init_state(t_state *state)
 {
 	// TODO: dir from parser
 	get_dir_v(&state->dir, UP);
 	// TODO: map pos from parser
-	map->pos = (t_point){5, 5};
-	state->pos.x = map->pos.x;
-	state->pos.y = map->pos.y;
+	state->pos.x = 5;
+	state->pos.y = 5;
+	state->move_x = NONE_DIR;
+	state->move_y = NONE_DIR;
+	state->rot = NONE_ROT;
 	v_perp(&state->plane, state->dir);
 	v_mul(&state->plane, state->plane, tan(FOV / 2));
 	return (0);
@@ -75,8 +79,10 @@ void init_cube(t_cub3d *cube)
 	// PARSER!!!
 	if (init_map(&cube->map) == -1)
 		exit_error(cube, "init_map() failed");
-	if (init_state(&cube->state, &cube->map))
+	if (init_state(&cube->state) == -1)
 		exit_error(cube, "init_state() failed");
 	if (init_mlx(&cube->mlx) == -1)
+		exit_error(cube, "mlx_init() failed");
+	if (init_mlx(&cube->mlx_test) == -1)
 		exit_error(cube, "mlx_init() failed");
 }

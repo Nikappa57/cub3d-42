@@ -6,7 +6,7 @@
 /*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 12:12:50 by lorenzogaud       #+#    #+#             */
-/*   Updated: 2024/12/01 00:33:06 by lgaudino         ###   ########.fr       */
+/*   Updated: 2024/12/03 20:50:32 by lgaudino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@
 # define FOV			to_rad(66)
 # define MOV_VEL		0.01f
 # define ROT_VEL		to_rad(0.5)
+# define INFINITY_VALUE	1e30
 
 /* data structure */
 
@@ -98,7 +99,6 @@ typedef struct s_map
 	int			**m;
 	int			w;
 	int			h;
-	t_point		pos;
 }				t_map;
 
 typedef struct s_state
@@ -111,9 +111,25 @@ typedef struct s_state
 	t_rot		rot;
 }				t_state;
 
+typedef struct s_dda
+{
+	t_vector	ray_dir;
+	t_vector	start_pos;
+	t_point		map_pos;
+	double		delta_dist_x;
+	double		delta_dist_y;
+	double		side_dist_x;
+	double		side_dist_y;
+	int			step_x;
+	int			step_y;
+	int			side;
+	double		distance;
+}	t_dda;
+
 typedef struct s_cub3D
 {
 	t_mlx		mlx;
+	t_mlx		mlx_test;
 	t_map		map;
 	t_state		state;
 }				t_cub3d;

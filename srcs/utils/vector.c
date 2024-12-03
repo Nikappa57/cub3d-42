@@ -6,7 +6,7 @@
 /*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 19:44:21 by lgaudino          #+#    #+#             */
-/*   Updated: 2024/11/30 22:56:57 by lgaudino         ###   ########.fr       */
+/*   Updated: 2024/12/03 00:07:25 by lgaudino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,19 +51,19 @@ void	v_rotate(t_vector *r, t_vector v, double angle)
 // perpendicolar vector
 void	v_perp(t_vector *r, t_vector v)
 {
-	r->x = v.y;
-	r->y = -v.x;
+	r->x = -v.y;
+	r->y = v.x;
 }
 
-// N => (0, 1) E => (1, 0) S => (0, -1) W => (-1, 0)
+// reference frame: screen coordinates
 void	get_dir_v(t_vector *v, t_dir dir)
 {
 	v->x = 0;
 	v->y = 0;
 	if (dir == UP)
-		v->y = 1;
-	else if (dir == DOWN)
 		v->y = -1;
+	else if (dir == DOWN)
+		v->y = 1;
 	else if (dir == LEFT)
 		v->x = -1;
 	else if (dir == RIGHT)

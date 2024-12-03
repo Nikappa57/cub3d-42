@@ -6,7 +6,7 @@
 /*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 19:22:14 by lgaudino          #+#    #+#             */
-/*   Updated: 2024/12/01 00:23:57 by lgaudino         ###   ########.fr       */
+/*   Updated: 2024/12/03 20:59:38 by lgaudino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +41,9 @@ static int	key_release_hook(int keycode, t_cub3d *cube)
 		cube->state.move_x = NONE_DIR;
 	else if ((keycode == XK_d) && (cube->state.move_x == RIGHT))
 		cube->state.move_x = NONE_DIR;
-	else if (keycode == XK_Left)
+	else if ((keycode == XK_Left) && (cube->state.rot == LEFT_ROT))
 		cube->state.rot = NONE_ROT;
-	else if (keycode == XK_Right)
+	else if ((keycode == XK_Right) && (cube->state.rot == RIGHT_ROT))
 		cube->state.rot = NONE_ROT;
 	
 	return (0);
