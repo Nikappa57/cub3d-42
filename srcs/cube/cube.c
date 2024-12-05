@@ -6,7 +6,7 @@
 /*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 19:16:39 by lgaudino          #+#    #+#             */
-/*   Updated: 2024/12/04 15:28:36 by lgaudino         ###   ########.fr       */
+/*   Updated: 2024/12/05 17:16:04 by lgaudino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,14 +44,7 @@ void vector_to_screen(t_vector v, t_point *r, int width, int height, int size)
 		r->y = height - 1;
 }
 
-bool	is_wall(t_map map, int x, int y)
-{
-	return (((x < 0)
-			|| (y < 0)
-			|| (x >= map.w)
-			|| (y >= map.h))
-		|| (map.m[y][x] > 0));
-}
+
 
 
 // only for test
@@ -115,76 +108,10 @@ void	draw_map(t_cub3d *cube)
 	// printf("camera 1 screen: %d %d, camera 2 screen: %d %d\n", camera1_screen.x, camera1_screen.y , camera2_screen.x, camera2_screen.y);
 
 	// DDA
+	t_dda		dda;
 	for (int x = 0; x < WIN_WIDTH; x++)
 	{
-		t_dda		dda;
-
-		v_mul(&dda.ray_dir, cube->state.plane, 2 * x / (double) WIN_WIDTH - 1);
-		v_sum(&dda.ray_dir, dda.ray_dir, cube->state.dir);
-
-		// TEST
-		// normalize ray_dir
-		// double ray_dir_len = sqrt(dda.ray_dir.x * dda.ray_dir.x + dda.ray_dir.y * dda.ray_dir.y);
-		// v_div(&dda.ray_dir, dda.ray_dir, ray_dir_len);
-
-		dda.map_pos.x = (int)cube->state.pos.x;
-		dda.map_pos.y = (int)cube->state.pos.y;
-
-		// delta dist
-		if (dda.ray_dir.x == 0)
-			dda.delta_dist_x = INFINITY_VALUE;
-		else
-			dda.delta_dist_x = fabs(1 / dda.ray_dir.x);
-		if (dda.ray_dir.y == 0)
-			dda.delta_dist_y = INFINITY_VALUE;
-		else
-			dda.delta_dist_y = fabs(1 / dda.ray_dir.y);
-
-		// step and initial side_dist
-		if (dda.ray_dir.x < 0)
-		{
-			dda.step_x = -1;
-			dda.side_dist_x = (cube->state.pos.x - dda.map_pos.x) * dda.delta_dist_x;
-		}
-		else
-		{
-			dda.step_x = 1;
-			dda.side_dist_x = (dda.map_pos.x + 1.0 - cube->state.pos.x) * dda.delta_dist_x;
-		}
-		if (dda.ray_dir.y < 0)
-		{
-			dda.step_y = -1;
-			dda.side_dist_y = (cube->state.pos.y - dda.map_pos.y) * dda.delta_dist_y;
-		}
-		else
-		{
-			dda.step_y = 1;
-			dda.side_dist_y = (dda.map_pos.y + 1.0 - cube->state.pos.y) * dda.delta_dist_y;
-		}
-
-		// DDA
-
-		dda.side = -1;
-		while (!is_wall(cube->map, dda.map_pos.x, dda.map_pos.y))
-		{
-			if (dda.side_dist_x < dda.side_dist_y)
-			{
-				dda.side_dist_x += dda.delta_dist_x;
-				dda.map_pos.x += dda.step_x;
-				dda.side = 0;
-			}
-			else
-			{
-				dda.side_dist_y += dda.delta_dist_y;
-				dda.map_pos.y += dda.step_y;
-				dda.side = 1;
-			}
-		}
-
-		if (dda.side == 0)
-			dda.distance = dda.side_dist_x - dda.delta_dist_x;
-		else if (dda.side == 1)
-			dda.distance = dda.side_dist_y - dda.delta_dist_y;
+		dda_distance(&dda, *cube, x);
 
 		if (dda.side != -1)
 		{
