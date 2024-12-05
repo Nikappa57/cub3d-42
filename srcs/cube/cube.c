@@ -6,7 +6,7 @@
 /*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 19:16:39 by lgaudino          #+#    #+#             */
-/*   Updated: 2024/12/05 18:28:38 by lgaudino         ###   ########.fr       */
+/*   Updated: 2024/12/05 18:42:06 by lgaudino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,49 +129,43 @@ static t_color	get_color(t_dda dda)
 	else if ((dda.side == 0 ) && (dda.ray_dir.x < 0))
 		return (GREEN);
 	else if ((dda.side == 1 ) && (dda.ray_dir.y > 0))
-		return (BLUE);
+		return (ORANGE);
 	else if ((dda.side == 1) && (dda.ray_dir.y < 0))
 		return (YELLOW);
 	else
 		return (BLACK);
 }
 
-static void	draw_wall(t_cub3d *cube, int x)
+/*
+ * 1) floor
+ * 2) wall
+ * 3) ceiling
+ */
+static void	draw_x_window(t_cub3d *cube, int x)
 {
-	t_color	color;
 	int		wall_height;
-	t_point	start;
-	t_point	end;
+	t_point	wall_start;
+	t_point	wall_end;
+	t_point	floor_end;
+	t_point	ceiling_start;
 
-	start.x = x;
-	end.x = x;
+	ceiling_start.x = x;
+	ceiling_start.y = 0;
+	floor_end.x = x;
+	floor_end.y = WIN_HEIGHT - 1;
+	wall_start.x = x;
+	wall_end.x = x;
 	if (cube->dda.side == -1)
 		wall_height = WIN_HEIGHT;
 	else
 		wall_height = (int)(WIN_HEIGHT / cube->dda.distance);
-	start.y = WIN_HEIGHT / 2 - wall_height / 2;
-	if (start.y < 0)
-		start.y = 0;
-	end.y = WIN_HEIGHT / 2 + wall_height / 2;
-	if (end.y >= WIN_HEIGHT)
-		end.y = WIN_HEIGHT - 1;
-	color = get_color(cube->dda);
-	draw_v_line(&cube->mlx.data, start, end, color);
-}
-
-static void	draw_floor_ceiling(t_cub3d *cube, int x)
-{
-	t_point	start;
-	t_point	end;
-
-	start.x = x;
-	end.x = x;
-	start.y = 0;
-	end.y = WIN_HEIGHT / 2;
-	draw_v_line(&cube->mlx.data, start, end, GRAY);	// TODO: from data
-	start.y = WIN_HEIGHT / 2;
-	end.y = WIN_HEIGHT;
-	draw_v_line(&cube->mlx.data, start, end, BLUE);	// TODO: from data
+	wall_start.y = window_bound(WIN_HEIGHT / 2 - wall_height / 2, WIN_HEIGHT);
+	wall_end.y = window_bound(WIN_HEIGHT / 2 + wall_height / 2, WIN_HEIGHT);
+	if (wall_start.y != 0)
+		draw_v_line(&cube->mlx.data, ceiling_start, wall_start, BLUE);
+	draw_v_line(&cube->mlx.data, wall_start, wall_end, get_color(cube->dda));
+	if (wall_end.y != WIN_HEIGHT - 1)
+		draw_v_line(&cube->mlx.data, wall_end, floor_end, GRAY);
 }
 
 int	show_cube(t_cub3d *cube)
@@ -181,9 +175,8 @@ int	show_cube(t_cub3d *cube)
 	x = -1;
 	while (++x < WIN_WIDTH)
 	{
-		draw_floor_ceiling(cube, x);
 		dda_distance(cube, x);
-		draw_wall(cube, x);
+		draw_x_window(cube, x);
 	}
 	draw_map(cube);
 	show_window(&cube->mlx_test);

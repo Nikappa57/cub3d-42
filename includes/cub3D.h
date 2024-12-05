@@ -6,7 +6,7 @@
 /*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 12:12:50 by lorenzogaud       #+#    #+#             */
-/*   Updated: 2024/12/05 18:27:47 by lgaudino         ###   ########.fr       */
+/*   Updated: 2024/12/05 18:40:52 by lgaudino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,7 +162,7 @@ void		draw_v_line(t_mlx_data *img, t_point start, t_point end, t_color color);
 int			show_cube(t_cub3d *cube);
 int			cube_loop(t_cub3d *cube);
 void		dda_distance(t_cub3d *cube, int x);
-
+int			window_bound(int p, int max);
 /* Actions */
 
 int			move(t_cub3d *cube);
