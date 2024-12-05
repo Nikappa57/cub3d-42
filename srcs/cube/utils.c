@@ -6,11 +6,11 @@
 /*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/05 18:39:37 by lgaudino          #+#    #+#             */
-/*   Updated: 2024/12/05 18:40:34 by lgaudino         ###   ########.fr       */
+/*   Updated: 2024/12/05 18:43:31 by lgaudino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "cub3D"
+# include "cub3D.h"
 
 int	window_bound(int p, int max)
 {

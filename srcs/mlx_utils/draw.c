@@ -6,13 +6,13 @@
 /*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 17:04:20 by lgaudino          #+#    #+#             */
-/*   Updated: 2024/12/05 18:30:02 by lgaudino         ###   ########.fr       */
+/*   Updated: 2024/12/05 19:27:21 by lgaudino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3D.h"
 
-void	draw_xy(t_mlx_data *img, int x, int y, t_color color)
+void	draw_xy(t_img *img, int x, int y, t_color color)
 {
 	char	*dst;
 	int		offset;
@@ -22,12 +22,12 @@ void	draw_xy(t_mlx_data *img, int x, int y, t_color color)
 	*(unsigned int *)dst = color;
 }
 
-inline void	draw_point(t_mlx_data *img, t_point point, t_color color)
+inline void	draw_point(t_img *img, t_point point, t_color color)
 {
 	draw_xy(img, point.x, point.y, color);
 }
 
-void	draw_line(t_mlx_data *img, t_point start, t_point end, t_color color)
+void	draw_line(t_img *img, t_point start, t_point end, t_color color)
 {
 	t_point	delta;
 	t_point	sign;
@@ -56,20 +56,20 @@ void	draw_line(t_mlx_data *img, t_point start, t_point end, t_color color)
 	draw_point(img, end, color);
 }
 
-void	draw_v_line(t_mlx_data *img, t_point start, t_point end, t_color color)
+void	draw_v_line(t_img *img, t_point start, t_point end, t_color color)
 {
 	while (start.y <= end.y)
 		draw_xy(img, start.x, start.y++, color);
 }
 
-void	draw_h_line(t_mlx_data *img, t_point start, t_point end, t_color color)
+void	draw_h_line(t_img *img, t_point start, t_point end, t_color color)
 {
 	while (start.x <= end.x)
 		draw_xy(img, start.x++, start.y, color);
 }
 
 
-void	draw_square(t_mlx_data *img, int start_x, int start_y, int size, t_color color)
+void	draw_square(t_img *img, int start_x, int start_y, int size, t_color color)
 {
 	int x;
 	int y;

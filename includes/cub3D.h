@@ -6,7 +6,7 @@
 /*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 12:12:50 by lorenzogaud       #+#    #+#             */
-/*   Updated: 2024/12/05 18:40:52 by lgaudino         ###   ########.fr       */
+/*   Updated: 2024/12/05 19:27:08 by lgaudino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,21 +77,22 @@ typedef struct s_point
 	int		y;
 }			t_point;
 
-
-typedef struct s_mlx_data
+typedef struct s_img
 {
-	void	*img;
-	char	*addr;
-	int		bits_per_pixel;
-	int		line_length;
-	int		endian;
-}			t_mlx_data;
+	void		*img;
+	char		*addr;
+	int			img_width;
+	int			img_height;
+	int			bits_per_pixel;
+	int			line_length;
+	int			endian;
+}	t_img;
 
 typedef struct s_mlx
 {
 	void		*mlx;
 	void		*win;
-	t_mlx_data	data;
+	t_img		data;
 }				t_mlx;
 
 typedef struct s_map
@@ -131,6 +132,9 @@ typedef struct s_cub3D
 	t_mlx		mlx;
 	t_mlx		mlx_test;
 	t_map		map;
+	t_img		texture[4];
+	t_color		floor_color;
+	t_color		ceiling_color;
 	t_state		state;
 	t_dda		dda;
 }				t_cub3d;
@@ -149,13 +153,13 @@ void		exit_perror(t_cub3d *cube, char *message);
 
 /* MLX */
 
-void		draw_xy(t_mlx_data *img, int x, int y, t_color color);
-void		draw_point(t_mlx_data *img, t_point point, t_color color);
-void		draw_square(t_mlx_data *img, int start_x, int start_y, int size, t_color color);
+void		draw_xy(t_img *img, int x, int y, t_color color);
+void		draw_point(t_img *img, t_point point, t_color color);
+void		draw_square(t_img *img, int start_x, int start_y, int size, t_color color);
 int			window_clean(t_mlx *mlx);
 void		show_window(t_mlx *mlx);
-void		draw_h_line(t_mlx_data *img, t_point start, t_point end, t_color color);
-void		draw_v_line(t_mlx_data *img, t_point start, t_point end, t_color color);
+void		draw_h_line(t_img *img, t_point start, t_point end, t_color color);
+void		draw_v_line(t_img *img, t_point start, t_point end, t_color color);
 
 /* CUBE */
 
@@ -163,6 +167,7 @@ int			show_cube(t_cub3d *cube);
 int			cube_loop(t_cub3d *cube);
 void		dda_distance(t_cub3d *cube, int x);
 int			window_bound(int p, int max);
+
 /* Actions */
 
 int			move(t_cub3d *cube);
@@ -180,6 +185,6 @@ void	v_perp(t_vector *r, t_vector v);
 void	get_dir_v(t_vector *r, t_dir dir);
 
 /************ TEST ************/
-void		draw_line(t_mlx_data *img, t_point start, t_point end, t_color color);
+void		draw_line(t_img *img, t_point start, t_point end, t_color color);
 
 #endif

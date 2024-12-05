@@ -6,7 +6,7 @@
 /*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 19:18:10 by lgaudino          #+#    #+#             */
-/*   Updated: 2024/12/03 20:52:51 by lgaudino         ###   ########.fr       */
+/*   Updated: 2024/12/05 19:27:24 by lgaudino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	window_clean(t_mlx *mlx)
 {
-	t_mlx_data	*data;
+	t_img	*data;
 
 	data = &mlx->data;
 	mlx_destroy_image(mlx->mlx, data->img);

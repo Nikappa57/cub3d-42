@@ -6,7 +6,7 @@
 /*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 18:27:42 by lgaudino          #+#    #+#             */
-/*   Updated: 2024/12/05 18:03:50 by lgaudino         ###   ########.fr       */
+/*   Updated: 2024/12/05 19:32:50 by lgaudino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,6 @@
 
 static int	init_mlx(t_mlx *mlx)
 {
-	mlx->mlx = NULL;
-	mlx->win = NULL;
-	mlx->data.img = NULL;
-	mlx->data.addr = NULL;
 	mlx->mlx = mlx_init();
 	if (!mlx->mlx)
 		return (-1);
@@ -74,15 +70,40 @@ static int	init_state(t_state *state)
 	return (0);
 }
 
+static int	init_textures(t_cub3d *cube)
+{
+	int		i;
+	t_img	t;
+
+	i = -1;
+	while (++i < 4)
+	{
+		t.img = mlx_xpm_file_to_image(cube->mlx.mlx, "./texture/wolfenstein/bluestone.xpm",
+			&t.img_width, &t.img_height);
+		if (t.img == NULL)
+			return (-1);
+		t.addr = mlx_get_data_addr(t.img, &t.bits_per_pixel, &t.line_length, &t.endian);
+		if (t.addr == NULL)
+			return (-1);
+		cube->texture[i] = t;
+	}
+	cube->ceiling_color = BLUE2;
+	cube->floor_color = GREEN;
+	return (0);
+}
+
 void init_cube(t_cub3d *cube)
 {
-	// PARSER!!!
+	ft_bzero(cube, sizeof(t_cub3d));
+	// TODO: PARSER!!!
 	if (init_map(&cube->map) == -1)
 		exit_error(cube, "init_map() failed");
 	if (init_state(&cube->state) == -1)
 		exit_error(cube, "init_state() failed");
 	if (init_mlx(&cube->mlx) == -1)
 		exit_error(cube, "mlx_init() failed");
+	if (init_textures(cube) == -1)
+		exit_error(cube, "init_textures() failed");
 	if (init_mlx(&cube->mlx_test) == -1)
 		exit_error(cube, "mlx_init() failed");
 }

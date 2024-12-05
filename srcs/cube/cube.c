@@ -6,7 +6,7 @@
 /*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 19:16:39 by lgaudino          #+#    #+#             */
-/*   Updated: 2024/12/05 18:42:06 by lgaudino         ###   ########.fr       */
+/*   Updated: 2024/12/05 19:30:20 by lgaudino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,6 +135,11 @@ static t_color	get_color(t_dda dda)
 	else
 		return (BLACK);
 }
+
+// static void	draw_wall(t_cub3d *cube, int x)
+// {
+	
+// }
 
 /*
  * 1) floor
