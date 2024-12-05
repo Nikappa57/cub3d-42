@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   dda->c                                              :+:      :+:    :+:   */
+/*   cube->dda.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -32,40 +32,40 @@ static void	dda_delta_dist(t_dda *dda)
  *	Save step for each direction and initial side_dist equal to the
  *	distance from the initial position to the x and y side
  */
-static void	dda_inital_data(t_dda *dda, t_cub3d cube)
+static void	dda_inital_data(t_cub3d *cube)
 {
-	if (dda->ray_dir.x < 0)
+	if (cube->dda.ray_dir.x < 0)
 	{
-		dda->step_x = -1;
-		dda->side_dist_x = (cube.state.pos.x - dda->map_pos.x) * dda->delta_dist_x;
+		cube->dda.step_x = -1;
+		cube->dda.side_dist_x = (cube->state.pos.x - cube->dda.map_pos.x) * cube->dda.delta_dist_x;
 	}
 	else
 	{
-		dda->step_x = 1;
-		dda->side_dist_x = (dda->map_pos.x + 1.0 - cube.state.pos.x) * dda->delta_dist_x;
+		cube->dda.step_x = 1;
+		cube->dda.side_dist_x = (cube->dda.map_pos.x + 1.0 - cube->state.pos.x) * cube->dda.delta_dist_x;
 	}
-	if (dda->ray_dir.y < 0)
+	if (cube->dda.ray_dir.y < 0)
 	{
-		dda->step_y = -1;
-		dda->side_dist_y = (cube.state.pos.y - dda->map_pos.y) * dda->delta_dist_y;
+		cube->dda.step_y = -1;
+		cube->dda.side_dist_y = (cube->state.pos.y - cube->dda.map_pos.y) * cube->dda.delta_dist_y;
 	}
 	else
 	{
-		dda->step_y = 1;
-		dda->side_dist_y = (dda->map_pos.y + 1.0 - cube.state.pos.y) * dda->delta_dist_y;
+		cube->dda.step_y = 1;
+		cube->dda.side_dist_y = (cube->dda.map_pos.y + 1.0 - cube->state.pos.y) * cube->dda.delta_dist_y;
 	}
-	dda->side = -1;
-	dda->distance = 0;
+	cube->dda.side = -1;
+	cube->dda.distance = 0;
 }
 
-static void	dda_data_setup(t_dda *dda, t_cub3d cube, int x)
+static void	dda_data_setup(t_cub3d *cube, int x)
 {
-	v_mul(&dda->ray_dir, cube.state.plane, 2 * x / (double) WIN_WIDTH - 1);
-	v_sum(&dda->ray_dir, dda->ray_dir, cube.state.dir);
-	dda->map_pos.x = (int)cube.state.pos.x;
-	dda->map_pos.y = (int)cube.state.pos.y;
-	dda_delta_dist(dda);
-	dda_inital_data(dda, cube);
+	v_mul(&cube->dda.ray_dir, cube->state.plane, 2 * x / (double) WIN_WIDTH - 1);
+	v_sum(&cube->dda.ray_dir, cube->dda.ray_dir, cube->state.dir);
+	cube->dda.map_pos.x = (int)cube->state.pos.x;
+	cube->dda.map_pos.y = (int)cube->state.pos.y;
+	dda_delta_dist(&cube->dda);
+	dda_inital_data(cube);
 }
 
 static bool	is_wall(t_map map, t_point p)
@@ -87,26 +87,26 @@ static bool	is_wall(t_map map, t_point p)
  *	1) setup the dda info
  *	2) dda loop
  */
-void	dda_distance(t_dda *dda, t_cub3d cube, int x)
+void	dda_distance(t_cub3d *cube, int x)
 {
-	dda_data_setup(dda, cube, x);
-	while (!is_wall(cube.map, dda->map_pos))
+	dda_data_setup(cube, x);
+	while (!is_wall(cube->map, cube->dda.map_pos))
 	{
-		if (dda->side_dist_x < dda->side_dist_y)
+		if (cube->dda.side_dist_x < cube->dda.side_dist_y)
 		{
-			dda->side_dist_x += dda->delta_dist_x;
-			dda->map_pos.x += dda->step_x;
-			dda->side = 0;
+			cube->dda.side_dist_x += cube->dda.delta_dist_x;
+			cube->dda.map_pos.x += cube->dda.step_x;
+			cube->dda.side = 0;
 		}
 		else
 		{
-			dda->side_dist_y += dda->delta_dist_y;
-			dda->map_pos.y += dda->step_y;
-			dda->side = 1;
+			cube->dda.side_dist_y += cube->dda.delta_dist_y;
+			cube->dda.map_pos.y += cube->dda.step_y;
+			cube->dda.side = 1;
 		}
 	}
-	if (dda->side == 0)
-		dda->distance = dda->side_dist_x - dda->delta_dist_x;
-	else if (dda->side == 1)
-		dda->distance = dda->side_dist_y - dda->delta_dist_y;
+	if (cube->dda.side == 0)
+		cube->dda.distance = cube->dda.side_dist_x - cube->dda.delta_dist_x;
+	else if (cube->dda.side == 1)
+		cube->dda.distance = cube->dda.side_dist_y - cube->dda.delta_dist_y;
 }

@@ -6,7 +6,7 @@
 /*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 12:12:50 by lorenzogaud       #+#    #+#             */
-/*   Updated: 2024/12/05 17:14:42 by lgaudino         ###   ########.fr       */
+/*   Updated: 2024/12/05 17:25:22 by lgaudino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,6 +132,7 @@ typedef struct s_cub3D
 	t_mlx		mlx_test;
 	t_map		map;
 	t_state		state;
+	t_dda		dda;
 }				t_cub3d;
 
 /*************** Funtions ***************/
@@ -159,7 +160,7 @@ void		show_window(t_mlx *mlx);
 
 int			show_cube(t_cub3d *cube);
 int			cube_loop(t_cub3d *cube);
-void		dda_distance(t_dda *dda, t_cub3d cube, int x);
+void		dda_distance(t_cub3d *cube, int x);
 
 /* Actions */
 

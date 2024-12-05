@@ -6,7 +6,7 @@
 /*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 19:16:39 by lgaudino          #+#    #+#             */
-/*   Updated: 2024/12/05 17:16:04 by lgaudino         ###   ########.fr       */
+/*   Updated: 2024/12/05 17:26:00 by lgaudino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,9 +44,6 @@ void vector_to_screen(t_vector v, t_point *r, int width, int height, int size)
 		r->y = height - 1;
 }
 
-
-
-
 // only for test
 void	draw_map(t_cub3d *cube)
 {
@@ -58,9 +55,7 @@ void	draw_map(t_cub3d *cube)
 		for (int x = 0; x < cube->map.w; x++)
 		{
 			if (cube->map.m[y][x] == 1)
-			{
 				draw_square(&cube->mlx_test.data, x * block_size, y * block_size, block_size, WHITE);
-			}
 		}
 	}
 	for (int y = 0; y < cube->map.h; y++)
@@ -108,16 +103,15 @@ void	draw_map(t_cub3d *cube)
 	// printf("camera 1 screen: %d %d, camera 2 screen: %d %d\n", camera1_screen.x, camera1_screen.y , camera2_screen.x, camera2_screen.y);
 
 	// DDA
-	t_dda		dda;
 	for (int x = 0; x < WIN_WIDTH; x++)
 	{
-		dda_distance(&dda, *cube, x);
+		dda_distance(cube, x);
 
-		if (dda.side != -1)
+		if (cube->dda.side != -1)
 		{
 			// TEST
 			t_vector hit;
-			v_mul(&hit, dda.ray_dir, dda.distance);
+			v_mul(&hit, cube->dda.ray_dir, cube->dda.distance);
 			v_sum(&hit, hit, cube->state.pos);
 			t_point	hit_screen;
 			vector_to_screen(hit, &hit_screen, WIN_WIDTH, WIN_HEIGHT, block_size);
@@ -126,10 +120,10 @@ void	draw_map(t_cub3d *cube)
 
 		// draw wall
 		int wall_height;
-		if (dda.side == -1)
+		if (cube->dda.side == -1)
 			wall_height = WIN_HEIGHT;
 		else
-			wall_height = (int)(WIN_HEIGHT / dda.distance);
+			wall_height = (int)(WIN_HEIGHT / cube->dda.distance);
 		int start = WIN_HEIGHT / 2 - wall_height / 2;
 		if (start < 0)
 			start = 0;
@@ -138,11 +132,11 @@ void	draw_map(t_cub3d *cube)
 			end = WIN_HEIGHT - 1;
 
 		t_color color;
-		if ((dda.side == 0 ) && (dda.ray_dir.x > 0))
+		if ((cube->dda.side == 0 ) && (cube->dda.ray_dir.x > 0))
 			color = RED;
-		else if ((dda.side == 0 ) && (dda.ray_dir.x < 0))
+		else if ((cube->dda.side == 0 ) && (cube->dda.ray_dir.x < 0))
 			color = GREEN;
-		else if ((dda.side == 1 ) && (dda.ray_dir.y > 0))
+		else if ((cube->dda.side == 1 ) && (cube->dda.ray_dir.y > 0))
 			color = BLUE;
 		else
 			color = YELLOW;
@@ -150,6 +144,14 @@ void	draw_map(t_cub3d *cube)
 		draw_line(&cube->mlx.data, (t_point){x, start}, (t_point){x, end}, color);
 	}
 }
+
+// void	cube_cr(t_cub3d *cube)
+// {
+// 	for (int x = 0; x < WIN_WIDTH; x++)
+// 	{
+		
+// 	}
+// }
 
 int	show_cube(t_cub3d *cube)
 {
