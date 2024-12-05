@@ -6,7 +6,7 @@
 /*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 19:16:39 by lgaudino          #+#    #+#             */
-/*   Updated: 2024/12/03 21:05:01 by lgaudino         ###   ########.fr       */
+/*   Updated: 2024/12/04 15:28:36 by lgaudino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -209,7 +209,18 @@ void	draw_map(t_cub3d *cube)
 		int end = WIN_HEIGHT / 2 + wall_height / 2;
 		if (end >= WIN_HEIGHT)
 			end = WIN_HEIGHT - 1;
-		draw_line(&cube->mlx.data, (t_point){x, start}, (t_point){x, end}, RED);
+
+		t_color color;
+		if ((dda.side == 0 ) && (dda.ray_dir.x > 0))
+			color = RED;
+		else if ((dda.side == 0 ) && (dda.ray_dir.x < 0))
+			color = GREEN;
+		else if ((dda.side == 1 ) && (dda.ray_dir.y > 0))
+			color = BLUE;
+		else
+			color = YELLOW;
+		
+		draw_line(&cube->mlx.data, (t_point){x, start}, (t_point){x, end}, color);
 	}
 }
 
