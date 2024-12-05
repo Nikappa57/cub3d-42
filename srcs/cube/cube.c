@@ -6,7 +6,7 @@
 /*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 19:16:39 by lgaudino          #+#    #+#             */
-/*   Updated: 2024/12/05 17:37:01 by lgaudino         ###   ########.fr       */
+/*   Updated: 2024/12/05 17:52:11 by lgaudino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -184,22 +184,34 @@ static void	draw_wall(t_cub3d *cube, int x)
 	draw_line(&cube->mlx.data, start, end, color);
 }
 
-void	cube_cr(t_cub3d *cube)
+static void	draw_floor_ceiling(t_cub3d *cube, int x)
+{
+	t_point	start;
+	t_point	end;
+
+	start.x = x;
+	end.x = x;
+	start.y = 0;
+	end.y = WIN_HEIGHT / 2;
+	draw_line(&cube->mlx.data, start, end, GRAY);	// TODO: from data
+	start.y = WIN_HEIGHT / 2;
+	end.y = WIN_HEIGHT;
+	draw_line(&cube->mlx.data, start, end, BLUE);	// TODO: from data
+}
+
+int	show_cube(t_cub3d *cube)
 {
 	int	x;
 
 	x = -1;
 	while (++x < WIN_WIDTH)
 	{
+		draw_floor_ceiling(cube, x);
 		dda_distance(cube, x);
 		draw_wall(cube, x);
 	}
-}
-
-int	show_cube(t_cub3d *cube)
-{
-	draw_map(cube);
-	show_window(&cube->mlx_test);
+	// draw_map(cube);
+	// show_window(&cube->mlx_test);
 	show_window(&cube->mlx);
 	return (0);
 }
@@ -208,8 +220,8 @@ int	cube_loop(t_cub3d *cube)
 {
 	if (window_clean(&cube->mlx) == -1)
 		exit_error(cube, "window_clean() failed");
-	if (window_clean(&cube->mlx_test) == -1)
-		exit_error(cube, "window_clean() failed");
+	// if (window_clean(&cube->mlx_test) == -1)
+	// 	exit_error(cube, "window_clean() failed");
 	if (!move(cube))
 		return (0);
 	return (show_cube(cube));
