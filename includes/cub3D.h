@@ -6,7 +6,7 @@
 /*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 12:12:50 by lorenzogaud       #+#    #+#             */
-/*   Updated: 2024/12/05 17:25:22 by lgaudino         ###   ########.fr       */
+/*   Updated: 2024/12/05 18:27:47 by lgaudino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,7 +154,8 @@ void		draw_point(t_mlx_data *img, t_point point, t_color color);
 void		draw_square(t_mlx_data *img, int start_x, int start_y, int size, t_color color);
 int			window_clean(t_mlx *mlx);
 void		show_window(t_mlx *mlx);
-
+void		draw_h_line(t_mlx_data *img, t_point start, t_point end, t_color color);
+void		draw_v_line(t_mlx_data *img, t_point start, t_point end, t_color color);
 
 /* CUBE */
 

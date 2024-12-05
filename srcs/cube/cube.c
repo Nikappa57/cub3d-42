@@ -6,7 +6,7 @@
 /*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 19:16:39 by lgaudino          #+#    #+#             */
-/*   Updated: 2024/12/05 17:52:11 by lgaudino         ###   ########.fr       */
+/*   Updated: 2024/12/05 18:28:38 by lgaudino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,15 +56,17 @@ void	draw_map(t_cub3d *cube)
 		{
 			if (cube->map.m[y][x] == 1)
 				draw_square(&cube->mlx_test.data, x * block_size, y * block_size, block_size, WHITE);
+			else
+				draw_square(&cube->mlx_test.data, x * block_size, y * block_size, block_size, BLACK);
 		}
 	}
 	for (int y = 0; y < cube->map.h; y++)
 	{
-		draw_line(&cube->mlx_test.data, (t_point){0, y * block_size}, (t_point){WIN_WIDTH, y * block_size}, GRAY);
+		draw_h_line(&cube->mlx_test.data, (t_point){0, y * block_size}, (t_point){WIN_WIDTH, y * block_size}, GRAY);
 	}
 	for (int x = 0; x < cube->map.w; x++)
 	{
-		draw_line(&cube->mlx_test.data, (t_point){x * block_size, 0}, (t_point){x * block_size, WIN_HEIGHT}, GRAY);
+		draw_v_line(&cube->mlx_test.data, (t_point){x * block_size, 0}, (t_point){x * block_size, WIN_HEIGHT}, GRAY);
 	}
 
 	// POS
@@ -117,33 +119,6 @@ void	draw_map(t_cub3d *cube)
 			vector_to_screen(hit, &hit_screen, WIN_WIDTH, WIN_HEIGHT, block_size);
 			draw_line(&cube->mlx_test.data, pos, hit_screen, YELLOW);
 		}
-
-		// draw wall
-		int wall_height;
-		if (cube->dda.side == -1)
-			wall_height = WIN_HEIGHT;
-		else
-			wall_height = (int)(WIN_HEIGHT / cube->dda.distance);
-		int start = WIN_HEIGHT / 2 - wall_height / 2;
-		if (start < 0)
-			start = 0;
-		int end = WIN_HEIGHT / 2 + wall_height / 2;
-		if (end >= WIN_HEIGHT)
-			end = WIN_HEIGHT - 1;
-
-		t_color color;
-		if ((cube->dda.side == 0) && (cube->dda.ray_dir.x > 0))
-			color = RED;
-		else if ((cube->dda.side == 0 ) && (cube->dda.ray_dir.x < 0))
-			color = GREEN;
-		else if ((cube->dda.side == 1 ) && (cube->dda.ray_dir.y > 0))
-			color = BLUE;
-		else if ((cube->dda.side == 1) && (cube->dda.ray_dir.y < 0))
-			color = YELLOW;
-		else
-			color = BLACK;
-		
-		draw_line(&cube->mlx.data, (t_point){x, start}, (t_point){x, end}, color);
 	}
 }
 
@@ -181,7 +156,7 @@ static void	draw_wall(t_cub3d *cube, int x)
 	if (end.y >= WIN_HEIGHT)
 		end.y = WIN_HEIGHT - 1;
 	color = get_color(cube->dda);
-	draw_line(&cube->mlx.data, start, end, color);
+	draw_v_line(&cube->mlx.data, start, end, color);
 }
 
 static void	draw_floor_ceiling(t_cub3d *cube, int x)
@@ -193,10 +168,10 @@ static void	draw_floor_ceiling(t_cub3d *cube, int x)
 	end.x = x;
 	start.y = 0;
 	end.y = WIN_HEIGHT / 2;
-	draw_line(&cube->mlx.data, start, end, GRAY);	// TODO: from data
+	draw_v_line(&cube->mlx.data, start, end, GRAY);	// TODO: from data
 	start.y = WIN_HEIGHT / 2;
 	end.y = WIN_HEIGHT;
-	draw_line(&cube->mlx.data, start, end, BLUE);	// TODO: from data
+	draw_v_line(&cube->mlx.data, start, end, BLUE);	// TODO: from data
 }
 
 int	show_cube(t_cub3d *cube)
@@ -210,8 +185,8 @@ int	show_cube(t_cub3d *cube)
 		dda_distance(cube, x);
 		draw_wall(cube, x);
 	}
-	// draw_map(cube);
-	// show_window(&cube->mlx_test);
+	draw_map(cube);
+	show_window(&cube->mlx_test);
 	show_window(&cube->mlx);
 	return (0);
 }

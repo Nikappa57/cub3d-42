@@ -6,7 +6,7 @@
 /*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 17:04:20 by lgaudino          #+#    #+#             */
-/*   Updated: 2024/11/30 18:05:40 by lgaudino         ###   ########.fr       */
+/*   Updated: 2024/12/05 18:26:39 by lgaudino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,21 @@ void	draw_line(t_mlx_data *img, t_point start, t_point end, t_color color)
 			start.y += sign.y;
 		}
 	}
+	draw_point(img, end, color);
 }
+
+void	draw_v_line(t_mlx_data *img, t_point start, t_point end, t_color color)
+{
+	while (start.y <= end.y)
+		draw_xy(img, start.x, start.y++, color);
+}
+
+void	draw_h_line(t_mlx_data *img, t_point start, t_point end, t_color color)
+{
+	while (start.x <= end.x)
+		draw_xy(img, start.x++, start.y, color);
+}
+
 
 void	draw_square(t_mlx_data *img, int start_x, int start_y, int size, t_color color)
 {

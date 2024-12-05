@@ -6,7 +6,7 @@
 /*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 18:27:42 by lgaudino          #+#    #+#             */
-/*   Updated: 2024/12/05 17:39:34 by lgaudino         ###   ########.fr       */
+/*   Updated: 2024/12/05 18:03:50 by lgaudino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,6 @@ void init_cube(t_cub3d *cube)
 		exit_error(cube, "init_state() failed");
 	if (init_mlx(&cube->mlx) == -1)
 		exit_error(cube, "mlx_init() failed");
-	// if (init_mlx(&cube->mlx_test) == -1)
-	// 	exit_error(cube, "mlx_init() failed");
+	if (init_mlx(&cube->mlx_test) == -1)
+		exit_error(cube, "mlx_init() failed");
 }
