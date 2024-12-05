@@ -6,7 +6,7 @@
 /*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 18:27:42 by lgaudino          #+#    #+#             */
-/*   Updated: 2024/12/05 19:32:50 by lgaudino         ###   ########.fr       */
+/*   Updated: 2024/12/05 21:06:43 by lgaudino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,10 +75,17 @@ static int	init_textures(t_cub3d *cube)
 	int		i;
 	t_img	t;
 
+	char *texts[4] = {
+		"./texture/wolfenstein/bluestone.xpm",
+		"./texture/wolfenstein/colorstone.xpm",
+		"./texture/wolfenstein/eagle.xpm",
+		"./texture/wolfenstein/redbrick.xpm",
+	};
+	
 	i = -1;
 	while (++i < 4)
 	{
-		t.img = mlx_xpm_file_to_image(cube->mlx.mlx, "./texture/wolfenstein/bluestone.xpm",
+		t.img = mlx_xpm_file_to_image(cube->mlx.mlx, texts[i],
 			&t.img_width, &t.img_height);
 		if (t.img == NULL)
 			return (-1);

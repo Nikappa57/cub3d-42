@@ -6,20 +6,24 @@
 /*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 17:04:20 by lgaudino          #+#    #+#             */
-/*   Updated: 2024/12/05 19:27:21 by lgaudino         ###   ########.fr       */
+/*   Updated: 2024/12/05 20:21:42 by lgaudino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3D.h"
 
-void	draw_xy(t_img *img, int x, int y, t_color color)
+void	put_pixel(t_img *img, int x, int y, int color)
 {
 	char	*dst;
-	int		offset;
 
-	offset = (y * img->line_length + x * (img->bits_per_pixel / 8));
-	dst = img->addr + offset;
+	dst = img->addr + (y * img->line_length + x * (img->bits_per_pixel / 8));
 	*(unsigned int *)dst = color;
+}
+
+
+void	draw_xy(t_img *img, int x, int y, t_color color)
+{
+	put_pixel(img, x, y, color);
 }
 
 inline void	draw_point(t_img *img, t_point point, t_color color)

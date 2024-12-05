@@ -6,7 +6,7 @@
 /*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 19:16:39 by lgaudino          #+#    #+#             */
-/*   Updated: 2024/12/05 19:30:20 by lgaudino         ###   ########.fr       */
+/*   Updated: 2024/12/05 20:59:20 by lgaudino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,7 @@ void	draw_map(t_cub3d *cube)
 	}
 }
 
-static t_color	get_color(t_dda dda)
+t_color	get_color(t_dda dda)
 {
 	if ((dda.side == 0) && (dda.ray_dir.x > 0))
 		return (RED);
@@ -136,10 +136,83 @@ static t_color	get_color(t_dda dda)
 		return (BLACK);
 }
 
-// static void	draw_wall(t_cub3d *cube, int x)
-// {
-	
-// }
+static t_dir	get_dir(t_vector dir, int side)
+{
+	if (side == 0)
+	{
+		if (dir.x > 0)
+			return (RIGHT);
+		else
+			return (LEFT);
+	}
+	else
+	{
+		if (dir.y > 0)
+			return (DOWN);
+		else
+			return (UP);
+	}
+}
+
+static unsigned int	get_pixel_color(t_img *img, int x, int y)
+{
+	char	*dst;
+
+	dst = img->addr + (y * img->line_length + x * (img->bits_per_pixel / 8));
+	return (*(unsigned int *)dst);
+}
+
+static void	draw_wall(t_cub3d *cube, t_point start, t_point end)
+{
+	t_vector	hit;
+	double		wall_x;
+
+	if (cube->dda.side == -1)
+	{
+		draw_v_line(&cube->mlx.data, start, end, BLACK);
+		return ;
+	}
+	v_mul(&hit, cube->dda.ray_dir, cube->dda.distance);
+	v_sum(&hit, hit, cube->state.pos);
+	if (cube->dda.side == 0)
+	{
+		wall_x = hit.y - floor(hit.y);
+		if (cube->dda.ray_dir.x < 0)
+			wall_x = 1 - wall_x;
+	}
+	else
+	{
+		wall_x = hit.x - floor(hit.x);
+		if (cube->dda.ray_dir.y > 0)
+			wall_x = 1 - wall_x;
+	}
+
+	if (wall_x < 0 || wall_x > 1)
+	{
+		printf("Errore: wall_x fuori dai limiti: %f\n", wall_x);
+		return;
+	}
+
+	t_img texture = cube->texture[get_dir(cube->dda.ray_dir, cube->dda.side)];
+	int text_y = 0;
+	int text_x = (int)(wall_x * (double)(texture.img_width - 1));
+
+	if (text_x < 0 || text_x >= texture.img_width)
+	{
+		printf("Errore: text_x fuori dai limiti: %d\n", text_x);
+		return;
+	}
+
+	double h_ratio = ((double)texture.img_height / (end.y - start.y));
+	int y = start.y;
+	while (y <= end.y)
+	{
+		text_y = (int)((y - start.y) * h_ratio);
+		put_pixel(&cube->mlx.data, start.x, y, 
+			get_pixel_color(&texture, text_x, text_y));
+		y++;
+	}
+}
 
 /*
  * 1) floor
@@ -168,7 +241,7 @@ static void	draw_x_window(t_cub3d *cube, int x)
 	wall_end.y = window_bound(WIN_HEIGHT / 2 + wall_height / 2, WIN_HEIGHT);
 	if (wall_start.y != 0)
 		draw_v_line(&cube->mlx.data, ceiling_start, wall_start, BLUE);
-	draw_v_line(&cube->mlx.data, wall_start, wall_end, get_color(cube->dda));
+	draw_wall(cube, wall_start, wall_end);
 	if (wall_end.y != WIN_HEIGHT - 1)
 		draw_v_line(&cube->mlx.data, wall_end, floor_end, GRAY);
 }

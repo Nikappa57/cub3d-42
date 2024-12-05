@@ -6,7 +6,7 @@
 /*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 12:12:50 by lorenzogaud       #+#    #+#             */
-/*   Updated: 2024/12/05 19:27:08 by lgaudino         ###   ########.fr       */
+/*   Updated: 2024/12/05 20:51:58 by lgaudino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,11 +48,11 @@
 
 typedef enum e_dir
 {
-	NONE_DIR,
 	UP,
 	DOWN,
 	LEFT,
-	RIGHT
+	RIGHT,
+	NONE_DIR
 }	t_dir;
 
 typedef enum e_rot
@@ -153,6 +153,7 @@ void		exit_perror(t_cub3d *cube, char *message);
 
 /* MLX */
 
+void		put_pixel(t_img *img, int x, int y, int color);
 void		draw_xy(t_img *img, int x, int y, t_color color);
 void		draw_point(t_img *img, t_point point, t_color color);
 void		draw_square(t_img *img, int start_x, int start_y, int size, t_color color);
