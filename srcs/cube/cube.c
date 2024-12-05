@@ -6,7 +6,7 @@
 /*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 19:16:39 by lgaudino          #+#    #+#             */
-/*   Updated: 2024/12/05 17:32:31 by lgaudino         ###   ########.fr       */
+/*   Updated: 2024/12/05 17:37:01 by lgaudino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,33 +147,41 @@ void	draw_map(t_cub3d *cube)
 	}
 }
 
+static t_color	get_color(t_dda dda)
+{
+	if ((dda.side == 0) && (dda.ray_dir.x > 0))
+		return (RED);
+	else if ((dda.side == 0 ) && (dda.ray_dir.x < 0))
+		return (GREEN);
+	else if ((dda.side == 1 ) && (dda.ray_dir.y > 0))
+		return (BLUE);
+	else if ((dda.side == 1) && (dda.ray_dir.y < 0))
+		return (YELLOW);
+	else
+		return (BLACK);
+}
+
 static void	draw_wall(t_cub3d *cube, int x)
 {
-	// draw wall
-	int wall_height;
+	t_color	color;
+	int		wall_height;
+	t_point	start;
+	t_point	end;
+
+	start.x = x;
+	end.x = x;
 	if (cube->dda.side == -1)
 		wall_height = WIN_HEIGHT;
 	else
 		wall_height = (int)(WIN_HEIGHT / cube->dda.distance);
-	int start = WIN_HEIGHT / 2 - wall_height / 2;
-	if (start < 0)
-		start = 0;
-	int end = WIN_HEIGHT / 2 + wall_height / 2;
-	if (end >= WIN_HEIGHT)
-		end = WIN_HEIGHT - 1;
-	t_color color;
-	if ((cube->dda.side == 0) && (cube->dda.ray_dir.x > 0))
-		color = RED;
-	else if ((cube->dda.side == 0 ) && (cube->dda.ray_dir.x < 0))
-		color = GREEN;
-	else if ((cube->dda.side == 1 ) && (cube->dda.ray_dir.y > 0))
-		color = BLUE;
-	else if ((cube->dda.side == 1) && (cube->dda.ray_dir.y < 0))
-		color = YELLOW;
-	else
-		color = BLACK;
-	
-	draw_line(&cube->mlx.data, (t_point){x, start}, (t_point){x, end}, color);
+	start.y = WIN_HEIGHT / 2 - wall_height / 2;
+	if (start.y < 0)
+		start.y = 0;
+	end.y = WIN_HEIGHT / 2 + wall_height / 2;
+	if (end.y >= WIN_HEIGHT)
+		end.y = WIN_HEIGHT - 1;
+	color = get_color(cube->dda);
+	draw_line(&cube->mlx.data, start, end, color);
 }
 
 void	cube_cr(t_cub3d *cube)
