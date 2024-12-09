@@ -6,7 +6,7 @@
 /*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 18:27:42 by lgaudino          #+#    #+#             */
-/*   Updated: 2024/12/05 21:06:43 by lgaudino         ###   ########.fr       */
+/*   Updated: 2024/12/09 21:50:26 by lgaudino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ static int	init_map(t_map *map)
 		}
 	}
 	map->m[3][3] = 1;
-
+	map->m[3][2] = 1;
 	return (0);
 }
 
