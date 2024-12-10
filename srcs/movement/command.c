@@ -12,6 +12,18 @@
 
 #include "cub3D.h"
 
+static int	is_wall(t_cub3d *cube, t_vector pos)
+{
+	int	x;
+	int	y;
+
+	x = (int)pos.x;
+	y = (int)pos.y;
+	if (x < 0 || x >= cube->map.w || y < 0 || y >= cube->map.h)
+		return (1);
+	return (cube->map.m[y][x] == 1);
+}
+
 static int	position(t_cub3d *cube)
 {
 	t_vector	mov;
@@ -36,6 +48,8 @@ static int	position(t_cub3d *cube)
 		state->pos.x = cube->map.w;
 	if (state->pos.y < 0)
 		state->pos.y = 0;
+	if(is_wall(cube, state->pos))
+		state->pos = old_pos;
 	if (state->pos.y >= cube->map.h)
 		state->pos.y = cube->map.h;
 	return ((old_pos.x != state->pos.x) || (old_pos.y != state->pos.y));

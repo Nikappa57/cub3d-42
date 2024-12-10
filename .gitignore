@@ -1,6 +1,7 @@
 # Prerequisites
 *.d
-
+.vscode
+cub3d
 # Object files
 *.o
 *.ko
