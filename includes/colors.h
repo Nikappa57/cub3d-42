@@ -6,15 +6,12 @@
 /*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/14 14:35:31 by lorenzogaud       #+#    #+#             */
-/*   Updated: 2024/11/28 17:03:15 by lgaudino         ###   ########.fr       */
+/*   Updated: 2024/12/05 19:17:33 by lgaudino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef COLORS_H
 # define COLORS_H
-
-# define PALETTE_N	3
-# define COLOR_N	3
 
 typedef enum e_color
 {
