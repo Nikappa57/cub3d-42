@@ -6,7 +6,7 @@
 #    By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/28 17:04:44 by lgaudino          #+#    #+#              #
-#    Updated: 2024/11/30 22:56:26 by lgaudino         ###   ########.fr        #
+#    Updated: 2024/12/11 21:21:41 by lgaudino         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,8 @@ INCLUDES			=	-I includes -I $(LIBFT_DIR)/includes/ -I mlx_linux/
 
 LIBFT				=	$(LIBFT_DIR)libft.a
 LIBFT_DIR			=	libft/
-LIB_FLAGS			=	-L $(LIBFT_DIR) -lft -L mlx_linux -lmlx_Linux -L /usr/lib -lXext -lX11 -lm -lz
+MLX_DIR				=	mlx_linux/
+LIB_FLAGS			=	-L $(LIBFT_DIR) -lft -L $(MLX_DIR) -lmlx_Linux -L /usr/lib -lXext -lX11 -lm -lz
 
 CC					=	gcc
 CFLAGS				=	-Wall -Wextra -Werror -g
@@ -41,16 +42,21 @@ all:				$(NAME)
 $(LIBFT):
 					make -C $(LIBFT_DIR)
 
-$(NAME):			$(OBJS) $(LIBFT)
+$(MLX_DIR)libmlx_Linux.a:
+					make -C $(MLX_DIR)
+
+$(NAME):			$(OBJS) $(LIBFT) $(MLX_DIR)libmlx_Linux.a
 					$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LIB_FLAGS)
 
 clean:
 					make clean -C $(LIBFT_DIR)
+					make clean -C $(MLX_DIR)
 					$(RM) $(OBJS)
 					$(RM) -r $(DIR_OBJS)
 
 fclean:				clean
 					make fclean -C $(LIBFT_DIR)
+					make clean -C $(MLX_DIR)
 					$(RM) $(NAME)
 
 re:					fclean all
