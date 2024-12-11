@@ -6,7 +6,7 @@
 /*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 12:12:50 by lorenzogaud       #+#    #+#             */
-/*   Updated: 2024/12/05 20:51:58 by lgaudino         ###   ########.fr       */
+/*   Updated: 2024/12/11 20:57:43 by lgaudino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,6 +168,7 @@ int			show_cube(t_cub3d *cube);
 int			cube_loop(t_cub3d *cube);
 void		dda_distance(t_cub3d *cube, int x);
 int			window_bound(int p, int max);
+bool		is_wall(t_map map, t_point p);
 
 /* Actions */
 

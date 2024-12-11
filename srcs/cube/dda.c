@@ -68,7 +68,7 @@ static void	dda_data_setup(t_cub3d *cube, int x)
 	dda_inital_data(cube);
 }
 
-static bool	is_wall(t_map map, t_point p)
+bool	is_wall(t_map map, t_point p)
 {
 	return (((p.x < 0)
 			|| (p.y < 0)
