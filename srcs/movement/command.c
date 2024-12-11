@@ -6,7 +6,7 @@
 /*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 19:38:11 by lgaudino          #+#    #+#             */
-/*   Updated: 2024/12/03 00:07:11 by lgaudino         ###   ########.fr       */
+/*   Updated: 2024/12/11 21:24:35 by lgaudino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,8 @@ static int	position(t_cub3d *cube)
 		state->pos.y = 0;
 	if (state->pos.y >= cube->map.h)
 		state->pos.y = cube->map.h;
+	if (is_wall(cube, state->pos))
+		state->pos = old_pos;
 	return ((old_pos.x != state->pos.x) || (old_pos.y != state->pos.y));
 }
 
