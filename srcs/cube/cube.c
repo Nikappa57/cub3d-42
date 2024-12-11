@@ -6,7 +6,7 @@
 /*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 19:16:39 by lgaudino          #+#    #+#             */
-/*   Updated: 2024/12/09 21:54:44 by lgaudino         ###   ########.fr       */
+/*   Updated: 2024/12/11 21:05:05 by lgaudino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,10 +162,11 @@ static unsigned int	get_pixel_color(t_img *img, int x, int y)
 	return (*(unsigned int *)dst);
 }
 
-static void	draw_wall(t_cub3d *cube, t_point start, t_point end, int wall_height)
+static int	get_text_x(t_cub3d *cube, t_img texture)
 {
 	t_vector	hit;
 	double		wall_x;
+	double		text_y;
 
 	v_mul(&hit, cube->dda.ray_dir, cube->dda.distance);
 	v_sum(&hit, hit, cube->state.pos);
@@ -181,28 +182,25 @@ static void	draw_wall(t_cub3d *cube, t_point start, t_point end, int wall_height
 		if (cube->dda.ray_dir.y > 0)
 			wall_x = 1 - wall_x;
 	}
+	return ((int)(wall_x * (double)(texture.img_width - 1)));
+}
 
-	if (wall_x < 0 || wall_x > 1)
-	{
-		printf("Errore: wall_x fuori dai limiti: %f\n", wall_x);
-		return;
-	}
+static void	draw_wall(t_cub3d *cube, t_point start, t_point end, int wall_height)
+{
+	int		y;
+	int		text_x;
+	double	text_y;
+	double	h_step;
+	t_img	texture;
 
-	t_img texture = cube->texture[get_dir(cube->dda.ray_dir, cube->dda.side)];
-	int text_x = (int)(wall_x * (double)(texture.img_width - 1));
-
-	if (text_x < 0 || text_x >= texture.img_width)
-	{
-		printf("Errore: text_x fuori dai limiti: %d\n", text_x);
-		return;
-	}
-
-	double h_step = (double)texture.img_height / wall_height;
-	double text_y = ((wall_height - WIN_HEIGHT) / 2 + start.y) * h_step;
-	int y = start.y;
+	cube->texture[get_dir(cube->dda.ray_dir, cube->dda.side)];
+	text_x = get_text_x(cubem, texture);
+	h_step = (double)texture.img_height / wall_height;
+	text_y = ((wall_height - WIN_HEIGHT) / 2 + start.y) * h_step;
+	y = start.y;
 	while (y <= end.y)
 	{
-		put_pixel(&cube->mlx.data, start.x, y, 
+		put_pixel(&cube->mlx.data, start.x, y,
 			get_pixel_color(&texture, text_x, (int)text_y));
 		y++;
 		text_y += h_step;
