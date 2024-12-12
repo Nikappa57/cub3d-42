@@ -6,23 +6,65 @@
 /*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 19:38:11 by lgaudino          #+#    #+#             */
-/*   Updated: 2024/12/03 00:07:11 by lgaudino         ###   ########.fr       */
+/*   Updated: 2024/12/12 14:27:58 by lgaudino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3D.h"
 
-static int	is_wall(t_cub3d *cube, t_vector pos)
+static bool	v_is_wall(t_map map, t_vector pos)
 {
-	int	x;
-	int	y;
-
-	x = (int)pos.x;
-	y = (int)pos.y;
-	if (x < 0 || x >= cube->map.w || y < 0 || y >= cube->map.h)
-		return (1);
-	return (cube->map.m[y][x] == 1);
+	t_point	p;
+	
+	p.x = (int)pos.x;
+	p.y = (int)pos.y;
+	return (is_wall(map, p));
 }
+/*
+ *	Check if the player hit a wall
+ *	return true if the player hit a wall, false otherwise
+ *	check the 4 point around the player with a distance of MIN_DISTANCE
+ */
+static bool	min_wall_dist(t_map map, t_vector p)
+{
+	if (v_is_wall(map, p))
+		return (true);
+	p.x += MIN_DISTANCE;
+	if (v_is_wall(map, p))
+		return (true);
+	p.x -= 2 * MIN_DISTANCE;
+	if (v_is_wall(map, p))
+		return (true);
+	p.x += MIN_DISTANCE;
+	p.y += MIN_DISTANCE;
+	if (v_is_wall(map, p))
+		return (true);
+	p.y -= 2 * MIN_DISTANCE;
+	if (v_is_wall(map, p))
+		return (true);
+	return (false);
+}
+
+/*
+ *	Check if the player hit a wall
+ *	if the player hit a wall, the player will be moved to the last position
+ *	first check the x axis, then the y axis
+ */
+static void check_wall(t_map map, t_vector *pos, t_vector old_pos)
+{
+	t_vector	new_pos;
+
+	new_pos = *pos;
+	if (!min_wall_dist(map, *pos))
+		return ;
+	pos->x = old_pos.x;
+	if (!min_wall_dist(map, *pos))
+		return ;
+	pos->x = new_pos.x;
+	pos->y = old_pos.y;
+	if (!min_wall_dist(map, *pos))
+		return ;
+	pos->x = old_pos.x;
 
 static int	position(t_cub3d *cube)
 {
@@ -52,7 +94,8 @@ static int	position(t_cub3d *cube)
 		state->pos = old_pos;
 	if (state->pos.y >= cube->map.h)
 		state->pos.y = cube->map.h;
-	return ((old_pos.x != state->pos.x) || (old_pos.y != state->pos.y));
+	return (check_wall(cube->map, &state->pos, old_pos),
+		(old_pos.x != state->pos.x) || (old_pos.y != state->pos.y));
 }
 
 static int	rotate(t_state *state)
