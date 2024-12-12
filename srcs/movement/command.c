@@ -6,7 +6,7 @@
 /*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 19:38:11 by lgaudino          #+#    #+#             */
-/*   Updated: 2024/12/12 14:27:58 by lgaudino         ###   ########.fr       */
+/*   Updated: 2024/12/12 14:42:41 by lgaudino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ static void check_wall(t_map map, t_vector *pos, t_vector old_pos)
 	if (!min_wall_dist(map, *pos))
 		return ;
 	pos->x = old_pos.x;
+}
 
 static int	position(t_cub3d *cube)
 {
@@ -90,8 +91,6 @@ static int	position(t_cub3d *cube)
 		state->pos.x = cube->map.w;
 	if (state->pos.y < 0)
 		state->pos.y = 0;
-	if(is_wall(cube, state->pos))
-		state->pos = old_pos;
 	if (state->pos.y >= cube->map.h)
 		state->pos.y = cube->map.h;
 	return (check_wall(cube->map, &state->pos, old_pos),
