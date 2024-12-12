@@ -6,7 +6,7 @@
 #    By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/28 17:04:44 by lgaudino          #+#    #+#              #
-#    Updated: 2024/12/12 14:30:14 by lgaudino         ###   ########.fr        #
+#    Updated: 2024/12/12 14:40:30 by lgaudino         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -56,7 +56,7 @@ clean:
 					
 
 fclean:				clean
-              $(RM) $(NAME)
+					$(RM) $(NAME)
 
 re:					fclean all
 
