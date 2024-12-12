@@ -56,7 +56,7 @@ clean:
 					
 
 fclean:				clean
-					$(RM) $(NAME)
+              $(RM) $(NAME)
 
 re:					fclean all
 
