@@ -6,7 +6,7 @@
 /*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 19:44:21 by lgaudino          #+#    #+#             */
-/*   Updated: 2024/12/03 00:07:25 by lgaudino         ###   ########.fr       */
+/*   Updated: 2024/12/12 14:17:32 by lgaudino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,5 +68,10 @@ void	get_dir_v(t_vector *v, t_dir dir)
 		v->x = -1;
 	else if (dir == RIGHT)
 		v->x = 1;
+}
+
+double	v_distance_pow2(t_vector v1, t_vector v2)
+{
+	return (pow(v1.x - v2.x, 2) + pow(v1.y - v2.y, 2));
 }
 

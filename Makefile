@@ -6,7 +6,7 @@
 #    By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/28 17:04:44 by lgaudino          #+#    #+#              #
-#    Updated: 2024/12/11 21:21:41 by lgaudino         ###   ########.fr        #
+#    Updated: 2024/12/12 14:30:14 by lgaudino         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -49,14 +49,13 @@ $(NAME):			$(OBJS) $(LIBFT) $(MLX_DIR)libmlx_Linux.a
 					$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LIB_FLAGS)
 
 clean:
-					make clean -C $(LIBFT_DIR)
-					make clean -C $(MLX_DIR)
 					$(RM) $(OBJS)
 					$(RM) -r $(DIR_OBJS)
+					make clean -C $(LIBFT_DIR)
+					make clean -C $(MLX_DIR)
+					
 
 fclean:				clean
-					make fclean -C $(LIBFT_DIR)
-					make clean -C $(MLX_DIR)
 					$(RM) $(NAME)
 
 re:					fclean all

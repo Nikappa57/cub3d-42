@@ -6,7 +6,7 @@
 /*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 12:12:50 by lorenzogaud       #+#    #+#             */
-/*   Updated: 2024/12/11 20:57:43 by lgaudino         ###   ########.fr       */
+/*   Updated: 2024/12/12 14:23:55 by lgaudino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,13 +34,14 @@
 
 /* Constants */
 
-# define WIN_WIDTH		800
-# define WIN_HEIGHT		600
-# define WIN_TITLE		"cub3D"
-# define FOV			to_rad(66)
-# define MOV_VEL		0.01f
-# define ROT_VEL		to_rad(0.5)
-# define INFINITY_VALUE	1e30
+# define WIN_WIDTH			800
+# define WIN_HEIGHT			600
+# define WIN_TITLE			"cub3D"
+# define FOV				to_rad(66)
+# define MOV_VEL			0.01f
+# define ROT_VEL			to_rad(0.5)
+# define INFINITY_VALUE		1e30
+# define MIN_DISTANCE		0.01
 
 /* data structure */
 
@@ -185,6 +186,7 @@ void	v_div(t_vector *r, t_vector v, double n);
 void	v_rotate(t_vector *r, t_vector v, double angle);
 void	v_perp(t_vector *r, t_vector v);
 void	get_dir_v(t_vector *r, t_dir dir);
+double	v_distance_pow2(t_vector v1, t_vector v2);
 
 /************ TEST ************/
 void		draw_line(t_img *img, t_point start, t_point end, t_color color);

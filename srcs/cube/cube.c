@@ -6,7 +6,7 @@
 /*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 19:16:39 by lgaudino          #+#    #+#             */
-/*   Updated: 2024/12/11 21:05:05 by lgaudino         ###   ########.fr       */
+/*   Updated: 2024/12/12 14:01:11 by lgaudino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,7 +166,6 @@ static int	get_text_x(t_cub3d *cube, t_img texture)
 {
 	t_vector	hit;
 	double		wall_x;
-	double		text_y;
 
 	v_mul(&hit, cube->dda.ray_dir, cube->dda.distance);
 	v_sum(&hit, hit, cube->state.pos);
@@ -193,8 +192,8 @@ static void	draw_wall(t_cub3d *cube, t_point start, t_point end, int wall_height
 	double	h_step;
 	t_img	texture;
 
-	cube->texture[get_dir(cube->dda.ray_dir, cube->dda.side)];
-	text_x = get_text_x(cubem, texture);
+	texture = cube->texture[get_dir(cube->dda.ray_dir, cube->dda.side)];
+	text_x = get_text_x(cube, texture);
 	h_step = (double)texture.img_height / wall_height;
 	text_y = ((wall_height - WIN_HEIGHT) / 2 + start.y) * h_step;
 	y = start.y;
