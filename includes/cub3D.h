@@ -24,6 +24,8 @@
 # include <stdio.h>
 # include <math.h>
 # include <stdbool.h>
+# include <fcntl.h>
+# include <string.h>
 
 /* macro */
 # ifndef M_PI
@@ -142,10 +144,10 @@ typedef struct s_cub3D
 
 /*************** Funtions ***************/
 
-/* init */
-
-void		init_cube(t_cub3d *cube);
+//pars
+void		init_cube(t_cub3d *cube, const char *filename);
 void		set_hook(t_cub3d *cube);
+
 /* exit */
 
 void		clear_exit(t_cub3d *cube, int exitcode);

@@ -12,11 +12,16 @@
 
 #include "cub3D.h"
 
-int	main(void)
+int	main(int argc, char **argv)
 {
 	t_cub3d	cube;
 
-	init_cube(&cube);
+	if (argc != 2) {
+		fprintf(stderr, "Usage: %s <map_file.cub>\n", argv[0]);
+		return 1;
+	}
+
+	init_cube(&cube, argv[1]);
 	set_hook(&cube);
 	show_cube(&cube);
 	return (mlx_loop(cube.mlx.mlx));
