@@ -6,7 +6,7 @@
 /*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 18:27:42 by lgaudino          #+#    #+#             */
-/*   Updated: 2024/12/17 16:21:03 by lgaudino         ###   ########.fr       */
+/*   Updated: 2024/12/17 16:36:49 by lgaudino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,6 @@ static int is_surrounded_by_walls(t_map *map) {
 
 static int parse_map_line(char *line, int *row, int width) {
 	for (int j = 0; j < width; j++) {
-		printf("c: '%c'\n", line[j]);
-		fflush(stdout);
 		if (!is_valid_char(line[j])) {
 			printf("Error: Invalid character '%c' in map\n", line[j]);
 			return -1;
@@ -92,8 +90,6 @@ static int read_map_lines(FILE *file, t_map *map) {
 				line[--len] = '\0';
 
 			map->w = ft_strlen(line); // TODO: questo mi sembra sbagliato. Ogni volta sovrascrive la w, invece dovrebbe salvarsi la massima w
-			printf("line: %s\n----\n", line);
-			printf("len: %d\n----\n", map->w);
 
 			map->m[i] = (int *)ft_calloc(map->w, sizeof(int));
 			if (!map->m[i]) {
@@ -166,10 +162,12 @@ static int init_mlx(t_mlx *mlx) {
 
 static int init_state(t_state *state) {
 	get_dir_v(&state->dir, UP);
-	state->pos.x = 5;
-	state->pos.y = 5;
-	state->pos.x = -1; // Initialize to invalid position
-	state->pos.y = -1;
+	state->pos.x = 2;
+	state->pos.y = 2;
+	// state->pos.x = -1; // Initialize to invalid position
+	// state->pos.y = -1;
+	state->move_x = NONE_DIR;
+	state->move_y = NONE_DIR;
 	state->rot = NONE_ROT;
 	v_perp(&state->plane, state->dir);
 	v_mul(&state->plane, state->plane, tan(FOV / 2));
@@ -209,6 +207,8 @@ void init_cube(t_cub3d *cube, const char *filename) {
 	if (init_state(&cube->state) == -1)
 		exit_error(cube, "init_state() failed");
 	if (init_mlx(&cube->mlx) == -1)
+		exit_error(cube, "mlx_init() failed");
+	if (init_mlx(&cube->mlx_test) == -1)
 		exit_error(cube, "mlx_init() failed");
 	if (init_textures(cube) == -1)
 		exit_error(cube, "init_textures() failed");

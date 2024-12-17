@@ -6,7 +6,7 @@
 /*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 19:16:39 by lgaudino          #+#    #+#             */
-/*   Updated: 2024/12/12 14:01:11 by lgaudino         ###   ########.fr       */
+/*   Updated: 2024/12/17 16:32:16 by lgaudino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void vector_to_screen(t_vector v, t_point *r, int width, int height, int size)
 void	draw_map(t_cub3d *cube)
 {
 	int block_size = (int)fmin(WIN_WIDTH / cube->map.w, WIN_HEIGHT / cube->map.h);
-
+	
 	// MAP
 	for (int y = 0; y < cube->map.h; y++)
 	{
