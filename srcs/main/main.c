@@ -12,8 +12,6 @@
 
 #include "cub3D.h"
 
-
-
 int	main(void)
 {
 	t_cub3d	cube;
