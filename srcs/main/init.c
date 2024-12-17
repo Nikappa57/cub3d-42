@@ -177,6 +177,8 @@ static int init_state(t_state *state) {
 	state->rot = NONE_ROT;
 	v_perp(&state->plane, state->dir);
 	v_mul(&state->plane, state->plane, tan(FOV / 2));
+	state->pos.x += 0.5;
+	state->pos.y += 0.5;
 	return 0;
 }
 
