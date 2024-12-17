@@ -6,20 +6,11 @@
 /*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 18:27:42 by lgaudino          #+#    #+#             */
-/*   Updated: 2024/12/09 21:50:26 by lgaudino         ###   ########.fr       */
+/*   Updated: 2024/12/17 16:21:03 by lgaudino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3D.h"
-
-static void free_map(t_map *map) {
-	if (map && map->m) {
-		for (int i = 0; i < map->h; i++) {
-			free(map->m[i]);
-		}
-		free(map->m);
-	}
-}
 
 static int is_valid_char(char c) {
 	return (c == '0' || c == '1' || c == 'N' || c == 'S' || c == 'E' || c == 'W');
@@ -39,6 +30,8 @@ static int is_surrounded_by_walls(t_map *map) {
 
 static int parse_map_line(char *line, int *row, int width) {
 	for (int j = 0; j < width; j++) {
+		printf("c: '%c'\n", line[j]);
+		fflush(stdout);
 		if (!is_valid_char(line[j])) {
 			printf("Error: Invalid character '%c' in map\n", line[j]);
 			return -1;
@@ -66,11 +59,17 @@ static int count_valid_lines(FILE *file) {
 
 static int allocate_map(t_map *map, int line_count) {
 	map->h = line_count;
-	map->m = (int **)malloc(sizeof(int *) * map->h);
+	map->m = (int **)ft_calloc(sizeof(int *), map->h);
 	if (!map->m) {
 		perror("Error allocating memory for map");
 		return -1;
 	}
+
+	for (int i = 0; i < map->h; i++) {
+		map->m[i] = NULL;
+	}
+	
+
 	return 0;
 }
 
@@ -78,23 +77,31 @@ static int read_map_lines(FILE *file, t_map *map) {
 	char line[256];
 	int i = 0;
 
+	line[0] = '\0';
 	while (fgets(line, sizeof(line), file)) {
 		if (strchr(line, '1') || strchr(line, '0') || strchr(line, 'N') || strchr(line, 'S') || strchr(line, 'E') || strchr(line, 'W')) {
-			map->w = strlen(line);
-			if (line[map->w - 1] == '\n') {
-				line[map->w - 1] = '\0';
-				map->w--;
-			}
+			
+			char *newline = strchr(line, '\n');
 
-			map->m[i] = (int *)calloc(map->w, sizeof(int));
+			if (newline)
+				*newline = '\0';
+
+			// Rimuovi eventuali spazi alla fine della linea
+			int len = ft_strlen(line);
+			while ((len > 0) && ft_isspace((unsigned char)line[len - 1]))
+				line[--len] = '\0';
+
+			map->w = ft_strlen(line); // TODO: questo mi sembra sbagliato. Ogni volta sovrascrive la w, invece dovrebbe salvarsi la massima w
+			printf("line: %s\n----\n", line);
+			printf("len: %d\n----\n", map->w);
+
+			map->m[i] = (int *)ft_calloc(map->w, sizeof(int));
 			if (!map->m[i]) {
 				perror("Error allocating row memory");
-				free_map(map);
 				return -1;
 			}
 
 			if (parse_map_line(line, map->m[i], map->w) == -1) {
-				free_map(map);
 				return -1;
 			}
 			i++;
@@ -127,7 +134,6 @@ static int init_map(t_map *map, const char *filename) {
 
 	if (!is_surrounded_by_walls(map)) {
 		printf("Error: Map is not surrounded by walls\n");
-		free_map(map);
 		return -1;
 	}
 
