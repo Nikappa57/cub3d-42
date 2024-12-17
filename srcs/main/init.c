@@ -28,7 +28,7 @@ static int is_surrounded_by_walls(t_map *map) {
 	return 1;
 }
 
-static int parse_map_line(char *line, int *row, int width) {
+static int parse_map_line(char *line, int *row, int width, t_state *state, int y) {
 	for (int j = 0; j < width; j++) {
 		if (!is_valid_char(line[j])) {
 			printf("Error: Invalid character '%c' in map\n", line[j]);
@@ -38,8 +38,19 @@ static int parse_map_line(char *line, int *row, int width) {
 			row[j] = 1;
 		else if (line[j] == '0')
 			row[j] = 0;
-		else if (line[j] == 'N' || line[j] == 'S' || line[j] == 'E' || line[j] == 'W')
+		else if (line[j] == 'N' || line[j] == 'S' || line[j] == 'E' || line[j] == 'W') {
 			row[j] = 0; // Player start positions are treated as empty spaces
+			state->pos.x = j;
+			state->pos.y = y;
+			if (line[j] == 'N')
+				get_dir_v(&state->dir, UP);
+			else if (line[j] == 'S')
+				get_dir_v(&state->dir, DOWN);
+			else if (line[j] == 'E')
+				get_dir_v(&state->dir, RIGHT);
+			else if (line[j] == 'W')
+				get_dir_v(&state->dir, LEFT);
+		}
 	}
 	return 0;
 }
@@ -66,19 +77,19 @@ static int allocate_map(t_map *map, int line_count) {
 	for (int i = 0; i < map->h; i++) {
 		map->m[i] = NULL;
 	}
-	
+
 
 	return 0;
 }
 
-static int read_map_lines(FILE *file, t_map *map) {
+static int read_map_lines(FILE *file, t_map *map, t_state *state) {
 	char line[256];
 	int i = 0;
 
 	line[0] = '\0';
 	while (fgets(line, sizeof(line), file)) {
 		if (strchr(line, '1') || strchr(line, '0') || strchr(line, 'N') || strchr(line, 'S') || strchr(line, 'E') || strchr(line, 'W')) {
-			
+
 			char *newline = strchr(line, '\n');
 
 			if (newline)
@@ -97,7 +108,7 @@ static int read_map_lines(FILE *file, t_map *map) {
 				return -1;
 			}
 
-			if (parse_map_line(line, map->m[i], map->w) == -1) {
+			if (parse_map_line(line, map->m[i], map->w, state, i) == -1) {
 				return -1;
 			}
 			i++;
@@ -106,7 +117,7 @@ static int read_map_lines(FILE *file, t_map *map) {
 	return 0;
 }
 
-static int init_map(t_map *map, const char *filename) {
+static int init_map(t_map *map, t_state *state, const char *filename) {
 	FILE *file = fopen(filename, "r");
 	if (!file) {
 		perror("Error opening map file");
@@ -121,7 +132,7 @@ static int init_map(t_map *map, const char *filename) {
 		return -1;
 	}
 
-	if (read_map_lines(file, map) == -1) {
+	if (read_map_lines(file, map, state) == -1) {
 		fclose(file);
 		return -1;
 	}
@@ -161,11 +172,6 @@ static int init_mlx(t_mlx *mlx) {
 }
 
 static int init_state(t_state *state) {
-	get_dir_v(&state->dir, UP);
-	state->pos.x = 2;
-	state->pos.y = 2;
-	// state->pos.x = -1; // Initialize to invalid position
-	// state->pos.y = -1;
 	state->move_x = NONE_DIR;
 	state->move_y = NONE_DIR;
 	state->rot = NONE_ROT;
@@ -202,7 +208,7 @@ static int init_textures(t_cub3d *cube) {
 
 void init_cube(t_cub3d *cube, const char *filename) {
 	ft_bzero(cube, sizeof(t_cub3d));
-	if (init_map(&cube->map, filename) == -1)
+	if (init_map(&cube->map, &cube->state, filename) == -1)
 		exit_error(cube, "init_map() failed");
 	if (init_state(&cube->state) == -1)
 		exit_error(cube, "init_state() failed");
