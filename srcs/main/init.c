@@ -109,15 +109,12 @@ int read_map_lines(FILE *file, t_map *map, t_state *state) {
 		perror("Errore nel riposizionamento del file");
 		return -1;
 	}
-
 	// Seconda passata: leggi le righe e riempi la mappa
 	map->w = max_w;
-	map->m = (int **)ft_calloc(map->h, sizeof(int *)); // Allocazione dinamica basata sul numero di righe valide
 	if (!map->m) {
 		perror("Errore nell'allocazione della mappa");
 		return -1;
 	}
-
 	while (fgets(line, sizeof(line), file)) {
 		if (strpbrk(line, "10NSEW")) {
 			char *newline = strchr(line, '\n');
@@ -126,7 +123,7 @@ int read_map_lines(FILE *file, t_map *map, t_state *state) {
 			int len = ft_strlen(line);
 			while ((len > 0) && ft_isspace((unsigned char)line[len - 1]))
 				line[--len] = '\0';
-			map->m[i] = (int *)ft_calloc(map->w, sizeof(int));
+			map->m[i] = (int *)ft_calloc(sizeof(int), map->w);
 			if (!map->m[i]) {
 				perror("Errore nell'allocazione della riga della mappa");
 				return -1;
