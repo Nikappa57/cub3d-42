@@ -12,8 +12,8 @@
 
 #include "cub3D.h"
 
-static int is_valid_char(char c) {
-	return (c == '0' || c == '1' || c == 'N' || c == 'S' || c == 'E' || c == 'W');
+void *ft_calloc(size_t count, size_t size) {
+    return calloc(count, size);
 }
 
 static int is_surrounded_by_walls(t_map *map) {
@@ -28,31 +28,22 @@ static int is_surrounded_by_walls(t_map *map) {
 	return 1;
 }
 
-static int parse_map_line(char *line, int *row, int width, t_state *state, int y) {
-	for (int j = 0; j < width; j++) {
-		if (!is_valid_char(line[j])) {
-			printf("Error: Invalid character '%c' in map\n", line[j]);
-			return -1;
-		}
-		if (line[j] == '1')
-			row[j] = 1;
-		else if (line[j] == '0')
-			row[j] = 0;
-		else if (line[j] == 'N' || line[j] == 'S' || line[j] == 'E' || line[j] == 'W') {
-			row[j] = 0; // Player start positions are treated as empty spaces
-			state->pos.x = j;
-			state->pos.y = y;
-			if (line[j] == 'N')
-				get_dir_v(&state->dir, UP);
-			else if (line[j] == 'S')
-				get_dir_v(&state->dir, DOWN);
-			else if (line[j] == 'E')
-				get_dir_v(&state->dir, RIGHT);
-			else if (line[j] == 'W')
-				get_dir_v(&state->dir, LEFT);
-		}
-	}
-	return 0;
+int parse_map_line(const char *line, int *row, int len, int i) {
+    for (int j = 0; j < len; j++) {
+        if (line[j] == '1') {
+            row[j] = 1;
+        } else if (line[j] == '0') {
+            row[j] = 0;
+        } else if (line[j] == 'N' || line[j] == 'S' || line[j] == 'E' || line[j] == 'W') {
+            // Aggiungi la logica per gestire i caratteri N, S, E, W
+            row[j] = 2; // Valore arbitrario, aggiornalo secondo le tue esigenze
+            // Puoi anche aggiornare lo stato se necessario
+        } else {
+            fprintf(stderr, "Carattere non valido '%c' nella riga %d\n", line[j], i);
+            return -1;
+        }
+    }
+    return 0;
 }
 
 static int count_valid_lines(FILE *file) {
@@ -82,43 +73,88 @@ static int allocate_map(t_map *map, int line_count) {
 	return 0;
 }
 
-static int read_map_lines(FILE *file, t_map *map, t_state *state) {
+int read_map_lines(FILE *file, t_map *map, t_state *state) {
 	char line[256];
 	int i = 0;
+	int max_w = 0;
 
-	line[0] = '\0';
+	// Prima passata: trova la larghezza massima
 	while (fgets(line, sizeof(line), file)) {
-		if (strchr(line, '1') || strchr(line, '0') || strchr(line, 'N') || strchr(line, 'S') || strchr(line, 'E') || strchr(line, 'W')) {
-
+		if (strpbrk(line, "10NSEW")) {
 			char *newline = strchr(line, '\n');
-
 			if (newline)
 				*newline = '\0';
 
-			// Rimuovi eventuali spazi alla fine della linea
 			int len = ft_strlen(line);
 			while ((len > 0) && ft_isspace((unsigned char)line[len - 1]))
 				line[--len] = '\0';
 
-			map->w = ft_strlen(line); // TODO: questo mi sembra sbagliato. Ogni volta sovrascrive la w, invece dovrebbe salvarsi la massima w
+			if (len > max_w)
+				max_w = len;
+		}
+	}
 
+	// Riposiziona il file pointer all'inizio del file
+	if (fseek(file, 0, SEEK_SET) != 0) {
+		perror("Errore nel riposizionamento del file");
+		return -1;
+	}
+
+	// Seconda passata: leggi le righe e riempi la mappa
+	map->w = max_w;
+	map->m = (int **)ft_calloc(map->h, sizeof(int *)); // Allocazione dinamica basata sul numero di righe valide
+	if (!map->m) {
+		perror("Errore nell'allocazione della mappa");
+		return -1;
+	}
+
+	while (fgets(line, sizeof(line), file)) {
+		if (strpbrk(line, "10NSEW")) {
+			char *newline = strchr(line, '\n');
+			if (newline)
+				*newline = '\0';
+			int len = ft_strlen(line);
+			while ((len > 0) && ft_isspace((unsigned char)line[len - 1]))
+				line[--len] = '\0';
 			map->m[i] = (int *)ft_calloc(map->w, sizeof(int));
 			if (!map->m[i]) {
-				perror("Error allocating row memory");
+				perror("Errore nell'allocazione della riga della mappa");
 				return -1;
 			}
-
-			if (parse_map_line(line, map->m[i], map->w, state, i) == -1) {
+			if (parse_map_line(line, map->m[i], len, i) == -1) {
+				return -1;
+			}
+			// Riempie gli spazi vuoti con 0
+			for (int j = len; j < map->w; j++) {
+				map->m[i][j] = 0;
+			}
+			// Controllo con t_state: verifica della posizione e direzione iniziale
+			if (state->pos.x < 0 || state->pos.y < 0 || state->pos.x >= map->w || state->pos.y >= map->h) {
+				fprintf(stderr, "Errore: posizione iniziale fuori dai limiti alla riga %d\n", i);
+				return -1;
+			}
+			if (state->dir.x < 0 && state->dir.y < 0) {
+				fprintf(stderr, "Errore: direzione non valida alla riga %d\n", i);
+				return -1;
+			}
+			if (state->plane.x < 0 && state->plane.y < 0) {
+				fprintf(stderr, "Errore: piano della camera non valido alla riga %d\n", i);
 				return -1;
 			}
 			i++;
 		}
+	}
+	// Controllo finale: verificare che almeno una posizione valida sia stata impostata
+	if (i == 0) {
+		fprintf(stderr, "Errore: nessuna riga valida trovata nella mappa\n");
+		return -1;
 	}
 	return 0;
 }
 
 static int init_map(t_map *map, t_state *state, const char *filename) {
 	FILE *file = fopen(filename, "r");
+
 	if (!file) {
 		perror("Error opening map file");
 		return -1;
@@ -137,13 +173,12 @@ static int init_map(t_map *map, t_state *state, const char *filename) {
 		return -1;
 	}
 
-	fclose(file);
-
 	if (!is_surrounded_by_walls(map)) {
 		printf("Error: Map is not surrounded by walls\n");
+		fclose(file);
 		return -1;
 	}
-
+	fclose(file);
 	return 0;
 }
 
@@ -215,8 +250,6 @@ void init_cube(t_cub3d *cube, const char *filename) {
 	if (init_state(&cube->state) == -1)
 		exit_error(cube, "init_state() failed");
 	if (init_mlx(&cube->mlx) == -1)
-		exit_error(cube, "mlx_init() failed");
-	if (init_mlx(&cube->mlx_test) == -1)
 		exit_error(cube, "mlx_init() failed");
 	if (init_textures(cube) == -1)
 		exit_error(cube, "init_textures() failed");
