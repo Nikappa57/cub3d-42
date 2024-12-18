@@ -26,6 +26,7 @@
 # include <stdbool.h>
 # include <fcntl.h>
 # include <string.h>
+# include <ctype.h>
 
 /* macro */
 # ifndef M_PI
