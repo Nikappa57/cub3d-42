@@ -6,7 +6,7 @@
 /*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 18:27:42 by lgaudino          #+#    #+#             */
-/*   Updated: 2024/12/17 16:36:49 by lgaudino         ###   ########.fr       */
+/*   Updated: 2024/12/18 17:53:54 by lgaudino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -252,6 +252,10 @@ static int init_mlx(t_mlx *mlx)
 
 static int init_state(t_state *state)
 {
+	state->pos.x = 3;
+	state->pos.y = 3;
+	get_dir_v(&state->dir, UP);
+
 	state->move_x = NONE_DIR;
 	state->move_y = NONE_DIR;
 	state->rot = NONE_ROT;
@@ -306,6 +310,8 @@ void init_cube(t_cub3d *cube, const char *filename)
 	if (init_state(&cube->state) == -1)
 		exit_error(cube, "init_state() failed");
 	if (init_mlx(&cube->mlx) == -1)
+		exit_error(cube, "mlx_init() failed");
+	if (init_mlx(&cube->mlx_test) == -1)
 		exit_error(cube, "mlx_init() failed");
 	if (init_textures(cube) == -1)
 		exit_error(cube, "init_textures() failed");
