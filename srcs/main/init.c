@@ -13,7 +13,17 @@
 #include "cub3D.h"
 
 void *ft_calloc(size_t count, size_t size) {
-	return calloc(count, size);
+	void *ptr = malloc(count * size);
+	if (!ptr) {
+		perror("Error allocating memory");
+		return NULL;
+	}
+	size_t i = 0;
+	while (i < count * size) {
+		((unsigned char *)ptr)[i] = 0;
+		i++;
+	}
+	return ptr;
 }
 
 static int is_surrounded_by_walls(t_map *map) {
