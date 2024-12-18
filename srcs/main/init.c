@@ -233,7 +233,7 @@ static int init_state(t_state *state)
 	state->dir.x = 0;
 	state->dir.y = 0;
 	state->plane.x = 0;
-	state->plane.y = 0;
+	state->plane.y = 1;
 	state->move_x = NONE_DIR;
 	state->move_y = NONE_DIR;
 	state->rot = NONE_ROT;
@@ -282,6 +282,8 @@ void init_cube(t_cub3d *cube, const char *filename)
 	if (init_map(&cube->map, &cube->state, filename) == -1)
 		exit_error(cube, "init_map() failed");
 	if (init_mlx(&cube->mlx) == -1)
+		exit_error(cube, "init_mlx() failed");
+	if(init_mlx(&cube->mlx_test) == -1)
 		exit_error(cube, "init_mlx() failed");
 	if (init_textures(cube) == -1)
 		exit_error(cube, "init_textures() failed");
