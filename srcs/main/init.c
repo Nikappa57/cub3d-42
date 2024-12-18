@@ -13,7 +13,7 @@
 #include "cub3D.h"
 
 void *ft_calloc(size_t count, size_t size) {
-    return calloc(count, size);
+	return calloc(count, size);
 }
 
 static int is_surrounded_by_walls(t_map *map) {
@@ -29,21 +29,21 @@ static int is_surrounded_by_walls(t_map *map) {
 }
 
 int parse_map_line(const char *line, int *row, int len, int i) {
-    for (int j = 0; j < len; j++) {
-        if (line[j] == '1') {
-            row[j] = 1;
-        } else if (line[j] == '0') {
-            row[j] = 0;
-        } else if (line[j] == 'N' || line[j] == 'S' || line[j] == 'E' || line[j] == 'W') {
-            // Aggiungi la logica per gestire i caratteri N, S, E, W
-            row[j] = 2; // Valore arbitrario, aggiornalo secondo le tue esigenze
-            // Puoi anche aggiornare lo stato se necessario
-        } else {
-            fprintf(stderr, "Carattere non valido '%c' nella riga %d\n", line[j], i);
-            return -1;
-        }
-    }
-    return 0;
+	for (int j = 0; j < len; j++) {
+		if (line[j] == '1') {
+			row[j] = 1;
+		} else if (line[j] == '0') {
+			row[j] = 0;
+		} else if (line[j] == 'N' || line[j] == 'S' || line[j] == 'E' || line[j] == 'W') {
+			// Aggiungi la logica per gestire i caratteri N, S, E, W
+			row[j] = 2; // Valore arbitrario, aggiornalo secondo le tue esigenze
+			// Puoi anche aggiornare lo stato se necessario
+		} else {
+			fprintf(stderr, "Carattere non valido '%c' nella riga %d\n", line[j], i);
+			return -1;
+		}
+	}
+	return 0;
 }
 
 static int count_valid_lines(FILE *file) {
