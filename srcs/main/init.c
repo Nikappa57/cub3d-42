@@ -6,7 +6,7 @@
 /*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 18:27:42 by lgaudino          #+#    #+#             */
-/*   Updated: 2024/12/19 16:01:26 by lottavi          ###   ########.fr       */
+/*   Updated: 2024/12/19 16:08:25 by lottavi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,21 @@ static int init_map(t_map *map, const char *map_path)
 	return 0;
 }
 
-static int init_state(t_state *state, const char *map_path)
+static void set_position_and_direction(t_state *state, char direction_char, int col, int row)
+{
+	state->pos.x = col + 0.5;
+	state->pos.y = row + 0.5;
+	if (direction_char == 'N')
+		get_dir_v(&state->dir, UP);
+	else if (direction_char == 'S')
+		get_dir_v(&state->dir, DOWN);
+	else if (direction_char == 'W')
+		get_dir_v(&state->dir, LEFT);
+	else if (direction_char == 'E')
+		get_dir_v(&state->dir, RIGHT);
+}
+
+static void parse_map(t_state *state, const char *map_path)
 {
 	FILE *file = fopen(map_path, "r");
 	char line[256];
@@ -114,23 +128,18 @@ static int init_state(t_state *state, const char *map_path)
 		{
 			if (line[col] == 'N' || line[col] == 'S' || line[col] == 'W' || line[col] == 'E')
 			{
-				state->pos.x = col + 0.5;
-				state->pos.y = row + 0.5;
-				if (line[col] == 'N') {
-					get_dir_v(&state->dir, UP);
-				} else if (line[col] == 'S') {
-					get_dir_v(&state->dir, DOWN);
-				} else if (line[col] == 'W') {
-					get_dir_v(&state->dir, LEFT);
-				} else if (line[col] == 'E') {
-					get_dir_v(&state->dir, RIGHT);
-				}
+				set_position_and_direction(state, line[col], col, row);
 				break;
 			}
 		}
 		row++;
 	}
 	fclose(file);
+}
+
+static int init_state(t_state *state, const char *map_path)
+{
+	parse_map(state, map_path);
 
 	state->move_x = NONE_DIR;
 	state->move_y = NONE_DIR;

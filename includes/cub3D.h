@@ -6,7 +6,7 @@
 /*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 12:12:50 by lorenzogaud       #+#    #+#             */
-/*   Updated: 2024/12/19 14:17:06 by lottavi          ###   ########.fr       */
+/*   Updated: 2024/12/19 16:06:16 by lottavi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,7 +148,6 @@ typedef struct s_cub3D
 //pars
 void		init_cube(t_cub3d *cube, const char *map_path);
 void		set_hook(t_cub3d *cube);
-
 /* exit */
 
 void		clear_exit(t_cub3d *cube, int exitcode);
