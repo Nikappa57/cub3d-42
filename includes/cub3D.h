@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
+/*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 12:12:50 by lorenzogaud       #+#    #+#             */
-/*   Updated: 2024/12/12 14:23:55 by lgaudino         ###   ########.fr       */
+/*   Updated: 2024/12/19 14:17:06 by lottavi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,7 +146,7 @@ typedef struct s_cub3D
 /*************** Funtions ***************/
 
 //pars
-void		init_cube(t_cub3d *cube, const char *filename);
+void		init_cube(t_cub3d *cube, const char *map_path);
 void		set_hook(t_cub3d *cube);
 
 /* exit */

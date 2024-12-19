@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
+/*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 18:27:42 by lgaudino          #+#    #+#             */
-/*   Updated: 2024/12/18 17:53:54 by lgaudino         ###   ########.fr       */
+/*   Updated: 2024/12/19 14:36:09 by lottavi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,178 +24,7 @@ void *ft_calloc(size_t count, size_t size)
 	return ptr;
 }
 
-static int is_surrounded_by_walls(t_map *map)
-{
-	for (int i = 0; i < map->h; i++)
-	{
-		if (map->m[i][0] != 1 || map->m[i][map->w - 1] != 1)
-			return 0;
-	}
-	for (int j = 0; j < map->w; j++)
-	{
-		if (map->m[0][j] != 1 || map->m[map->h - 1][j] != 1)
-			return 0;
-	}
-	return 1;
-}
 
-int parse_map_line(const char *line, int *row, int len, int i, t_state *state)
-{
-	for (int j = 0; j < len; j++)
-	{
-		if (line[j] == '1')
-			row[j] = 1;
-		else if (line[j] == '0')
-			row[j] = 0;
-		else if (line[j] == 'N' || line[j] == 'S' || line[j] == 'E' || line[j] == 'W')
-		{
-			row[j] = 2;
-			state->pos.x = j + 0.5;
-			state->pos.y = i + 0.5;
-			if (line[j] == 'N')
-				get_dir_v(&state->dir, UP);
-			else if (line[j] == 'S')
-				get_dir_v(&state->dir, DOWN);
-			else if (line[j] == 'E')
-				get_dir_v(&state->dir, RIGHT);
-			else if (line[j] == 'W')
-				get_dir_v(&state->dir, LEFT);
-		}
-		else
-		{
-			fprintf(stderr, "Invalid character '%c' in line %d\n", line[j], i);
-			return -1;
-		}
-	}
-	return 0;
-}
-
-static int count_valid_lines(FILE *file)
-{
-	char line[256];
-	int line_count = 0;
-
-	while (fgets(line, sizeof(line), file))
-	{
-		if (strpbrk(line, "10NSEW"))
-			line_count++;
-	}
-	return line_count;
-}
-
-static int allocate_map(t_map *map, int line_count)
-{
-	map->h = line_count;
-	map->m = (int **)ft_calloc(map->h, sizeof(int *));
-	if (!map->m)
-	{
-		perror("Error allocating memory for map");
-		return -1;
-	}
-	return 0;
-}
-
-static int read_map_lines_pass1(FILE *file, int *max_w)
-{
-	char line[256];
-
-	while (fgets(line, sizeof(line), file))
-	{
-		if (strpbrk(line, "10NSEW"))
-		{
-			int len = strlen(line);
-			if (line[len - 1] == '\n')
-				line[--len] = '\0';
-			while (len > 0 && isspace((unsigned char)line[len - 1]))
-				line[--len] = '\0';
-			if (len > *max_w)
-				*max_w = len;
-		}
-	}
-	return 0;
-}
-
-static int read_map_lines_pass2(FILE *file, t_map *map, t_state *state)
-{
-	char line[256];
-	int i = 0;
-
-	while (fgets(line, sizeof(line), file))
-	{
-		if (strpbrk(line, "10NSEW"))
-		{
-			int len = strlen(line);
-			if (line[len - 1] == '\n')
-				line[--len] = '\0';
-			while (len > 0 && isspace((unsigned char)line[len - 1]))
-				line[--len] = '\0';
-			map->m[i] = (int *)ft_calloc(map->w, sizeof(int));
-			if (!map->m[i])
-			{
-				perror("Error allocating memory for map row");
-				return -1;
-			}
-			if (parse_map_line(line, map->m[i], map->w, i, state) == -1)
-				return -1;
-			i++;
-		}
-	}
-	return 0;
-}
-
-int read_map_lines(FILE *file, t_map *map, t_state *state)
-{
-	int max_w = 0;
-
-	read_map_lines_pass1(file, &max_w);
-	if (fseek(file, 0, SEEK_SET) != 0)
-	{
-		perror("Error resetting file position");
-		return -1;
-	}
-	map->w = max_w;
-	return read_map_lines_pass2(file, map, state);
-}
-
-static int init_map(t_map *map, t_state *state, const char *filename)
-{
-	FILE *file = fopen(filename, "r");
-	if (!file)
-	{
-		perror("Error opening map file");
-		return -1;
-	}
-
-	int line_count = count_valid_lines(file);
-	if (fseek(file, 0, SEEK_SET) != 0)
-	{
-		perror("Error resetting file position");
-		fclose(file);
-		return -1;
-	}
-
-	if (allocate_map(map, line_count) == -1)
-	{
-		fclose(file);
-		return -1;
-	}
-
-	if (read_map_lines(file, map, state) == -1)
-	{
-		fclose(file);
-		return -1;
-	}
-
-	if (!is_surrounded_by_walls(map))
-	{
-		fprintf(stderr, "Error: Map is not surrounded by walls\n");
-		fclose(file);
-		return -1;
-	}
-
-	fclose(file);
-	return 0;
-}
 
 static int init_mlx(t_mlx *mlx)
 {
@@ -226,17 +55,116 @@ static int init_mlx(t_mlx *mlx)
 	return 0;
 }
 
-static int init_state(t_state *state)
+static int init_map(t_map *map, const char *map_path)
 {
-	state->pos.x = 0;
-	state->pos.y = 0;
-	state->dir.x = 0;
-	state->dir.y = 0;
-	state->plane.x = 0;
-	state->plane.y = 1;
+	FILE *file = fopen(map_path, "r");
+	if (!file)
+	{
+		fprintf(stderr, "Error: Failed to open map file\n");
+		return -1;
+	}
+
+	// Get map dimensions
+	char line[256];
+	int width = 0;
+	int height = 0;
+	while (fgets(line, sizeof(line), file))
+	{
+		int len = strlen(line);
+		if (len > width)
+			width = len;
+		height++;
+	}
+
+	// Allocate memory for map
+	map->w = width;
+	map->h = height;
+	map->m = (int **)malloc(sizeof(int *) * height);
+	if (!map->m)
+	{
+		fclose(file);
+		return -1;
+	}
+
+	// Read map from file
+	rewind(file);
+	int row = 0;
+	while (fgets(line, sizeof(line), file))
+	{
+		map->m[row] = calloc(width, sizeof(int));
+		if (!map->m[row])
+		{
+			fclose(file);
+			return -1;
+		}
+
+		int col = 0;
+		for (size_t i = 0; i < strlen(line); i++)
+		{
+			if (line[i] != '\n')
+			{
+				if (line[i] == '1')
+					map->m[row][col] = 1;
+				else if (line[i] == '0')
+					map->m[row][col] = 0;
+				col++;
+			}
+		}
+
+		row++;
+	}
+
+	fclose(file);
+	return 0;
+}
+
+static int init_state(t_state *state, const char *map_path)
+{
+	// TODO: dir and pos from parser
+	// Read map file to determine player position and orientation
+	FILE *file = fopen(map_path, "r");
+	if (!file)
+	{
+		fprintf(stderr, "Error: Failed to open map file\n");
+		return -1;
+	}
+	char line[256];
+	int row = 0;
+	while (fgets(line, sizeof(line), file))
+	{
+		for (size_t col = 0; col < strlen(line); col++)
+		{
+			if (line[col] == 'N' || line[col] == 'S' || line[col] == 'W' || line[col] == 'E')
+			{
+				state->pos.x = col + 0.5;
+				state->pos.y = row + 0.5;
+				switch (line[col])
+				{
+					case 'N':
+						get_dir_v(&state->dir, UP);
+						break;
+					case 'S':
+						get_dir_v(&state->dir, DOWN);
+						break;
+					case 'W':
+						get_dir_v(&state->dir, LEFT);
+						break;
+					case 'E':
+						get_dir_v(&state->dir, RIGHT);
+						break;
+				}
+				break;
+			}
+		}
+		row++;
+	}
+	fclose(file);
+
 	state->move_x = NONE_DIR;
 	state->move_y = NONE_DIR;
 	state->rot = NONE_ROT;
+	v_perp(&state->plane, state->dir);
+	v_mul(&state->plane, state->plane, tan(FOV / 2));
 	return 0;
 }
 
@@ -274,12 +202,12 @@ static int init_textures(t_cub3d *cube)
 	return 0;
 }
 
-void init_cube(t_cub3d *cube, const char *filename)
+void init_cube(t_cub3d *cube, const char *map_path)
 {
 	ft_bzero(cube, sizeof(t_cub3d));
-	if (init_state(&cube->state) == -1)
+	if (init_state(&cube->state, map_path) == -1)
 		exit_error(cube, "init_state() failed");
-	if (init_map(&cube->map, &cube->state, filename) == -1)
+	if (init_map(&cube->map, map_path) == -1)
 		exit_error(cube, "init_map() failed");
 	if (init_mlx(&cube->mlx) == -1)
 		exit_error(cube, "init_mlx() failed");
