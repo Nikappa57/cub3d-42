@@ -6,7 +6,7 @@
 /*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 18:27:42 by lgaudino          #+#    #+#             */
-/*   Updated: 2024/12/19 14:37:21 by lottavi          ###   ########.fr       */
+/*   Updated: 2024/12/19 16:01:26 by lottavi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,6 @@ void *ft_calloc(size_t count, size_t size)
 	memset(ptr, 0, count * size);
 	return ptr;
 }
-
-
 
 static int init_mlx(t_mlx *mlx)
 {
@@ -57,17 +55,10 @@ static int init_mlx(t_mlx *mlx)
 
 static int init_map(t_map *map, const char *map_path)
 {
-	FILE *file = fopen(map_path, "r");
-	if (!file)
-	{
-		fprintf(stderr, "Error: Failed to open map file\n");
-		return -1;
-	}
-
-	// Get map dimensions
 	char line[256];
 	int width = 0;
 	int height = 0;
+	FILE *file = fopen(map_path, "r");
 	while (fgets(line, sizeof(line), file))
 	{
 		int len = strlen(line);
@@ -75,8 +66,6 @@ static int init_map(t_map *map, const char *map_path)
 			width = len;
 		height++;
 	}
-
-	// Allocate memory for map
 	map->w = width;
 	map->h = height;
 	map->m = (int **)malloc(sizeof(int *) * height);
@@ -85,8 +74,6 @@ static int init_map(t_map *map, const char *map_path)
 		fclose(file);
 		return -1;
 	}
-
-	// Read map from file
 	rewind(file);
 	int row = 0;
 	while (fgets(line, sizeof(line), file))
@@ -110,24 +97,15 @@ static int init_map(t_map *map, const char *map_path)
 				col++;
 			}
 		}
-
 		row++;
 	}
-
 	fclose(file);
 	return 0;
 }
 
 static int init_state(t_state *state, const char *map_path)
 {
-	// TODO: dir and pos from parser
-	// Read map file to determine player position and orientation
 	FILE *file = fopen(map_path, "r");
-	if (!file)
-	{
-		fprintf(stderr, "Error: Failed to open map file\n");
-		return -1;
-	}
 	char line[256];
 	int row = 0;
 	while (fgets(line, sizeof(line), file))
@@ -190,7 +168,6 @@ static int init_textures(t_cub3d *cube)
 		if (load_texture(cube, &cube->texture[i], textures[i]) == -1)
 			return -1;
 	}
-
 	cube->ceiling_color = BLUE2;
 	cube->floor_color = GREEN;
 	return 0;
