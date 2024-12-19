@@ -45,6 +45,53 @@ static int	init_mlx(t_mlx *mlx)
 	return (0);
 }
 
+static int is_map_acceptable(t_map *map)
+{
+	int i, j;
+	int n_count = 0, w_count = 0, e_count = 0, s_count = 0;
+
+	// Check if the first line is made of only 1s
+	j = 0;
+	while (j < map->w - 1) {
+		if (map->m[0][j] != 1) {
+			return 0;
+		}
+		j++;
+	}
+	printf("Width of the map: %d\n", map->w);
+	// Check lines from the second to the penultimate
+	i = 1;
+	while (i < map->h - 1) {
+		if (map->m[i][0] != 1 || map->m[i][map->w - 1] != 1) {
+			return 0;
+		}
+		j = 0;
+		while (j < map->w) {
+			if (map->m[i][j] == 'N') n_count++;
+			if (map->m[i][j] == 'W') w_count++;
+			if (map->m[i][j] == 'E') e_count++;
+			if (map->m[i][j] == 'S') s_count++;
+			j++;
+		}
+		i++;
+	}
+	// Check if the last line is made of only 1s
+	j = 0;
+	while (j < map->w) {
+		if (map->m[map->h - 1][j] != 1) {
+			return 0;
+		}
+		j++;
+	}
+	// Check if there is exactly one 'N', 'W', 'E', and 'S'
+	if (n_count != 1 || w_count != 1 || e_count != 1 || s_count != 1) {
+		return 0;
+	}
+	printf("Height of the map: %d\n", map->h);
+	return 1;
+}
+
+
 static int	init_map(t_map *map, const char *map_path)
 {
 	char	line[256];
@@ -110,7 +157,7 @@ static void	set_position_and_direction(t_state *state,
 		get_dir_v(&state->dir, RIGHT);
 }
 
-static void	parse_map(t_state *state, const char *map_path)
+static void	parse_player(t_state *state, const char *map_path)
 {
 	FILE	*file;
 	char	line[256];
@@ -139,7 +186,7 @@ static void	parse_map(t_state *state, const char *map_path)
 
 static int	init_state(t_state *state, const char *map_path)
 {
-	parse_map(state, map_path);
+	parse_player(state, map_path);
 
 	state->move_x = NONE_DIR;
 	state->move_y = NONE_DIR;
@@ -188,6 +235,8 @@ static int	init_textures(t_cub3d *cube)
 void	init_cube(t_cub3d *cube, const char *map_path)
 {
 	ft_bzero(cube, sizeof(t_cub3d));
+	if(is_map_acceptable(&cube->map) == 0)
+		exit_error(cube, "Map is not acceptable");
 	if (init_state(&cube->state, map_path) == -1)
 		exit_error(cube, "init_state() failed");
 	if (init_map(&cube->map, map_path) == -1)
