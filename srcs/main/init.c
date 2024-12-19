@@ -44,76 +44,89 @@ static int	init_mlx(t_mlx *mlx)
 		return (printf("Error: mlx_get_data_addr failed\n"), (-1));
 	return (0);
 }
-
 static int	init_map(t_map *map, const char *map_path)
 {
-	char	line[256];
-	int		width = 0;
-	int		height = 0;
-	FILE	*file = fopen(map_path, "r");
-	if (!file)
-		return -1;
+    char	line[256];
+    int		width = 0;
+    int		height = 0;
+    FILE	*file = fopen(map_path, "r");
+    if (!file)
+        return -1;
 
-	// Determine the width and height of the map
-	while (fgets(line, sizeof(line), file))
-	{
-		int len = strlen(line);
-		if (line[len - 1] == '\n')
-			len--; // Ignore newline character at the end of the line
-		if (len > width)
-			width = len;
-		height++;
-	}
-	fclose(file);
+    // Determine the width and height of the map
+    while (fgets(line, sizeof(line), file))
+    {
+        int len = 0;
+        for (size_t i = 0; i < strlen(line); i++)
+        {
+            if (line[i] == '\t')
+                len += 4; // Count tab as 4 spaces
+            else
+                len++;
+        }
+        if (line[len - 1] == '\n')
+            len--; // Ignore newline character at the end of the line
+        if (len > width)
+            width = len;
+        height++;
+    }
+    fclose(file);
 
-	map->w = width;
-	map->h = height;
-	// Allocate memory for the map
-	map->m = (int **)malloc(sizeof(int *) * height);
-	if (!map->m)
-		return -1;
+    map->w = width;
+    map->h = height;
+    // Allocate memory for the map
+    map->m = (int **)malloc(sizeof(int *) * height);
+    if (!map->m)
+        return -1;
 
-	for (int i = 0; i < height; i++)
-	{
-		map->m[i] = (int *)calloc(width, sizeof(int));
-		if (!map->m[i])
-		{
-			for (int j = 0; j < i; j++)
-				free(map->m[j]);
-			free(map->m);
-			return -1;
-		}
-	}
+    for (int i = 0; i < height; i++)
+    {
+        map->m[i] = (int *)calloc(width, sizeof(int));
+        if (!map->m[i])
+        {
+            for (int j = 0; j < i; j++)
+                free(map->m[j]);
+            free(map->m);
+            return -1;
+        }
+    }
 
-	// Reopen the file and read the map into the allocated space
-	file = fopen(map_path, "r");
-	if (!file)
-	{
-		for (int i = 0; i < height; i++)
-			free(map->m[i]);
-		free(map->m);
-		return -1;
-	}
+    // Reopen the file and read the map into the allocated space
+    file = fopen(map_path, "r");
+    if (!file)
+    {
+        for (int i = 0; i < height; i++)
+            free(map->m[i]);
+        free(map->m);
+        return -1;
+    }
 
-	int row = 0;
-	while (fgets(line, sizeof(line), file))
-	{
-		int col = 0;
-		for (size_t i = 0; i < strlen(line); i++)
-		{
-			if (line[i] != '\n')
-			{
-				if (line[i] == '1')
-					map->m[row][col] = 1;
-				else if (line[i] == '0')
-					map->m[row][col] = 0;
-				col++;
-			}
-		}
-		row++;
-	}
-	fclose(file);
-	return 0;
+    int row = 0;
+    while (fgets(line, sizeof(line), file))
+    {
+        int col = 0;
+        for (size_t i = 0; i < strlen(line); i++)
+        {
+            if (line[i] == '\t')
+            {
+                for (int j = 0; j < 4; j++)
+                    map->m[row][col++] = 0; // Treat tab as 4 empty cells
+            }
+            else if (line[i] != '\n')
+            {
+                if (line[i] == '1')
+                    map->m[row][col] = 1;
+                else if (line[i] == '0')
+                    map->m[row][col] = 0;
+                else if (line[i] == ' ')
+                    map->m[row][col] = 0; // Treat space as empty cell
+                col++;
+            }
+        }
+        row++;
+    }
+    fclose(file);
+    return 0;
 }
 
 static void	set_position_and_direction(t_state *state,
@@ -137,20 +150,26 @@ static void	parse_player(t_state *state, const char *map_path)
 	char	line[256];
 	int		row;
 	size_t	col;
+	size_t	actual_col;
 
 	file = fopen(map_path, "r");
 	row = 0;
 	while (fgets(line, sizeof(line), file))
 	{
 		col = 0;
+		actual_col = 0;
 		while (col < strlen(line))
 		{
 			if (line[col] == 'N' || line[col] == 'S'
 				|| line[col] == 'W' || line[col] == 'E')
 			{
-				set_position_and_direction(state, line[col], col, row);
+				set_position_and_direction(state, line[col], actual_col, row);
 				break ;
 			}
+			if (line[col] == '\t')
+				actual_col += 4;
+			else
+				actual_col++;
 			col++;
 		}
 		row++;
@@ -209,10 +228,10 @@ static int	init_textures(t_cub3d *cube)
 void	init_cube(t_cub3d *cube, const char *map_path)
 {
 	ft_bzero(cube, sizeof(t_cub3d));
-	if (init_state(&cube->state, map_path) == -1)
-		exit_error(cube, "init_state() failed");
 	if (init_map(&cube->map, map_path) == -1)
 		exit_error(cube, "init_map() failed");
+	if (init_state(&cube->state, map_path) == -1)
+		exit_error(cube, "init_state() failed");
 	if (init_mlx(&cube->mlx) == -1)
 		exit_error(cube, "init_mlx() failed");
 	if(init_mlx(&cube->mlx_test) == -1)
