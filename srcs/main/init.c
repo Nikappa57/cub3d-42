@@ -45,85 +45,59 @@ static int	init_mlx(t_mlx *mlx)
 	return (0);
 }
 
-static int is_map_acceptable(t_map *map)
-{
-	int i, j;
-	int n_count = 0, w_count = 0, e_count = 0, s_count = 0;
-
-	// Check if the first line is made of only 1s
-	j = 0;
-	while (j < map->w - 1) {
-		if (map->m[0][j] != 1) {
-			return 0;
-		}
-		j++;
-	}
-	printf("Width of the map: %d\n", map->w);
-	// Check lines from the second to the penultimate
-	i = 1;
-	while (i < map->h - 1) {
-		if (map->m[i][0] != 1 || map->m[i][map->w - 1] != 1) {
-			return 0;
-		}
-		j = 0;
-		while (j < map->w) {
-			if (map->m[i][j] == 'N') n_count++;
-			if (map->m[i][j] == 'W') w_count++;
-			if (map->m[i][j] == 'E') e_count++;
-			if (map->m[i][j] == 'S') s_count++;
-			j++;
-		}
-		i++;
-	}
-	// Check if the last line is made of only 1s
-	j = 0;
-	while (j < map->w) {
-		if (map->m[map->h - 1][j] != 1) {
-			return 0;
-		}
-		j++;
-	}
-	// Check if there is exactly one 'N', 'W', 'E', and 'S'
-	if (n_count != 1 || w_count != 1 || e_count != 1 || s_count != 1) {
-		return 0;
-	}
-	printf("Height of the map: %d\n", map->h);
-	return 1;
-}
-
-
 static int	init_map(t_map *map, const char *map_path)
 {
 	char	line[256];
 	int		width = 0;
 	int		height = 0;
 	FILE	*file = fopen(map_path, "r");
+	if (!file)
+		return -1;
+
+	// Determine the width and height of the map
 	while (fgets(line, sizeof(line), file))
 	{
 		int len = strlen(line);
+		if (line[len - 1] == '\n')
+			len--; // Ignore newline character at the end of the line
 		if (len > width)
 			width = len;
 		height++;
 	}
+	fclose(file);
+
 	map->w = width;
 	map->h = height;
+	// Allocate memory for the map
 	map->m = (int **)malloc(sizeof(int *) * height);
 	if (!map->m)
+		return -1;
+
+	for (int i = 0; i < height; i++)
 	{
-		fclose(file);
+		map->m[i] = (int *)calloc(width, sizeof(int));
+		if (!map->m[i])
+		{
+			for (int j = 0; j < i; j++)
+				free(map->m[j]);
+			free(map->m);
+			return -1;
+		}
+	}
+
+	// Reopen the file and read the map into the allocated space
+	file = fopen(map_path, "r");
+	if (!file)
+	{
+		for (int i = 0; i < height; i++)
+			free(map->m[i]);
+		free(map->m);
 		return -1;
 	}
-	rewind(file);
+
 	int row = 0;
 	while (fgets(line, sizeof(line), file))
 	{
-		map->m[row] = calloc(width, sizeof(int));
-		if (!map->m[row])
-		{
-			fclose(file);
-			return -1;
-		}
-
 		int col = 0;
 		for (size_t i = 0; i < strlen(line); i++)
 		{
@@ -235,8 +209,6 @@ static int	init_textures(t_cub3d *cube)
 void	init_cube(t_cub3d *cube, const char *map_path)
 {
 	ft_bzero(cube, sizeof(t_cub3d));
-	if(is_map_acceptable(&cube->map) == 0)
-		exit_error(cube, "Map is not acceptable");
 	if (init_state(&cube->state, map_path) == -1)
 		exit_error(cube, "init_state() failed");
 	if (init_map(&cube->map, map_path) == -1)
