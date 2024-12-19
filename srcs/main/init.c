@@ -6,7 +6,7 @@
 /*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 18:27:42 by lgaudino          #+#    #+#             */
-/*   Updated: 2024/12/19 14:36:09 by lottavi          ###   ########.fr       */
+/*   Updated: 2024/12/19 14:37:21 by lottavi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,20 +138,14 @@ static int init_state(t_state *state, const char *map_path)
 			{
 				state->pos.x = col + 0.5;
 				state->pos.y = row + 0.5;
-				switch (line[col])
-				{
-					case 'N':
-						get_dir_v(&state->dir, UP);
-						break;
-					case 'S':
-						get_dir_v(&state->dir, DOWN);
-						break;
-					case 'W':
-						get_dir_v(&state->dir, LEFT);
-						break;
-					case 'E':
-						get_dir_v(&state->dir, RIGHT);
-						break;
+				if (line[col] == 'N') {
+					get_dir_v(&state->dir, UP);
+				} else if (line[col] == 'S') {
+					get_dir_v(&state->dir, DOWN);
+				} else if (line[col] == 'W') {
+					get_dir_v(&state->dir, LEFT);
+				} else if (line[col] == 'E') {
+					get_dir_v(&state->dir, RIGHT);
 				}
 				break;
 			}
