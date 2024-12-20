@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+         #
+#    By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/28 17:04:44 by lgaudino          #+#    #+#              #
-#    Updated: 2024/12/12 14:40:30 by lgaudino         ###   ########.fr        #
+#    Updated: 2024/12/20 12:15:17 by lottavi          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,7 +26,7 @@ NORM				=	norminette
 
 DIR_SRCS			=	srcs
 DIR_OBJS			=	objs
-SUBDIRS				=	main mlx_utils cube movement utils
+SUBDIRS				=	main mlx_utils cube movement utils parser
 
 SRCS_PATHS			=	$(foreach dir, $(SUBDIRS), $(addprefix $(DIR_SRCS)/, $(dir)))
 OBJS_PATHS			=	$(foreach dir, $(SUBDIRS), $(addprefix $(DIR_OBJS)/, $(dir)))
@@ -53,7 +53,7 @@ clean:
 					$(RM) -r $(DIR_OBJS)
 					make clean -C $(LIBFT_DIR)
 					make clean -C $(MLX_DIR)
-					
+
 
 fclean:				clean
 					$(RM) $(NAME)

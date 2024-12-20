@@ -6,7 +6,7 @@
 /*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 17:46:56 by lgaudino          #+#    #+#             */
-/*   Updated: 2024/12/05 19:35:04 by lgaudino         ###   ########.fr       */
+/*   Updated: 2024/12/17 15:47:00 by lgaudino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static void clear_mlx(t_mlx mlx)
 {
-	if (mlx.mlx)
+	if (!mlx.mlx)
 		return ;
 	if (mlx.data.img)
 		mlx_destroy_image(mlx.mlx, mlx.data.img);
@@ -30,7 +30,10 @@ static void clear_map(t_map map)
 	if (map.m)
 	{
 		for (int i = 0; i < map.h; i++)
-			free(map.m[i]);
+		{
+			if (map.m[i])
+				free(map.m[i]);
+		}
 		free(map.m);
 	}
 }

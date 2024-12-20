@@ -3,20 +3,25 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
+/*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 12:11:01 by lorenzogaud       #+#    #+#             */
-/*   Updated: 2024/11/30 23:46:07 by lgaudino         ###   ########.fr       */
+/*   Updated: 2024/12/19 14:16:50 by lottavi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3D.h"
 
-int	main(void)
+int	main(int argc, char **argv)
 {
 	t_cub3d	cube;
 
-	init_cube(&cube);
+	if (argc != 2) {
+		fprintf(stderr, "Usage: %s <map_file.cub>\n", argv[0]);
+		return 1;
+	}
+
+	init_cube(&cube, argv[1]);
 	set_hook(&cube);
 	show_cube(&cube);
 	return (mlx_loop(cube.mlx.mlx));

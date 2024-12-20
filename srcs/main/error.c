@@ -14,7 +14,7 @@
 
 void	exit_error(t_cub3d *cube, char *message)
 {
-	ft_putstr_fd("Error:", 2);
+	ft_putstr_fd("Error: ", 2);
 	ft_putstr_fd(message, 2);
 	ft_putchar_fd('\n', 2);
 	clear_exit(cube, 1);
