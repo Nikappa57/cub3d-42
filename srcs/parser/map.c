@@ -25,20 +25,13 @@ int init_map(t_map *map, const char *map_path) {
     }
 
     skip_texture_info(fd);
-
-    char *line = NULL;
+    char *line = get_next_line(fd);
     size_t len = 1024; // Lunghezza massima della riga
     ssize_t read_bytes;
     int width = 0, height = 0;
 
     // Calcola dimensioni della mappa
-    while ((read_bytes = fd_getline(&line, &len, fd)) != -1) {
-        if (read_bytes == -2) {
-            printf("Error: Line exceeds buffer size\n");
-            free(line);
-            close(fd);
-            return -1;
-        }
+	while ((line = get_next_line(fd)) != NULL) {
 
         int line_length = 0;
         for (size_t i = 0; i < ft_strlen(line); i++) {
@@ -88,7 +81,7 @@ int init_map(t_map *map, const char *map_path) {
     }
 
     skip_texture_info(fd);
-
+	printf("width: %d, height: %d\n", width, height);
     int row = 0;
     line = malloc(len);
     if (!line) {

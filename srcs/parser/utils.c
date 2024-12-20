@@ -26,22 +26,22 @@ void	*ft_calloc(size_t count, size_t size)
 	return (ptr);
 }
 
-int	skip_texture_info(int fd)
+int skip_texture_info(int fd)
 {
-	char	*line;
-	int		is_empty;
-	int		i;
+	char *line;
+	int is_empty;
+	int i;
 
 	// Controllo del file descriptor
 	if (fd < 0)
 	{
-		fprintf(stderr, "Error: Invalid file descriptor\n");
+		printf("Error: Invalid file descriptor\n");
 		return (-1);
 	}
 
 	while ((line = get_next_line(fd)) != NULL)
 	{
-		is_empty = 1;
+		is_empty = true;
 		i = 0;
 
 		// Check if the line is empty or contains only spaces/tabs
@@ -49,7 +49,7 @@ int	skip_texture_info(int fd)
 		{
 			if (!ft_isspace(line[i]))
 			{
-				is_empty = 0;
+				is_empty = false;
 				break;
 			}
 			i++;
@@ -74,14 +74,13 @@ int	skip_texture_info(int fd)
 			// Rewind the file descriptor to re-read the current line
 			if (lseek(fd, -strlen(line), SEEK_CUR) == -1)
 			{
-				fprintf(stderr, "Error: Failed to rewind file descriptor\n");
+				printf("Error: Failed to rewind file descriptor\n");
 				free(line);
 				return (-1);
 			}
 			free(line);
 			break;
 		}
-		free(line);
 	}
 	return (0); // Success
 }
