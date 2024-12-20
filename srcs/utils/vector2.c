@@ -6,7 +6,7 @@
 /*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 19:44:21 by lgaudino          #+#    #+#             */
-/*   Updated: 2024/12/20 14:54:30 by lgaudino         ###   ########.fr       */
+/*   Updated: 2024/12/20 15:18:10 by lgaudino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,4 +38,3 @@ double	v_distance_pow2(t_vector v1, t_vector v2)
 {
 	return (pow(v1.x - v2.x, 2) + pow(v1.y - v2.y, 2));
 }
-
