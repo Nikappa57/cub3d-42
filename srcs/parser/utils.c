@@ -6,7 +6,7 @@
 /*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 11:14:35 by lottavi           #+#    #+#             */
-/*   Updated: 2024/12/20 12:31:13 by lottavi          ###   ########.fr       */
+/*   Updated: 2024/12/20 14:03:32 by lottavi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,8 +82,9 @@ void	free_map(t_map *map)
 	free(map->m);
 }
 
-void	skip_spaces(const int *line, int *len)
+char	*skip_spaces_and_tabs(char *str)
 {
-	while (line[*len] == ' ' || line[*len] == '\t')
-		(*len)++;
+	while (*str == ' ' || *str == '\t')
+		str++;
+	return (str);
 }

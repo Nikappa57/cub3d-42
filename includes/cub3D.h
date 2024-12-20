@@ -6,7 +6,7 @@
 /*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 12:12:50 by lorenzogaud       #+#    #+#             */
-/*   Updated: 2024/12/20 11:20:38 by lottavi          ###   ########.fr       */
+/*   Updated: 2024/12/20 14:03:43 by lottavi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,7 +180,7 @@ bool		flood_fill(t_map *map, int x, int y, bool **visited);
 void		skip_texture_info(FILE *file);
 void		skip_spaces(const int *line, int *len);
 void		free_map(t_map *map);
-
+char		*skip_spaces_and_tabs(char *str);
 
 /* exit */
 
