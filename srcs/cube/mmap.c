@@ -6,11 +6,11 @@
 /*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 15:11:49 by lgaudino          #+#    #+#             */
-/*   Updated: 2024/12/20 16:16:06 by lgaudino         ###   ########.fr       */
+/*   Updated: 2024/12/20 16:25:55 by lgaudino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "cub3D.h"
+#include "cub3D.h"
 
 static void	draw_dir(
 	t_cub3d *cube, t_point	pos, t_vector pos_dir, int block_size)

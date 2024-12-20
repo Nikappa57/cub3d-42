@@ -6,7 +6,7 @@
 /*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 12:12:50 by lorenzogaud       #+#    #+#             */
-/*   Updated: 2024/12/20 16:17:17 by lgaudino         ###   ########.fr       */
+/*   Updated: 2024/12/20 16:25:45 by lgaudino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -179,7 +179,7 @@ bool			flood_fill(t_map *map, int x, int y, bool **visited);
 void			skip_texture_info(FILE *file);
 void			skip_spaces(const int *line, int *len);
 void			free_map(t_map *map);
-char		  *skip_spaces_and_tabs(char *str);
+char			*skip_spaces_and_tabs(char *str);
 
 /* exit */
 
