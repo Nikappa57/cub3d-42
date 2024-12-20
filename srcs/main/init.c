@@ -156,6 +156,7 @@ static void	parse_player(t_state *state, const char *map_path)
 	int		row;
 	size_t	col;
 	size_t	actual_col;
+	int		player_count = 0;
 
 	file = fopen(map_path, "r");
 	row = 0;
@@ -168,8 +169,8 @@ static void	parse_player(t_state *state, const char *map_path)
 			if (line[col] == 'N' || line[col] == 'S'
 				|| line[col] == 'W' || line[col] == 'E')
 			{
+				player_count++;
 				set_position_and_direction(state, line[col], actual_col, row);
-				break ;
 			}
 			if (line[col] == '\t')
 				actual_col += 4;
@@ -178,6 +179,11 @@ static void	parse_player(t_state *state, const char *map_path)
 			col++;
 		}
 		row++;
+	}
+	if (player_count != 1)
+	{
+		printf("\033[0;31mError: Invalid number of players\033[0m\n");
+		exit(1);
 	}
 	fclose(file);
 }
