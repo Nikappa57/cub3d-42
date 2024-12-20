@@ -6,11 +6,11 @@
 /*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 19:18:10 by lgaudino          #+#    #+#             */
-/*   Updated: 2024/12/05 19:27:24 by lgaudino         ###   ########.fr       */
+/*   Updated: 2024/12/20 14:49:57 by lgaudino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "cub3D.h"
+#include "cub3D.h"
 
 int	window_clean(t_mlx *mlx)
 {
@@ -28,8 +28,7 @@ int	window_clean(t_mlx *mlx)
 	return (0);
 }
 
-void show_window(t_mlx *mlx)
+void	show_window(t_mlx *mlx)
 {
 	mlx_put_image_to_window(mlx->mlx, mlx->win, mlx->data.img, 0, 0);
 }
-

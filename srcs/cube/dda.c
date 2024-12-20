@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cube->dda.c                                              :+:      :+:    :+:   */
+/*   dda.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/05 16:58:25 by lgaudino          #+#    #+#             */
-/*   Updated: 2024/12/05 17:02:35 by lgaudino         ###   ########.fr       */
+/*   Created: 2024/12/20 14:29:23 by lgaudino          #+#    #+#             */
+/*   Updated: 2024/12/20 14:37:42 by lgaudino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,40 +32,41 @@ static void	dda_delta_dist(t_dda *dda)
  *	Save step for each direction and initial side_dist equal to the
  *	distance from the initial position to the x and y side
  */
-static void	dda_inital_data(t_cub3d *cube)
+static void	dda_inital_data(t_dda *dda, t_vector pos)
 {
-	if (cube->dda.ray_dir.x < 0)
+	if (dda->ray_dir.x < 0)
 	{
-		cube->dda.step_x = -1;
-		cube->dda.side_dist_x = (cube->state.pos.x - cube->dda.map_pos.x) * cube->dda.delta_dist_x;
+		dda->step_x = -1;
+		dda->side_dist_x = (pos.x - dda->map_pos.x) * dda->delta_dist_x;
 	}
 	else
 	{
-		cube->dda.step_x = 1;
-		cube->dda.side_dist_x = (cube->dda.map_pos.x + 1.0 - cube->state.pos.x) * cube->dda.delta_dist_x;
+		dda->step_x = 1;
+		dda->side_dist_x = (dda->map_pos.x + 1.0 - pos.x) * dda->delta_dist_x;
 	}
-	if (cube->dda.ray_dir.y < 0)
+	if (dda->ray_dir.y < 0)
 	{
-		cube->dda.step_y = -1;
-		cube->dda.side_dist_y = (cube->state.pos.y - cube->dda.map_pos.y) * cube->dda.delta_dist_y;
+		dda->step_y = -1;
+		dda->side_dist_y = (pos.y - dda->map_pos.y) * dda->delta_dist_y;
 	}
 	else
 	{
-		cube->dda.step_y = 1;
-		cube->dda.side_dist_y = (cube->dda.map_pos.y + 1.0 - cube->state.pos.y) * cube->dda.delta_dist_y;
+		dda->step_y = 1;
+		dda->side_dist_y = (dda->map_pos.y + 1.0 - pos.y) * dda->delta_dist_y;
 	}
-	cube->dda.side = -1;
-	cube->dda.distance = 0;
+	dda->side = -1;
+	dda->distance = 0;
 }
 
 static void	dda_data_setup(t_cub3d *cube, int x)
 {
-	v_mul(&cube->dda.ray_dir, cube->state.plane, 2 * x / (double) WIN_WIDTH - 1);
+	v_mul(&cube->dda.ray_dir, cube->state.plane,
+		2 * x / (double) WIN_WIDTH - 1);
 	v_sum(&cube->dda.ray_dir, cube->dda.ray_dir, cube->state.dir);
 	cube->dda.map_pos.x = (int)cube->state.pos.x;
 	cube->dda.map_pos.y = (int)cube->state.pos.y;
 	dda_delta_dist(&cube->dda);
-	dda_inital_data(cube);
+	dda_inital_data(&cube->dda, cube->state.pos);
 }
 
 bool	is_wall(t_map map, t_point p)
