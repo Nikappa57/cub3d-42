@@ -6,13 +6,13 @@
 /*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 17:46:56 by lgaudino          #+#    #+#             */
-/*   Updated: 2024/12/17 15:47:00 by lgaudino         ###   ########.fr       */
+/*   Updated: 2024/12/20 14:43:54 by lgaudino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3D.h"
 
-static void clear_mlx(t_mlx mlx)
+static void	clear_mlx(t_mlx mlx)
 {
 	if (!mlx.mlx)
 		return ;
@@ -25,11 +25,14 @@ static void clear_mlx(t_mlx mlx)
 	free(mlx.mlx);
 }
 
-static void clear_map(t_map map)
+static void	clear_map(t_map map)
 {
+	int	i;
+
 	if (map.m)
 	{
-		for (int i = 0; i < map.h; i++)
+		i = -1;
+		while (++i < map.h)
 		{
 			if (map.m[i])
 				free(map.m[i]);
@@ -61,4 +64,3 @@ void	clear_exit(t_cub3d *cube, int exitcode)
 	}
 	exit(exitcode);
 }
-
