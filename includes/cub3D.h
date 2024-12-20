@@ -6,7 +6,7 @@
 /*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 12:12:50 by lorenzogaud       #+#    #+#             */
-/*   Updated: 2024/12/19 16:06:16 by lottavi          ###   ########.fr       */
+/*   Updated: 2024/12/20 11:20:38 by lottavi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,6 +158,30 @@ typedef struct s_config
 //pars
 void		init_cube(t_cub3d *cube, const char *map_path);
 void		set_hook(t_cub3d *cube);
+
+//texture
+int			load_texture(t_cub3d *cube, t_img *t, const char *path);
+int			init_textures(t_cub3d *cube, const char *map_path);
+int			read_config(const char *map_path, t_config *config);
+int			parse_color(const char *line);
+
+//map
+int			init_map(t_map *map, const char *map_path);
+
+//player
+void		parse_player(t_state *state, const char *map_path);
+void		parse_line(t_state *state, const char *line, int row, int *player_count);
+void		set_position_and_direction(t_state *state, char direction_char, int col, int row);
+bool		is_map_enclosed(t_state *state, t_map *map);
+
+//utils
+void		*ft_calloc(size_t count, size_t size);
+bool		flood_fill(t_map *map, int x, int y, bool **visited);
+void		skip_texture_info(FILE *file);
+void		skip_spaces(const int *line, int *len);
+void		free_map(t_map *map);
+
+
 /* exit */
 
 void		clear_exit(t_cub3d *cube, int exitcode);
