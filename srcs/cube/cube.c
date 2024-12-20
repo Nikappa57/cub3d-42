@@ -6,7 +6,7 @@
 /*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 19:16:39 by lgaudino          #+#    #+#             */
-/*   Updated: 2024/12/20 14:36:40 by lgaudino         ###   ########.fr       */
+/*   Updated: 2024/12/20 14:42:08 by lgaudino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,6 @@ void	draw_map(t_cub3d *cube)
 {
 	int block_size = (int)fmin(WIN_WIDTH / cube->map.w, WIN_HEIGHT / cube->map.h);
 
-
-	printf("h: %d, w: %d\n", cube->map.h, cube->map.w);
 	t_point start;
 	// MAP
 	for (int y = 0; y < cube->map.h; y++)

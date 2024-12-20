@@ -6,7 +6,7 @@
 /*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 12:12:50 by lorenzogaud       #+#    #+#             */
-/*   Updated: 2024/12/20 14:28:39 by lgaudino         ###   ########.fr       */
+/*   Updated: 2024/12/20 14:38:18 by lgaudino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,6 @@ typedef enum e_rot
 	LEFT_ROT,
 	RIGHT_ROT
 }	t_rot;
-
 
 // 2d vector
 typedef struct s_vector
@@ -180,7 +179,6 @@ bool		flood_fill(t_map *map, int x, int y, bool **visited);
 void		skip_texture_info(FILE *file);
 void		skip_spaces(const int *line, int *len);
 void		free_map(t_map *map);
-
 
 /* exit */
 
