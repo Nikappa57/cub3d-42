@@ -6,7 +6,7 @@
 /*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 11:14:35 by lottavi           #+#    #+#             */
-/*   Updated: 2024/12/20 14:03:32 by lottavi          ###   ########.fr       */
+/*   Updated: 2024/12/20 14:50:36 by lottavi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,17 +29,33 @@ void	*ft_calloc(size_t count, size_t size)
 void	skip_texture_info(FILE *file)
 {
 	char	line[256];
+	int		is_empty;
 	int		i;
 
-	i = 0;
-	while (i < 7)
+	while (fgets(line, sizeof(line), file) != NULL)
 	{
-		if (fgets(line, sizeof(line), file) == NULL)
+		is_empty = 1;
+		i = 0;
+		while (line[i] != '\0')
 		{
-			perror("Error reading texture info");
-			exit(1);
+			if (!isspace(line[i]))
+			{
+				is_empty = 0;
+				break;
+			}
+			i++;
 		}
-		i++;
+		if (is_empty)
+			continue;
+		if (strncmp(line, "NO", 2) == 0 || strncmp(line, "SO", 2) == 0 ||
+			strncmp(line, "WE", 2) == 0 || strncmp(line, "EA", 2) == 0 ||
+			strncmp(line, "F", 1) == 0 || strncmp(line, "C", 1) == 0)
+			continue;
+		else
+		{
+			fseek(file, -strlen(line), SEEK_CUR);
+			break;
+		}
 	}
 }
 
