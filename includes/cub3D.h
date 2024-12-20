@@ -143,6 +143,16 @@ typedef struct s_cub3D
 	t_dda		dda;
 }				t_cub3d;
 
+typedef struct s_config
+{
+	char		*north_texture;
+	char		*south_texture;
+	char		*west_texture;
+	char		*east_texture;
+	int			floor_color;
+	int			ceiling_color;
+}				t_config;
+
 /*************** Funtions ***************/
 
 //pars

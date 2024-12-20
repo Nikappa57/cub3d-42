@@ -1,7 +1,7 @@
-NO ./path_to_the_north_texture
-SO ./path_to_the_south_texture
-WE ./path_to_the_west_texture
-EA ./path_to_the_east_texture
+NO ./D:\Folders\42\cub3d-42\texture\wolfenstein\colorstone.xpm
+SO ./D:\Folders\42\cub3d-42\texture\wolfenstein\bluestone.xpm
+WE ./D:\Folders\42\cub3d-42\texture\wolfenstein\eagle.xpm
+EA ./D:\Folders\42\cub3d-42\texture\wolfenstein\redbrick.xpm
 F 220,100,0
 C 225,30,0
 

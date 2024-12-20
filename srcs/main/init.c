@@ -301,45 +301,98 @@ bool	is_map_enclosed(t_state *state, t_map *map)
 	return result;
 }
 
-static int	load_texture(t_cub3d *cube, t_img *t, const char *path)
-{
+static int	parse_color(const char *str) {
+	int	r, g, b;
+	char	*endptr;
+
+	r = strtol(str, &endptr, 10);
+	if (*endptr != ',')
+		return -1;
+	str = endptr + 1;
+
+	g = strtol(str, &endptr, 10);
+	if (*endptr != ',')
+		return -1;
+	str = endptr + 1;
+
+	b = strtol(str, &endptr, 10);
+	if (*endptr != '\0' && *endptr != '\n')
+		return -1;
+
+	return (r << 16) | (g << 8) | b;
+}
+
+static int	read_config(const char *file_path, t_config *config) {
+	FILE	*file = fopen(file_path, "r");
+	if (!file) {
+		fprintf(stderr, "Error: Failed to open config file %s\n", file_path);
+		return -1;
+	}
+
+	char	line[256];
+	while (fgets(line, sizeof(line), file)) {
+		if (strncmp(line, "NO ", 3) == 0)
+			config->north_texture = strdup(line + 3);
+		else if (strncmp(line, "SO ", 3) == 0)
+			config->south_texture = strdup(line + 3);
+		else if (strncmp(line, "WE ", 3) == 0)
+			config->west_texture = strdup(line + 3);
+		else if (strncmp(line, "EA ", 3) == 0)
+			config->east_texture = strdup(line + 3);
+		else if (strncmp(line, "F ", 2) == 0)
+			config->floor_color = parse_color(line + 2);
+		else if (strncmp(line, "C ", 2) == 0)
+			config->ceiling_color = parse_color(line + 2);
+	}
+
+	fclose(file);
+	return 0;
+}
+
+static int	load_texture(t_cub3d *cube, t_img *t, const char *path) {
 	t->img = mlx_xpm_file_to_image(cube->mlx.mlx, (char *)path, &t->img_width, &t->img_height);
-	if (!t->img)
-	{
+	if (!t->img) {
 		fprintf(stderr, "Error: Failed to load texture %s\n", path);
-		return (-1);
+		return -1;
 	}
 	t->addr = mlx_get_data_addr(t->img, &t->bits_per_pixel, &t->line_length, &t->endian);
 	if (!t->addr)
-		return (-1);
-	return (0);
+		return -1;
+	return 0;
 }
 
-static int	init_textures(t_cub3d *cube)
-{
-	int	i;
+static int	init_textures(t_cub3d *cube, const char *map_path) {
+	t_config	config;
+	if (read_config(map_path, &config) == -1)
+		return -1;
 
-	const char	*textures[] = {
-		"./texture/wolfenstein/bluestone.xpm",
-		"./texture/wolfenstein/colorstone.xpm",
-		"./texture/wolfenstein/eagle.xpm",
-		"./texture/wolfenstein/redbrick.xpm"
-	};
-	i = 0;
-	while (i < 4)
-	{
-		if (load_texture(cube, &cube->texture[i], textures[i]) == -1)
-			return (-1);
-		i++;
-	}
-	cube->ceiling_color = BLUE2;
-	cube->floor_color = GREEN;
-	return (0);
+	printf("North texture path: %s\n", config.north_texture);
+	printf("South texture path: %s\n", config.south_texture);
+	printf("West texture path: %s\n", config.west_texture);
+	printf("East texture path: %s\n", config.east_texture);
+
+	if (load_texture(cube, &cube->texture[0], config.north_texture) == -1 ||
+		load_texture(cube, &cube->texture[1], config.south_texture) == -1 ||
+		load_texture(cube, &cube->texture[2], config.west_texture) == -1 ||
+		load_texture(cube, &cube->texture[3], config.east_texture) == -1)
+		return -1;
+
+	cube->ceiling_color = config.ceiling_color;
+	cube->floor_color = config.floor_color;
+
+	free(config.north_texture);
+	free(config.south_texture);
+	free(config.west_texture);
+	free(config.east_texture);
+
+	return 0;
 }
 
 void	init_cube(t_cub3d *cube, const char *map_path)
 {
 	ft_bzero(cube, sizeof(t_cub3d));
+	if (init_textures(cube, map_path) == -1)
+		exit_error(cube, "init_textures() failed");
 	if (init_map(&cube->map, map_path) == -1)
 		exit_error(cube, "init_map() failed");
 	if (init_state(&cube->state, map_path) == -1)
@@ -350,6 +403,4 @@ void	init_cube(t_cub3d *cube, const char *map_path)
 		exit_error(cube, "init_mlx() failed");
 	if (init_mlx(&cube->mlx_test) == -1)
 		exit_error(cube, "init_mlx() failed");
-	if (init_textures(cube) == -1)
-		exit_error(cube, "init_textures() failed");
 }
