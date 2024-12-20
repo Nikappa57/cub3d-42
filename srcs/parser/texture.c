@@ -6,7 +6,7 @@
 /*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 10:57:55 by lottavi           #+#    #+#             */
-/*   Updated: 2024/12/20 14:15:30 by lottavi          ###   ########.fr       */
+/*   Updated: 2024/12/20 14:37:35 by lottavi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,8 @@ int	parse_color(const char *str)
 		str++;
 	if (*str != '\0' && *str != '\n')
 		return (-1);
-	printf("\033[0;31mColor parsed: %d, %d, %d\033[0m\n", r, g, b);
+	printf("\033[0;33mColor parsed: %d, %d, %d\033[0m\n", r, g, b);
+
 	return ((r << 16) | (g << 8) | b);
 }
 
@@ -49,7 +50,7 @@ int	read_config(const char *file_path, t_config *config)
 
 	file = fopen(file_path, "r");
 	if (!file)
-		return (printf("Error: Failed to open config file %s\n",
+		return (printf("\033[0;31mError: Failed to open config file %s\n\033[0m",
 				file_path), (-1));
 	while (fgets(line, sizeof(line), file))
 	{
@@ -82,12 +83,12 @@ int	load_texture(t_cub3d *cube, t_img *t, const char *path)
 	if (!t->img)
 		return (printf("\033[0;31mError: Failed to load texture %s\n\033[0m",
 				path), (-1));
-	printf("Texture loaded successfully: %s\n", path);
+	printf("\033[0;32mTexture loaded: %s\n\033[0m", path);
 	t->addr = mlx_get_data_addr(t->img,
 			&t->bits_per_pixel, &t->line_length, &t->endian);
 	if (!t->addr)
 		return (printf("\033[0;31mError: Failed data for texture %s\n\033[0m",
 				path), (-1));
-	printf("Data address obtained successfully for texture: %s\n", path);
+	printf("\033[0;32mData address obtained successfully for texture: %s\n\033[0m", path);
 	return (0);
 }
