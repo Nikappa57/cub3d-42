@@ -6,7 +6,7 @@
 /*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 15:11:49 by lgaudino          #+#    #+#             */
-/*   Updated: 2024/12/20 15:46:45 by lgaudino         ###   ########.fr       */
+/*   Updated: 2024/12/20 15:59:09 by lgaudino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static void	draw_grid(t_cub3d *cube, int block_size)
 
 	y = -1;
 	start.x = 0;
-	end.x = WIN_WIDTH;
+	end.x = cube->map.w * block_size;
 	while (++y < cube->map.h)
 	{
 		start.y = y * block_size;
@@ -30,7 +30,7 @@ static void	draw_grid(t_cub3d *cube, int block_size)
 	}
 	x = -1;
 	start.y = 0;
-	end.y = WIN_HEIGHT;
+	end.y = cube->map.h * block_size;
 	while (++x < cube->map.w)
 	{
 		start.x = x * block_size;
@@ -61,18 +61,12 @@ static void	draw_wall_block(t_cub3d *cube, int block_size)
 	}
 }
 
-void	draw_map(t_cub3d *cube)
+static void	draw_pos(t_cub3d *cube, t_point	pos, int block_size)
 {
-	int		block_size;
+	int		pos_dim;
+	t_point	start_pos;
 
-	block_size = (int)fmin(WIN_WIDTH / cube->map.w, WIN_HEIGHT / cube->map.h);
-	draw_wall_block(cube, block_size);
-	draw_grid(cube, block_size);
-	// POS
-	int pos_dim = block_size/4;
-	t_point pos;
-	t_point start_pos;
-	vector_to_screen(cube->state.pos, &pos, block_size);
+	pos_dim = block_size / 4;
 	start_pos.x = pos.x - pos_dim / 2;
 	start_pos.y = pos.y - pos_dim / 2;
 	if (start_pos.x < 0)
@@ -81,6 +75,19 @@ void	draw_map(t_cub3d *cube)
 		start_pos.y = 0;
 
 	draw_square(&cube->mlx_test.data, start_pos, pos_dim, GREEN);
+}
+
+void	draw_map(t_cub3d *cube)
+{
+	int		block_size;
+	t_point	pos;
+
+	block_size = (int)fmin(WIN_WIDTH / cube->map.w, WIN_HEIGHT / cube->map.h);
+	draw_wall_block(cube, block_size);
+	draw_grid(cube, block_size);
+	vector_to_screen(cube->state.pos, &pos, block_size);
+	draw_pos(cube, pos, block_size);
+	
 
 	// DIR
 	t_vector pos_dir;
