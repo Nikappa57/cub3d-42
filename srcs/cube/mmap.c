@@ -6,7 +6,7 @@
 /*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 15:11:49 by lgaudino          #+#    #+#             */
-/*   Updated: 2024/12/20 16:03:06 by lgaudino         ###   ########.fr       */
+/*   Updated: 2024/12/20 16:11:17 by lgaudino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,26 @@ static void	draw_dir(
 	draw_line(&cube->mlx_test.data, pos, pos_dir_screen, RED);
 }
 
+static void	draw_rays(t_cub3d *cube, t_point pos, int block_size)
+{
+	t_point		hit_screen;
+	t_vector	hit;
+	int			x;
+
+	x = -1;
+	while (++x < WIN_WIDTH)
+	{
+		dda_distance(cube, x);
+		if (cube->dda.side != -1)
+		{
+			v_mul(&hit, cube->dda.ray_dir, cube->dda.distance);
+			v_sum(&hit, hit, cube->state.pos);
+			vector_to_screen(hit, &hit_screen, block_size);
+			draw_line(&cube->mlx_test.data, pos, hit_screen, YELLOW);
+		}
+	}
+}
+
 void	draw_map(t_cub3d *cube)
 {
 	int			block_size;
@@ -117,19 +137,5 @@ void	draw_map(t_cub3d *cube)
 	// printf("camera 1 screen: %d %d, camera 2 screen: %d %d\n", camera1_screen.x, camera1_screen.y , camera2_screen.x, camera2_screen.y);
 
 	// DDA
-	for (int x = 0; x < WIN_WIDTH; x++)
-	{
-		dda_distance(cube, x);
-
-		if (cube->dda.side != -1)
-		{
-			// TEST
-			t_vector hit;
-			v_mul(&hit, cube->dda.ray_dir, cube->dda.distance);
-			v_sum(&hit, hit, cube->state.pos);
-			t_point	hit_screen;
-			vector_to_screen(hit, &hit_screen, block_size);
-			draw_line(&cube->mlx_test.data, pos, hit_screen, YELLOW);
-		}
-	}
+	draw_rays(cube, pos, block_size);
 }
