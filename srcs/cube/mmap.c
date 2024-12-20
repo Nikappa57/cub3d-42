@@ -6,7 +6,7 @@
 /*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 15:11:49 by lgaudino          #+#    #+#             */
-/*   Updated: 2024/12/20 15:59:09 by lgaudino         ###   ########.fr       */
+/*   Updated: 2024/12/20 16:03:06 by lgaudino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,25 +77,28 @@ static void	draw_pos(t_cub3d *cube, t_point	pos, int block_size)
 	draw_square(&cube->mlx_test.data, start_pos, pos_dim, GREEN);
 }
 
+static void	draw_dir(
+	t_cub3d *cube, t_point	pos, t_vector pos_dir, int block_size)
+{
+	t_point	pos_dir_screen;
+
+	vector_to_screen(pos_dir, &pos_dir_screen, block_size);
+	draw_line(&cube->mlx_test.data, pos, pos_dir_screen, RED);
+}
+
 void	draw_map(t_cub3d *cube)
 {
-	int		block_size;
-	t_point	pos;
+	int			block_size;
+	t_point		pos;
+	t_vector	pos_dir;
 
 	block_size = (int)fmin(WIN_WIDTH / cube->map.w, WIN_HEIGHT / cube->map.h);
 	draw_wall_block(cube, block_size);
 	draw_grid(cube, block_size);
 	vector_to_screen(cube->state.pos, &pos, block_size);
 	draw_pos(cube, pos, block_size);
-	
-
-	// DIR
-	t_vector pos_dir;
-	t_point pos_dir_screen;
 	v_sum(&pos_dir, cube->state.pos, cube->state.dir);
-	// printf("pos: %lf %lf, dir %lf %lf\n", cube->state.pos.x, cube->state.pos.y, cube->state.dir.x, cube->state.dir.y);
-	vector_to_screen(pos_dir, &pos_dir_screen, block_size);
-	draw_line(&cube->mlx_test.data, pos, pos_dir_screen, RED);
+	draw_dir(cube, pos, pos_dir, block_size);
 
 	// PLANE
 	t_vector camera1, camera2;
