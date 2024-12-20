@@ -6,76 +6,11 @@
 /*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 15:11:49 by lgaudino          #+#    #+#             */
-/*   Updated: 2024/12/20 16:11:17 by lgaudino         ###   ########.fr       */
+/*   Updated: 2024/12/20 16:16:06 by lgaudino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "cub3D.h"
-
-static void	draw_grid(t_cub3d *cube, int block_size)
-{
-	int		x;
-	int		y;
-	t_point	start;
-	t_point	end;
-
-	y = -1;
-	start.x = 0;
-	end.x = cube->map.w * block_size;
-	while (++y < cube->map.h)
-	{
-		start.y = y * block_size;
-		end.y = y * block_size;
-		draw_h_line(&cube->mlx_test.data, start, end, GRAY);
-	}
-	x = -1;
-	start.y = 0;
-	end.y = cube->map.h * block_size;
-	while (++x < cube->map.w)
-	{
-		start.x = x * block_size;
-		end.x = x * block_size;
-		draw_v_line(&cube->mlx_test.data, start, end, GRAY);
-	}
-}
-
-static void	draw_wall_block(t_cub3d *cube, int block_size)
-{
-	t_point	start;
-	int		x;
-	int		y;
-
-	y = -1;
-	while (++y < cube->map.h)
-	{
-		x = -1;
-		while (++x < cube->map.w)
-		{
-			start.x = x * block_size;
-			start.y = y * block_size;
-			if (cube->map.m[y][x] == 1)
-				draw_square(&cube->mlx_test.data, start, block_size, WHITE);
-			else
-				draw_square(&cube->mlx_test.data, start, block_size, BLACK);
-		}
-	}
-}
-
-static void	draw_pos(t_cub3d *cube, t_point	pos, int block_size)
-{
-	int		pos_dim;
-	t_point	start_pos;
-
-	pos_dim = block_size / 4;
-	start_pos.x = pos.x - pos_dim / 2;
-	start_pos.y = pos.y - pos_dim / 2;
-	if (start_pos.x < 0)
-		start_pos.x = 0;
-	if (start_pos.y < 0)
-		start_pos.y = 0;
-
-	draw_square(&cube->mlx_test.data, start_pos, pos_dim, GREEN);
-}
 
 static void	draw_dir(
 	t_cub3d *cube, t_point	pos, t_vector pos_dir, int block_size)
@@ -106,6 +41,20 @@ static void	draw_rays(t_cub3d *cube, t_point pos, int block_size)
 	}
 }
 
+static void	draw_plane(t_cub3d *cube, t_vector pos_dir, int block_size)
+{
+	t_vector	camera1;
+	t_vector	camera2;
+	t_point		camera1_screen;
+	t_point		camera2_screen;
+
+	v_sub(&camera1, pos_dir, cube->state.plane);
+	v_sum(&camera2, pos_dir, cube->state.plane);
+	vector_to_screen(camera1, &camera1_screen, block_size);
+	vector_to_screen(camera2, &camera2_screen, block_size);
+	draw_line(&cube->mlx_test.data, camera1_screen, camera2_screen, BLUE);
+}
+
 void	draw_map(t_cub3d *cube)
 {
 	int			block_size;
@@ -119,23 +68,6 @@ void	draw_map(t_cub3d *cube)
 	draw_pos(cube, pos, block_size);
 	v_sum(&pos_dir, cube->state.pos, cube->state.dir);
 	draw_dir(cube, pos, pos_dir, block_size);
-
-	// PLANE
-	t_vector camera1, camera2;
-	t_point camera1_screen, camera2_screen;
-
-	v_sub(&camera1, pos_dir, cube->state.plane);
-	v_sum(&camera2, pos_dir, cube->state.plane);
-
-	// printf("plane: %lf, %lf\n", cube->state.plane.x, cube->state.plane.y);
-	// printf("camera1: %lf %lf camera2: %lf %lf\n", camera1.x, camera1.y, camera2.x, camera2.y);
-
-	vector_to_screen(camera1, &camera1_screen, block_size);
-	vector_to_screen(camera2, &camera2_screen, block_size);
-	draw_line(&cube->mlx_test.data, camera1_screen, camera2_screen, BLUE);
-	// printf("pos screen: %d %d\n", pos.x, pos.y);
-	// printf("camera 1 screen: %d %d, camera 2 screen: %d %d\n", camera1_screen.x, camera1_screen.y , camera2_screen.x, camera2_screen.y);
-
-	// DDA
+	draw_plane(cube, pos_dir, block_size);
 	draw_rays(cube, pos, block_size);
 }

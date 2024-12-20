@@ -6,7 +6,7 @@
 /*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 12:12:50 by lorenzogaud       #+#    #+#             */
-/*   Updated: 2024/12/20 15:52:53 by lgaudino         ###   ########.fr       */
+/*   Updated: 2024/12/20 16:17:17 by lgaudino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -212,6 +212,9 @@ t_color			get_color(t_dda dda);
 t_dir			get_dir(t_vector dir, int side);
 unsigned int	get_pixel_color(t_img *img, int x, int y);
 void			draw_map(t_cub3d *cube);
+void			draw_pos(t_cub3d *cube, t_point	pos, int block_size);
+void			draw_wall_block(t_cub3d *cube, int block_size);
+void			draw_grid(t_cub3d *cube, int block_size);
 
 /* Actions */
 
