@@ -6,7 +6,7 @@
 /*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 19:38:11 by lgaudino          #+#    #+#             */
-/*   Updated: 2024/12/12 14:42:41 by lgaudino         ###   ########.fr       */
+/*   Updated: 2024/12/20 14:24:12 by lgaudino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ static int	position(t_cub3d *cube)
 		v_sum(&state->pos, state->pos, mov);
 	else if (state->move_y == DOWN)
 		v_sub(&state->pos, state->pos, mov);
-	v_rotate(&mov, mov, to_rad(90));
+	v_rotate(&mov, mov, M_PI / 2);
 	if (state->move_x == RIGHT)
 		v_sum(&state->pos, state->pos, mov);
 	else if (state->move_x == LEFT)

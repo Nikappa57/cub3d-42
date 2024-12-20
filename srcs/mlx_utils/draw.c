@@ -6,7 +6,7 @@
 /*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 17:04:20 by lgaudino          #+#    #+#             */
-/*   Updated: 2024/12/05 20:21:42 by lgaudino         ###   ########.fr       */
+/*   Updated: 2024/12/20 14:26:48 by lgaudino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,16 +73,16 @@ void	draw_h_line(t_img *img, t_point start, t_point end, t_color color)
 }
 
 
-void	draw_square(t_img *img, int start_x, int start_y, int size, t_color color)
+void	draw_square(t_img *img, t_point start, int size, t_color color)
 {
-	int x;
-	int y;
+	int	x;
+	int	y;
 
-	y = start_y;
-	while (y < start_y + size)
+	y = start.y;
+	while (y < start.y + size)
 	{
-		x = start_x;
-		while (x < start_x + size)
+		x = start.x;
+		while (x < start.x + size)
 		{
 			draw_xy(img, x, y, color);
 			x++;

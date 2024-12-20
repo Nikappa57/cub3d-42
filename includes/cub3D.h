@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 12:12:50 by lorenzogaud       #+#    #+#             */
-/*   Updated: 2024/12/20 11:20:38 by lottavi          ###   ########.fr       */
+/*   Updated: 2024/12/20 14:28:39 by lgaudino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,16 +33,14 @@
 #  define M_PI 3.14159265358979323846
 # endif
 
-# define to_rad(angle) angle * M_PI / 180
-
 /* Constants */
 
 # define WIN_WIDTH			800
 # define WIN_HEIGHT			600
 # define WIN_TITLE			"cub3D"
-# define FOV				to_rad(66)
+# define FOV				1.152f
 # define MOV_VEL			0.01f
-# define ROT_VEL			to_rad(0.5)
+# define ROT_VEL			0.0087
 # define INFINITY_VALUE		1e30
 # define MIN_DISTANCE		0.01
 
@@ -170,8 +168,10 @@ int			init_map(t_map *map, const char *map_path);
 
 //player
 void		parse_player(t_state *state, const char *map_path);
-void		parse_line(t_state *state, const char *line, int row, int *player_count);
-void		set_position_and_direction(t_state *state, char direction_char, int col, int row);
+void		parse_line(t_state *state, const char *line, int row,
+				int *player_count);
+void		set_position_and_direction(t_state *state, char direction_char,
+				int col, int row);
 bool		is_map_enclosed(t_state *state, t_map *map);
 
 //utils
@@ -193,7 +193,7 @@ void		exit_perror(t_cub3d *cube, char *message);
 void		put_pixel(t_img *img, int x, int y, int color);
 void		draw_xy(t_img *img, int x, int y, t_color color);
 void		draw_point(t_img *img, t_point point, t_color color);
-void		draw_square(t_img *img, int start_x, int start_y, int size, t_color color);
+void		draw_square(t_img *img, t_point start, int size, t_color color);
 int			window_clean(t_mlx *mlx);
 void		show_window(t_mlx *mlx);
 void		draw_h_line(t_img *img, t_point start, t_point end, t_color color);
@@ -215,14 +215,14 @@ int			move(t_cub3d *cube);
 
 // vectors
 
-void	v_sum(t_vector *r, t_vector v1, t_vector v2);
-void	v_sub(t_vector *r, t_vector v1, t_vector v2);
-void	v_mul(t_vector *r, t_vector v, double n);
-void	v_div(t_vector *r, t_vector v, double n);
-void	v_rotate(t_vector *r, t_vector v, double angle);
-void	v_perp(t_vector *r, t_vector v);
-void	get_dir_v(t_vector *r, t_dir dir);
-double	v_distance_pow2(t_vector v1, t_vector v2);
+void		v_sum(t_vector *r, t_vector v1, t_vector v2);
+void		v_sub(t_vector *r, t_vector v1, t_vector v2);
+void		v_mul(t_vector *r, t_vector v, double n);
+void		v_div(t_vector *r, t_vector v, double n);
+void		v_rotate(t_vector *r, t_vector v, double angle);
+void		v_perp(t_vector *r, t_vector v);
+void		get_dir_v(t_vector *r, t_dir dir);
+double		v_distance_pow2(t_vector v1, t_vector v2);
 
 /************ TEST ************/
 void		draw_line(t_img *img, t_point start, t_point end, t_color color);

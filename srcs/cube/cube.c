@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cube.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 19:16:39 by lgaudino          #+#    #+#             */
-/*   Updated: 2024/12/20 09:59:01 by lottavi          ###   ########.fr       */
+/*   Updated: 2024/12/20 14:36:40 by lgaudino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,16 +51,18 @@ void	draw_map(t_cub3d *cube)
 
 
 	printf("h: %d, w: %d\n", cube->map.h, cube->map.w);
-
+	t_point start;
 	// MAP
 	for (int y = 0; y < cube->map.h; y++)
 	{
 		for (int x = 0; x < cube->map.w; x++)
 		{
+			start.x = x * block_size;
+			start.y = y * block_size;
 			if (cube->map.m[y][x] == 1)
-				draw_square(&cube->mlx_test.data, x * block_size, y * block_size, block_size, WHITE);
+				draw_square(&cube->mlx_test.data, start, block_size, WHITE);
 			else
-				draw_square(&cube->mlx_test.data, x * block_size, y * block_size, block_size, BLACK);
+				draw_square(&cube->mlx_test.data, start, block_size, BLACK);
 		}
 	}
 	for (int y = 0; y < cube->map.h; y++)
@@ -75,13 +77,16 @@ void	draw_map(t_cub3d *cube)
 	// POS
 	int pos_dim = block_size/4;
 	t_point pos;
+	t_point start_pos;
 	vector_to_screen(cube->state.pos, &pos, WIN_WIDTH, WIN_HEIGHT, block_size);
-	int start_posx = pos.x - pos_dim / 2;
-	int start_posy = pos.y - pos_dim / 2;
-	start_posx = start_posx < 0 ? 0 : start_posx;
-	start_posy = start_posy < 0 ? 0 : start_posy;
+	start_pos.x = pos.x - pos_dim / 2;
+	start_pos.y = pos.y - pos_dim / 2;
+	if (start_pos.x < 0)
+		start_pos.x = 0;
+	if (start_pos.y < 0)
+		start_pos.y = 0;
 
-	draw_square(&cube->mlx_test.data, start_posx, start_posy, pos_dim, GREEN);
+	draw_square(&cube->mlx_test.data, start_pos, pos_dim, GREEN);
 
 	// DIR
 	t_vector pos_dir;
