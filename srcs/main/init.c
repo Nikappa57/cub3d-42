@@ -12,6 +12,56 @@
 
 #include "cub3D.h"
 
+void free_map(t_map *map) {
+	for (int i = 0; i < map->h; i++) {
+		free(map->m[i]);
+	}
+	free(map->m);
+}
+
+bool flood_fill(t_map *map, int x, int y, bool **visited) {
+	if (x < 0 || y < 0 || x >= map->w || y >= map->h) {
+		return false;
+	}
+	if (map->m[y][x] == 1 || visited[y][x]) {
+		return true;
+	}
+	if (x == 0 || y == 0 || x == map->w - 1 || y == map->h - 1) {
+		return false;
+	}
+	visited[y][x] = true;
+	bool up = flood_fill(map, x, y - 1, visited);
+	bool down = flood_fill(map, x, y + 1, visited);
+	bool left = flood_fill(map, x - 1, y, visited);
+	bool right = flood_fill(map, x + 1, y, visited);
+	return up && down && left && right;
+}
+
+bool is_map_enclosed(t_map *map) {
+	bool **visited = (bool **)malloc(map->h * sizeof(bool *));
+	for (int i = 0; i < map->h; i++) {
+		visited[i] = (bool *)calloc(map->w, sizeof(bool));
+	}
+	for (int y = 1; y < map->h; y++) {
+		for (int x = 0; x < map->w; x++) {
+			if (map->m[y][x] == 0) {
+				printf("Inizio flood fill da: (%d, %d)\n", x, y);
+				bool result = flood_fill(map, x, y, visited);
+				for (int i = 0; i < map->h; i++) {
+					free(visited[i]);
+				}
+				free(visited);
+				return result;
+			}
+		}
+	}
+	for (int i = 0; i < map->h; i++) {
+		free(visited[i]);
+	}
+	free(visited);
+	return true;
+}
+
 void	*ft_calloc(size_t count, size_t size)
 {
 	void	*ptr;
@@ -45,28 +95,28 @@ static int	init_mlx(t_mlx *mlx)
 	return (0);
 }
 
-static int	init_map(t_map *map, const char *map_path)
-{
-	char	line[256];
-	int		width = 0;
-	int		height = 0;
-	FILE	*file = fopen(map_path, "r");
-	if (!file)
+static int init_map(t_map *map, const char *map_path) {
+	if (!map || !map_path) {
+		fprintf(stderr, "Error: Invalid map or path\n");
 		return -1;
+	}
 
-	// Determine the width and height of the map
-	while (fgets(line, sizeof(line), file))
-	{
+	FILE *file = fopen(map_path, "r");
+	if (!file) {
+		perror("Error opening map file");
+		return -1;
+	}
+
+	char line[256];
+	int width = 0, height = 0;
+
+	while (fgets(line, sizeof(line), file)) {
 		int len = 0;
-		for (size_t i = 0; i < strlen(line); i++)
-		{
-			if (line[i] == '\t')
-				len += 4; // Count tab as 4 spaces
-			else
-				len++;
+		for (size_t i = 0; i < strlen(line); i++) {
+			len += (line[i] == '\t') ? 4 : 1;
 		}
 		if (line[len - 1] == '\n')
-			len--; // Ignore newline character at the end of the line
+			len--;
 		if (len > width)
 			width = len;
 		height++;
@@ -75,16 +125,17 @@ static int	init_map(t_map *map, const char *map_path)
 
 	map->w = width;
 	map->h = height;
-	// Allocate memory for the map
-	map->m = (int **)malloc(sizeof(int *) * height);
-	if (!map->m)
-		return -1;
 
-	for (int i = 0; i < height; i++)
-	{
+	map->m = (int **)malloc(height * sizeof(int *));
+	if (!map->m) {
+		fprintf(stderr, "Error: Memory allocation failed for map matrix\n");
+		return -1;
+	}
+
+	for (int i = 0; i < height; i++) {
 		map->m[i] = (int *)calloc(width, sizeof(int));
-		if (!map->m[i])
-		{
+		if (!map->m[i]) {
+			fprintf(stderr, "Error: Memory allocation failed for map row\n");
 			for (int j = 0; j < i; j++)
 				free(map->m[j]);
 			free(map->m);
@@ -92,10 +143,9 @@ static int	init_map(t_map *map, const char *map_path)
 		}
 	}
 
-	// Reopen the file and read the map into the allocated space
 	file = fopen(map_path, "r");
-	if (!file)
-	{
+	if (!file) {
+		perror("Error reopening map file");
 		for (int i = 0; i < height; i++)
 			free(map->m[i]);
 		free(map->m);
@@ -103,30 +153,20 @@ static int	init_map(t_map *map, const char *map_path)
 	}
 
 	int row = 0;
-	while (fgets(line, sizeof(line), file))
-	{
+	while (fgets(line, sizeof(line), file)) {
 		int col = 0;
-		for (size_t i = 0; i < strlen(line); i++)
-		{
-			if (line[i] == '\t')
-			{
+		for (size_t i = 0; i < strlen(line); i++) {
+			if (line[i] == '\t') {
 				for (int j = 0; j < 4; j++)
-					map->m[row][col++] = 0; // Treat tab as 4 empty cells
-			}
-			else if (line[i] != '\n')
-			{
-				if (line[i] == '1')
-					map->m[row][col] = 1;
-				else if (line[i] == '0')
-					map->m[row][col] = 0;
-				else if (line[i] == ' ')
-					map->m[row][col] = 0; // Treat space as empty cell
-				col++;
+					map->m[row][col++] = 0;
+			} else if (line[i] != '\n') {
+				map->m[row][col++] = (line[i] == '1') ? 1 : 0;
 			}
 		}
 		row++;
 	}
 	fclose(file);
+
 	return 0;
 }
 
@@ -233,6 +273,8 @@ void	init_cube(t_cub3d *cube, const char *map_path)
 		exit_error(cube, "init_map() failed");
 	if (init_state(&cube->state, map_path) == -1)
 		exit_error(cube, "init_state() failed");
+	if (!is_map_enclosed(&cube->map))
+		exit_error(cube, "Map is not enclosed");
 	if (init_mlx(&cube->mlx) == -1)
 		exit_error(cube, "init_mlx() failed");
 	if(init_mlx(&cube->mlx_test) == -1)
