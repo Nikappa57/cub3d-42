@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   check.c                                            :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 11:14:35 by lottavi           #+#    #+#             */
-/*   Updated: 2024/12/20 11:15:36 by lottavi          ###   ########.fr       */
+/*   Updated: 2024/12/20 12:31:13 by lottavi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,11 @@ void	skip_texture_info(FILE *file)
 
 bool	flood_fill(t_map *map, int x, int y, bool **visited)
 {
+	bool	up;
+	bool	down;
+	bool	left;
+	bool	right;
+
 	if (x < 0 || y < 0 || x >= map->w || y >= map->h)
 	{
 		printf("\033[0;31mOut of bounds: (%d, %d)\033[0m\n", x, y);
@@ -55,15 +60,12 @@ bool	flood_fill(t_map *map, int x, int y, bool **visited)
 		printf("\033[0;32mHit wall or visited: (%d, %d)\033[0m\n", x, y);
 		return (true);
 	}
-
 	visited[y][x] = true;
 	printf("Visiting: (%d, %d)\n", x, y);
-
-	bool	up = flood_fill(map, x, y - 1, visited);
-	bool	down = flood_fill(map, x, y + 1, visited);
-	bool	left = flood_fill(map, x - 1, y, visited);
-	bool	right = flood_fill(map, x + 1, y, visited);
-
+	up = flood_fill(map, x, y - 1, visited);
+	down = flood_fill(map, x, y + 1, visited);
+	left = flood_fill(map, x - 1, y, visited);
+	right = flood_fill(map, x + 1, y, visited);
 	return (up && down && left && right);
 }
 

@@ -6,7 +6,7 @@
 /*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 18:27:42 by lgaudino          #+#    #+#             */
-/*   Updated: 2024/12/20 11:16:38 by lottavi          ###   ########.fr       */
+/*   Updated: 2024/12/20 12:04:26 by lottavi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ int	init_mlx(t_mlx *mlx)
 int	init_state(t_state *state, const char *map_path)
 {
 	parse_player(state, map_path);
-
 	state->move_x = NONE_DIR;
 	state->move_y = NONE_DIR;
 	state->rot = NONE_ROT;
@@ -46,6 +45,7 @@ int	init_state(t_state *state, const char *map_path)
 int	init_textures(t_cub3d *cube, const char *map_path)
 {
 	t_config	config;
+
 	if (read_config(map_path, &config) == -1)
 		return (-1);
 	config.north_texture[strcspn(config.north_texture, "\n")] = '\0';
@@ -56,10 +56,10 @@ int	init_textures(t_cub3d *cube, const char *map_path)
 	printf("South texture path: %s\n", config.south_texture);
 	printf("West texture path: %s\n", config.west_texture);
 	printf("East texture path: %s\n", config.east_texture);
-	if (load_texture(cube, &cube->texture[0], config.north_texture) == -1 ||
-		load_texture(cube, &cube->texture[1], config.south_texture) == -1 ||
-		load_texture(cube, &cube->texture[2], config.west_texture) == -1 ||
-		load_texture(cube, &cube->texture[3], config.east_texture) == -1)
+	if (load_texture(cube, &cube->texture[0], config.north_texture) == -1
+		|| load_texture(cube, &cube->texture[1], config.south_texture) == -1
+		|| load_texture(cube, &cube->texture[2], config.west_texture) == -1
+		|| load_texture(cube, &cube->texture[3], config.east_texture) == -1)
 		return (-1);
 	cube->ceiling_color = config.ceiling_color;
 	cube->floor_color = config.floor_color;

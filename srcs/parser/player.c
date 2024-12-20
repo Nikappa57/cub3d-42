@@ -6,7 +6,7 @@
 /*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 11:13:51 by lottavi           #+#    #+#             */
-/*   Updated: 2024/12/20 11:19:29 by lottavi          ###   ########.fr       */
+/*   Updated: 2024/12/20 12:21:53 by lottavi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,9 @@ bool	is_map_enclosed(t_state *state, t_map *map)
 {
 	bool	**visited;
 	int		i;
+	int		player_x;
+	int		player_y;
+	bool	result;
 
 	i = 0;
 	visited = (bool **)malloc(map->h * sizeof(bool *));
@@ -24,10 +27,10 @@ bool	is_map_enclosed(t_state *state, t_map *map)
 		visited[i] = (bool *)ft_calloc(map->w, sizeof(bool));
 		i++;
 	}
-	int	player_x = state->pos.x;
-	int	player_y = state->pos.y;
+	player_x = state->pos.x;
+	player_y = state->pos.y;
 	printf("Inizio flood fill da: (%d, %d)\n", player_x, player_y);
-	bool	result = flood_fill(map, player_x, player_y, visited);
+	result = flood_fill(map, player_x, player_y, visited);
 	i = 0;
 	while (i < map->h)
 	{
@@ -35,7 +38,7 @@ bool	is_map_enclosed(t_state *state, t_map *map)
 		i++;
 	}
 	free(visited);
-	return result;
+	return (result);
 }
 
 void	set_position_and_direction(t_state *state,
@@ -99,4 +102,3 @@ void	parse_player(t_state *state, const char *map_path)
 	}
 	fclose(file);
 }
-
