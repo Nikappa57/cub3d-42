@@ -39,24 +39,34 @@ bool flood_fill(t_map *map, int x, int y, bool **visited) {
 
 bool is_map_enclosed(t_map *map) {
 	bool **visited = (bool **)malloc(map->h * sizeof(bool *));
-	for (int i = 0; i < map->h; i++) {
+	int i = 0;
+	while (i < map->h) {
 		visited[i] = (bool *)calloc(map->w, sizeof(bool));
+		i++;
 	}
-	for (int y = 1; y < map->h; y++) {
-		for (int x = 0; x < map->w; x++) {
+	int y = 1;
+	while (y < map->h) {
+		int x = 0;
+		while (x < map->w) {
 			if (map->m[y][x] == 0) {
 				printf("Inizio flood fill da: (%d, %d)\n", x, y);
 				bool result = flood_fill(map, x, y, visited);
-				for (int i = 0; i < map->h; i++) {
+				i = 0;
+				while (i < map->h) {
 					free(visited[i]);
+					i++;
 				}
 				free(visited);
 				return result;
 			}
+			x++;
 		}
+		y++;
 	}
-	for (int i = 0; i < map->h; i++) {
+	i = 0;
+	while (i < map->h) {
 		free(visited[i]);
+		i++;
 	}
 	free(visited);
 	return true;
