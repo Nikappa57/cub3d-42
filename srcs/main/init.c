@@ -211,30 +211,25 @@ void	free_map(t_map *map)
 
 bool	flood_fill(t_map *map, int x, int y, bool **visited)
 {
-	// Check if the current position is outside the bounds of the map
 	if (x < 0 || y < 0 || x >= map->w || y >= map->h)
 	{
 		printf("\033[0;31mOut of bounds: (%d, %d)\033[0m\n", x, y);
 		return false;
 	}
-	// Check if the position is a wall (1) or already visited
 	if (map->m[y][x] == 1 || visited[y][x])
 	{
 		printf("\033[0;32mHit wall or visited: (%d, %d)\033[0m\n", x, y);
 		return true;
 	}
 
-	// Mark the current position as visited
 	visited[y][x] = true;
 	printf("Visiting: (%d, %d)\n", x, y);
 
-	// Recurse to adjacent cells
 	bool	up = flood_fill(map, x, y - 1, visited);
 	bool	down = flood_fill(map, x, y + 1, visited);
 	bool	left = flood_fill(map, x - 1, y, visited);
 	bool	right = flood_fill(map, x + 1, y, visited);
 
-	// Return true if all directions are valid
 	return up && down && left && right;
 }
 
