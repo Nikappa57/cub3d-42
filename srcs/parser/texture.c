@@ -59,13 +59,13 @@ int	read_config(const char *file_path, t_config *config)
 		if (split_line[0] && split_line[1])
 		{
 			if (ft_strcmp(split_line[0], "NO") == 0)
-				config->north_texture = strdup(split_line[1]);
+				config->north_texture = ft_strdup(split_line[1]);
 			else if (ft_strcmp(split_line[0], "SO") == 0)
-				config->south_texture = strdup(split_line[1]);
+				config->south_texture = ft_strdup(split_line[1]);
 			else if (ft_strcmp(split_line[0], "WE") == 0)
-				config->west_texture = strdup(split_line[1]);
+				config->west_texture = ft_strdup(split_line[1]);
 			else if (ft_strcmp(split_line[0], "EA") == 0)
-				config->east_texture = strdup(split_line[1]);
+				config->east_texture = ft_strdup(split_line[1]);
 			else if (ft_strcmp(split_line[0], "F") == 0)
 				config->floor_color = parse_color(split_line[1]);
 			else if (ft_strcmp(split_line[0], "C") == 0)
