@@ -12,66 +12,6 @@
 
 #include "cub3D.h"
 
-void free_map(t_map *map) {
-	for (int i = 0; i < map->h; i++) {
-		free(map->m[i]);
-	}
-	free(map->m);
-}
-
-bool flood_fill(t_map *map, int x, int y, bool **visited) {
-	if (x < 0 || y < 0 || x >= map->w || y >= map->h) {
-		return false;
-	}
-	if (map->m[y][x] == 1 || visited[y][x]) {
-		return true;
-	}
-	if (x == 0 || y == 0 || x == map->w - 1 || y == map->h - 1) {
-		return false;
-	}
-	visited[y][x] = true;
-	bool up = flood_fill(map, x, y - 1, visited);
-	bool down = flood_fill(map, x, y + 1, visited);
-	bool left = flood_fill(map, x - 1, y, visited);
-	bool right = flood_fill(map, x + 1, y, visited);
-	return up && down && left && right;
-}
-
-bool is_map_enclosed(t_map *map) {
-	bool **visited = (bool **)malloc(map->h * sizeof(bool *));
-	int i = 0;
-	while (i < map->h) {
-		visited[i] = (bool *)calloc(map->w, sizeof(bool));
-		i++;
-	}
-	int y = 1;
-	while (y < map->h) {
-		int x = 0;
-		while (x < map->w) {
-			if (map->m[y][x] == 0) {
-				printf("Inizio flood fill da: (%d, %d)\n", x, y);
-				bool result = flood_fill(map, x, y, visited);
-				i = 0;
-				while (i < map->h) {
-					free(visited[i]);
-					i++;
-				}
-				free(visited);
-				return result;
-			}
-			x++;
-		}
-		y++;
-	}
-	i = 0;
-	while (i < map->h) {
-		free(visited[i]);
-		i++;
-	}
-	free(visited);
-	return true;
-}
-
 void	*ft_calloc(size_t count, size_t size)
 {
 	void	*ptr;
@@ -105,24 +45,29 @@ static int	init_mlx(t_mlx *mlx)
 	return (0);
 }
 
-static int init_map(t_map *map, const char *map_path) {
-	if (!map || !map_path) {
+static int	init_map(t_map *map, const char *map_path)
+{
+	if (!map || !map_path)
+	{
 		fprintf(stderr, "Error: Invalid map or path\n");
 		return -1;
 	}
 
-	FILE *file = fopen(map_path, "r");
-	if (!file) {
+	FILE	*file = fopen(map_path, "r");
+	if (!file)
+	{
 		perror("Error opening map file");
 		return -1;
 	}
 
-	char line[256];
-	int width = 0, height = 0;
+	char	line[256];
+	int		width = 0, height = 0;
 
-	while (fgets(line, sizeof(line), file)) {
-		int len = 0;
-		for (size_t i = 0; i < strlen(line); i++) {
+	while (fgets(line, sizeof(line), file))
+	{
+		int	len = 0;
+		for (size_t i = 0; i < strlen(line); i++)
+		{
 			len += (line[i] == '\t') ? 4 : 1;
 		}
 		if (line[len - 1] == '\n')
@@ -137,14 +82,17 @@ static int init_map(t_map *map, const char *map_path) {
 	map->h = height;
 
 	map->m = (int **)malloc(height * sizeof(int *));
-	if (!map->m) {
+	if (!map->m)
+	{
 		fprintf(stderr, "Error: Memory allocation failed for map matrix\n");
 		return -1;
 	}
 
-	for (int i = 0; i < height; i++) {
+	for (int i = 0; i < height; i++)
+	{
 		map->m[i] = (int *)calloc(width, sizeof(int));
-		if (!map->m[i]) {
+		if (!map->m[i])
+		{
 			fprintf(stderr, "Error: Memory allocation failed for map row\n");
 			for (int j = 0; j < i; j++)
 				free(map->m[j]);
@@ -154,7 +102,8 @@ static int init_map(t_map *map, const char *map_path) {
 	}
 
 	file = fopen(map_path, "r");
-	if (!file) {
+	if (!file)
+	{
 		perror("Error reopening map file");
 		for (int i = 0; i < height; i++)
 			free(map->m[i]);
@@ -162,14 +111,19 @@ static int init_map(t_map *map, const char *map_path) {
 		return -1;
 	}
 
-	int row = 0;
-	while (fgets(line, sizeof(line), file)) {
-		int col = 0;
-		for (size_t i = 0; i < strlen(line); i++) {
-			if (line[i] == '\t') {
+	int	row = 0;
+	while (fgets(line, sizeof(line), file))
+	{
+		int	col = 0;
+		for (size_t i = 0; i < strlen(line); i++)
+		{
+			if (line[i] == '\t')
+			{
 				for (int j = 0; j < 4; j++)
 					map->m[row][col++] = 0;
-			} else if (line[i] != '\n') {
+			}
+			else if (line[i] != '\n')
+			{
 				map->m[row][col++] = (line[i] == '1') ? 1 : 0;
 			}
 		}
@@ -240,6 +194,72 @@ static int	init_state(t_state *state, const char *map_path)
 	return (0);
 }
 
+void	free_map(t_map *map)
+{
+	for (int i = 0; i < map->h; i++)
+	{
+		free(map->m[i]);
+	}
+	free(map->m);
+}
+
+bool	flood_fill(t_map *map, int x, int y, bool **visited)
+{
+	// Check if the current position is outside the bounds of the map
+	if (x < 0 || y < 0 || x >= map->w || y >= map->h)
+	{
+		printf("\033[0;31mOut of bounds: (%d, %d)\033[0m\n", x, y);
+		return false;
+	}
+	// Check if the position is a wall (1) or already visited
+	if (map->m[y][x] == 1 || visited[y][x])
+	{
+		printf("\033[0;32mHit wall or visited: (%d, %d)\033[0m\n", x, y);
+		return true;
+	}
+
+	// Mark the current position as visited
+	visited[y][x] = true;
+	printf("Visiting: (%d, %d)\n", x, y);
+
+	// Recurse to adjacent cells
+	bool	up = flood_fill(map, x, y - 1, visited);
+	bool	down = flood_fill(map, x, y + 1, visited);
+	bool	left = flood_fill(map, x - 1, y, visited);
+	bool	right = flood_fill(map, x + 1, y, visited);
+
+	// Return true if all directions are valid
+	return up && down && left && right;
+}
+
+void	skip_spaces(const int *line, int *len)
+{
+	while (line[*len] == ' ' || line[*len] == '\t')
+		(*len)++;
+}
+
+bool	is_map_enclosed(t_state *state, t_map *map)
+{
+	bool	**visited = (bool **)malloc(map->h * sizeof(bool *));
+	for (int i = 0; i < map->h; i++)
+	{
+		visited[i] = (bool *)calloc(map->w, sizeof(bool));
+	}
+
+	int	player_x = state->pos.x;
+	int	player_y = state->pos.y;
+
+	printf("Inizio flood fill da: (%d, %d)\n", player_x, player_y);
+	bool	result = flood_fill(map, player_x, player_y, visited);
+
+	for (int i = 0; i < map->h; i++)
+	{
+		free(visited[i]);
+	}
+	free(visited);
+	return result;
+}
+
 static int	load_texture(t_cub3d *cube, t_img *t, const char *path)
 {
 	t->img = mlx_xpm_file_to_image(cube->mlx.mlx, (char *)path, &t->img_width, &t->img_height);
@@ -258,7 +278,7 @@ static int	init_textures(t_cub3d *cube)
 {
 	int	i;
 
-	const char *textures[] = {
+	const char	*textures[] = {
 		"./texture/wolfenstein/bluestone.xpm",
 		"./texture/wolfenstein/colorstone.xpm",
 		"./texture/wolfenstein/eagle.xpm",
@@ -283,11 +303,11 @@ void	init_cube(t_cub3d *cube, const char *map_path)
 		exit_error(cube, "init_map() failed");
 	if (init_state(&cube->state, map_path) == -1)
 		exit_error(cube, "init_state() failed");
-	if (!is_map_enclosed(&cube->map))
+	if (!is_map_enclosed(&cube->state, &cube->map))
 		exit_error(cube, "Map is not enclosed");
 	if (init_mlx(&cube->mlx) == -1)
 		exit_error(cube, "init_mlx() failed");
-	if(init_mlx(&cube->mlx_test) == -1)
+	if (init_mlx(&cube->mlx_test) == -1)
 		exit_error(cube, "init_mlx() failed");
 	if (init_textures(cube) == -1)
 		exit_error(cube, "init_textures() failed");
