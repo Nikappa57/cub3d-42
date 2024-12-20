@@ -58,12 +58,13 @@ void	set_position_and_direction(t_state *state,
 
 void	parse_line(t_state *state, const char *line, int row, int *player_count)
 {
+    if (!line || !state || !player_count) return; // Add null check
 	size_t	col;
 	size_t	actual_col;
 
 	actual_col = 0;
 	col = 0;
-	while (col < strlen(line))
+	while (col < ft_strlen(line))
 	{
 		if (line[col] == 'N' || line[col] == 'S'
 			|| line[col] == 'W' || line[col] == 'E')
@@ -81,24 +82,30 @@ void	parse_line(t_state *state, const char *line, int row, int *player_count)
 
 void	parse_player(t_state *state, const char *map_path)
 {
-	FILE	*file;
-	char	line[256];
-	int		row;
-	int		player_count;
+    int		fd;
+    char	*line;
+    int		row;
+    int		player_count;
 
-	player_count = 0;
-	file = fopen(map_path, "r");
-	skip_texture_info(file);
-	row = 0;
-	while (fgets(line, sizeof(line), file))
-	{
-		parse_line(state, line, row, &player_count);
-		row++;
-	}
-	if (player_count != 1)
-	{
-		printf("\033[0;31mError: Invalid number of players\033[0m\n");
-		exit(1);
-	}
-	fclose(file);
+    player_count = 0;
+    fd = open(map_path, O_RDONLY);
+    if (fd == -1)
+    {
+        perror("Error opening map file");
+        exit(1);
+    }
+    skip_texture_info(fd);
+    row = 0;
+    while ((line = get_next_line(fd)) != NULL)
+    {
+        parse_line(state, line, row, &player_count);
+        free(line);
+        row++;
+    }
+    if (player_count != 1)
+    {
+        printf("\033[0;31mError: Invalid number of players\033[0m\n");
+        exit(1);
+    }
+    close(fd);
 }

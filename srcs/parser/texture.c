@@ -14,6 +14,7 @@
 
 int	parse_color(const char *str)
 {
+	if (!str) return -1; // Add null check
 	int		r;
 	int		g;
 	int		b;
@@ -42,36 +43,41 @@ int	parse_color(const char *str)
 
 int	read_config(const char *file_path, t_config *config)
 {
-	FILE	*file;
-	char	line[256];
-	char	key[3];
-	char	value[256];
+	if (!file_path || !config) return -1; // Add null check
+	int		fd;
+	char	*line;
+	char	**split_line;
 	char	*trimmed_line;
 
-	file = fopen(file_path, "r");
-	if (!file)
-		return (printf("Error: Failed to open config file %s\n",
-				file_path), (-1));
-	while (fgets(line, sizeof(line), file))
+	fd = open(file_path, O_RDONLY);
+	if (fd == -1)
+		return (printf("Error: Failed to open config file %s\n", file_path), (-1));
+	while ((line = get_next_line(fd)) != NULL)
 	{
 		trimmed_line = skip_spaces_and_tabs(line);
-		if (sscanf(trimmed_line, "%2s %255[^\n]", key, value) == 2)
+		split_line = ft_split(trimmed_line, ' ');
+		if (split_line[0] && split_line[1])
 		{
-			if (strcmp(key, "NO") == 0)
-				config->north_texture = strdup(value);
-			else if (strcmp(key, "SO") == 0)
-				config->south_texture = strdup(value);
-			else if (strcmp(key, "WE") == 0)
-				config->west_texture = strdup(value);
-			else if (strcmp(key, "EA") == 0)
-				config->east_texture = strdup(value);
-			else if (strcmp(key, "F") == 0)
-				config->floor_color = parse_color(value);
-			else if (strcmp(key, "C") == 0)
-				config->ceiling_color = parse_color(value);
+			if (ft_strcmp(split_line[0], "NO") == 0)
+				config->north_texture = strdup(split_line[1]);
+			else if (ft_strcmp(split_line[0], "SO") == 0)
+				config->south_texture = strdup(split_line[1]);
+			else if (ft_strcmp(split_line[0], "WE") == 0)
+				config->west_texture = strdup(split_line[1]);
+			else if (ft_strcmp(split_line[0], "EA") == 0)
+				config->east_texture = strdup(split_line[1]);
+			else if (ft_strcmp(split_line[0], "F") == 0)
+				config->floor_color = parse_color(split_line[1]);
+			else if (ft_strcmp(split_line[0], "C") == 0)
+				config->ceiling_color = parse_color(split_line[1]);
 		}
+		free(line);
+		free(trimmed_line);
+		for (int i = 0; split_line[i]; i++)
+			free(split_line[i]);
+		free(split_line);
 	}
-	fclose(file);
+	close(fd);
 	return (0);
 }
 

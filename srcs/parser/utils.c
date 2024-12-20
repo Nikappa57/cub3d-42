@@ -26,19 +26,20 @@ void	*ft_calloc(size_t count, size_t size)
 	return (ptr);
 }
 
-void	skip_texture_info(FILE *file)
+void	skip_texture_info(int fd)
 {
-	char	line[256];
+	char	*line;
 	int		is_empty;
 	int		i;
 
-	while (fgets(line, sizeof(line), file) != NULL)
+	while ((line = get_next_line(fd)) != NULL)
 	{
+		if (!line) continue; // Add null check
 		is_empty = 1;
 		i = 0;
 		while (line[i] != '\0')
 		{
-			if (!isspace(line[i]))
+			if (!ft_isspace(line[i]))
 			{
 				is_empty = 0;
 				break;
@@ -46,16 +47,25 @@ void	skip_texture_info(FILE *file)
 			i++;
 		}
 		if (is_empty)
+		{
+			free(line);
 			continue;
-		if (strncmp(line, "NO", 2) == 0 || strncmp(line, "SO", 2) == 0 ||
-			strncmp(line, "WE", 2) == 0 || strncmp(line, "EA", 2) == 0 ||
-			strncmp(line, "F", 1) == 0 || strncmp(line, "C", 1) == 0)
+		}
+
+		if (ft_strncmp(line, "NO", 2) == 0 || ft_strncmp(line, "SO", 2) == 0 ||
+			ft_strncmp(line, "WE", 2) == 0 || ft_strncmp(line, "EA", 2) == 0 ||
+			ft_strncmp(line, "F", 1) == 0 || ft_strncmp(line, "C", 1) == 0)
+		{
+			free(line);
 			continue;
+		}
 		else
 		{
-			fseek(file, -strlen(line), SEEK_CUR);
+			lseek(fd, -strlen(line), SEEK_CUR);
+			free(line);
 			break;
 		}
+		free(line);
 	}
 }
 

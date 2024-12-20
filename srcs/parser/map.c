@@ -14,22 +14,25 @@
 
 int	init_map(t_map *map, const char *map_path)
 {
-	FILE	*file;
+	if (!map || !map_path) return -1; // Add null check
+	int		fd;
 
 	if (!map || !map_path)
 		return (printf("Error: Invalid map or path\n"), (-1));
-	file = fopen(map_path, "r");
-	if (!file)
+	fd = open(map_path, O_RDONLY);
+	if (fd == -1)
 		return (perror("Error opening map file"), (-1));
-	skip_texture_info(file);
+	skip_texture_info(fd);
 	char	line[256];
 	int		width = 0, height = 0;
-	while (fgets(line, sizeof(line), file))
+	while (read(fd, line, sizeof(line)) > 0)
 	{
 		int	len = 0;
-		for (size_t i = 0; i < strlen(line); i++)
+		size_t i = 0;
+		while (i < ft_strlen(line))
 		{
 			len += (line[i] == '\t') ? 4 : 1;
+			i++;
 		}
 		if (line[len - 1] == '\n')
 			len--;
@@ -37,7 +40,7 @@ int	init_map(t_map *map, const char *map_path)
 			width = len;
 		height++;
 	}
-	fclose(file);
+	close(fd);
 
 	map->w = width;
 	map->h = height;
@@ -52,7 +55,7 @@ int	init_map(t_map *map, const char *map_path)
 	int i = 0;
 	while (i < height)
 	{
-		map->m[i] = (int *)calloc(width, sizeof(int));
+		map->m[i] = (int *)ft_calloc(width, sizeof(int));
 		if (!map->m[i])
 		{
 			printf("Error: Memory allocation failed for map row\n");
@@ -64,8 +67,8 @@ int	init_map(t_map *map, const char *map_path)
 		i++;
 	}
 
-	file = fopen(map_path, "r");
-	if (!file)
+	fd = open(map_path, O_RDONLY);
+	if (fd == -1)
 	{
 		perror("Error reopening map file");
 		for (int i = 0; i < height; i++)
@@ -74,14 +77,14 @@ int	init_map(t_map *map, const char *map_path)
 		return -1;
 	}
 
-	skip_texture_info(file);
+	skip_texture_info(fd);
 
 	int	row = 0;
-	while (fgets(line, sizeof(line), file))
+	while (read(fd, line, sizeof(line)) > 0)
 	{
 		int col = 0;
 		size_t i = 0;
-		while (i < strlen(line))
+		while (i < ft_strlen(line))
 		{
 			if (line[i] == '\t')
 			{
@@ -100,6 +103,6 @@ int	init_map(t_map *map, const char *map_path)
 		}
 		row++;
 	}
-	fclose(file);
+	close(fd);
 	return 0;
 }

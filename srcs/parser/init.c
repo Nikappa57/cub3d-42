@@ -44,14 +44,15 @@ int	init_state(t_state *state, const char *map_path)
 
 int	init_textures(t_cub3d *cube, const char *map_path)
 {
+    if (!cube || !map_path) return -1; // Add null check
 	t_config	config;
 
 	if (read_config(map_path, &config) == -1)
 		return (-1);
-	config.north_texture[strcspn(config.north_texture, "\n")] = '\0';
-	config.south_texture[strcspn(config.south_texture, "\n")] = '\0';
-	config.west_texture[strcspn(config.west_texture, "\n")] = '\0';
-	config.east_texture[strcspn(config.east_texture, "\n")] = '\0';
+	config.north_texture[ft_strcspn(config.north_texture, "\n")] = '\0';
+	config.south_texture[ft_strcspn(config.south_texture, "\n")] = '\0';
+	config.west_texture[ft_strcspn(config.west_texture, "\n")] = '\0';
+	config.east_texture[ft_strcspn(config.east_texture, "\n")] = '\0';
 	printf("North texture path: %s\n", config.north_texture);
 	printf("South texture path: %s\n", config.south_texture);
 	printf("West texture path: %s\n", config.west_texture);
