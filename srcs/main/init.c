@@ -49,7 +49,7 @@ static int	init_map(t_map *map, const char *map_path)
 {
 	if (!map || !map_path)
 	{
-		fprintf(stderr, "Error: Invalid map or path\n");
+		printf("Error: Invalid map or path\n");
 		return -1;
 	}
 
@@ -84,21 +84,23 @@ static int	init_map(t_map *map, const char *map_path)
 	map->m = (int **)malloc(height * sizeof(int *));
 	if (!map->m)
 	{
-		fprintf(stderr, "Error: Memory allocation failed for map matrix\n");
+		printf("Error: Memory allocation failed for map matrix\n");
 		return -1;
 	}
 
-	for (int i = 0; i < height; i++)
+	int i = 0;
+	while (i < height)
 	{
 		map->m[i] = (int *)calloc(width, sizeof(int));
 		if (!map->m[i])
 		{
-			fprintf(stderr, "Error: Memory allocation failed for map row\n");
+			printf("Error: Memory allocation failed for map row\n");
 			for (int j = 0; j < i; j++)
 				free(map->m[j]);
 			free(map->m);
 			return -1;
 		}
+		i++;
 	}
 
 	file = fopen(map_path, "r");
@@ -114,23 +116,28 @@ static int	init_map(t_map *map, const char *map_path)
 	int	row = 0;
 	while (fgets(line, sizeof(line), file))
 	{
-		int	col = 0;
-		for (size_t i = 0; i < strlen(line); i++)
+		int col = 0;
+		size_t i = 0;
+		while (i < strlen(line))
 		{
 			if (line[i] == '\t')
 			{
-				for (int j = 0; j < 4; j++)
+				int j = 0;
+				while (j < 4)
+				{
 					map->m[row][col++] = 0;
+					j++;
+				}
 			}
 			else if (line[i] != '\n')
 			{
 				map->m[row][col++] = (line[i] == '1') ? 1 : 0;
 			}
+			i++;
 		}
 		row++;
 	}
 	fclose(file);
-
 	return 0;
 }
 
@@ -149,35 +156,39 @@ static void	set_position_and_direction(t_state *state,
 		get_dir_v(&state->dir, RIGHT);
 }
 
+static void	parse_line(t_state *state, const char *line, int row, int *player_count)
+{
+	size_t col = 0;
+	size_t actual_col = 0;
+
+	while (col < strlen(line))
+	{
+		if (line[col] == 'N' || line[col] == 'S'
+			|| line[col] == 'W' || line[col] == 'E')
+		{
+			(*player_count)++;
+			set_position_and_direction(state, line[col], actual_col, row);
+		}
+		if (line[col] == '\t')
+			actual_col += 4;
+		else
+			actual_col++;
+		col++;
+	}
+}
+
 static void	parse_player(t_state *state, const char *map_path)
 {
 	FILE	*file;
 	char	line[256];
 	int		row;
-	size_t	col;
-	size_t	actual_col;
 	int		player_count = 0;
 
 	file = fopen(map_path, "r");
 	row = 0;
 	while (fgets(line, sizeof(line), file))
 	{
-		col = 0;
-		actual_col = 0;
-		while (col < strlen(line))
-		{
-			if (line[col] == 'N' || line[col] == 'S'
-				|| line[col] == 'W' || line[col] == 'E')
-			{
-				player_count++;
-				set_position_and_direction(state, line[col], actual_col, row);
-			}
-			if (line[col] == '\t')
-				actual_col += 4;
-			else
-				actual_col++;
-			col++;
-		}
+		parse_line(state, line, row, &player_count);
 		row++;
 	}
 	if (player_count != 1)
@@ -202,9 +213,11 @@ static int	init_state(t_state *state, const char *map_path)
 
 void	free_map(t_map *map)
 {
-	for (int i = 0; i < map->h; i++)
+	int i = 0;
+	while (i < map->h)
 	{
 		free(map->m[i]);
+		i++;
 	}
 	free(map->m);
 }
@@ -242,9 +255,12 @@ void	skip_spaces(const int *line, int *len)
 bool	is_map_enclosed(t_state *state, t_map *map)
 {
 	bool	**visited = (bool **)malloc(map->h * sizeof(bool *));
-	for (int i = 0; i < map->h; i++)
+	int		i = 0;
+
+	while (i < map->h)
 	{
 		visited[i] = (bool *)calloc(map->w, sizeof(bool));
+		i++;
 	}
 
 	int	player_x = state->pos.x;
@@ -253,9 +269,11 @@ bool	is_map_enclosed(t_state *state, t_map *map)
 	printf("Inizio flood fill da: (%d, %d)\n", player_x, player_y);
 	bool	result = flood_fill(map, player_x, player_y, visited);
 
-	for (int i = 0; i < map->h; i++)
+	i = 0;
+	while (i < map->h)
 	{
 		free(visited[i]);
+		i++;
 	}
 	free(visited);
 	return result;
