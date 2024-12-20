@@ -167,7 +167,7 @@ int				parse_color(const char *line);
 int				init_map(t_map *map, const char *map_path);
 
 //player
-void			parse_player(t_state *state, const char *map_path);
+int				parse_player(t_state *state, const char *map_path);
 void			parse_line(t_state *state, const char *line, int row,
 					int *player_count);
 void			set_position_and_direction(t_state *state, char direction_char,
@@ -177,7 +177,7 @@ bool			is_map_enclosed(t_state *state, t_map *map);
 //utils
 void			*ft_calloc(size_t count, size_t size);
 bool			flood_fill(t_map *map, int x, int y, bool **visited);
-void			skip_texture_info(int fd);
+int				skip_texture_info(int fd);
 void			skip_spaces(const int *line, int *len);
 void			free_map(t_map *map);
 char			*skip_spaces_and_tabs(char *str);
@@ -185,6 +185,7 @@ char			*skip_spaces_and_tabs(char *str);
 //utils2
 size_t			ft_strcspn(const char *s, const char *reject);
 int				ft_strcmp(char *s1, char *s2);
+ssize_t			fd_getline(char **line, size_t *len, int fd);
 
 /* exit */
 

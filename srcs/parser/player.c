@@ -20,32 +20,49 @@ bool	is_map_enclosed(t_state *state, t_map *map)
 	int		player_y;
 	bool	result;
 
-	i = 0;
+	if (!state || !map || map->w <= 0 || map->h <= 0)
+		return (false);
+
+	// Allocazione matrice visitata
 	visited = (bool **)malloc(map->h * sizeof(bool *));
-	while (i < map->h)
+	if (!visited)
+		return (false);
+
+	for (i = 0; i < map->h; i++)
 	{
 		visited[i] = (bool *)ft_calloc(map->w, sizeof(bool));
-		i++;
+		if (!visited[i])
+		{
+			while (i-- > 0)
+				free(visited[i]);
+			free(visited);
+			return (false);
+			return (0);
+		}
 	}
-	player_x = state->pos.x;
-	player_y = state->pos.y;
+
+	player_x = (int)state->pos.x;
+	player_y = (int)state->pos.y;
+
 	printf("Inizio flood fill da: (%d, %d)\n", player_x, player_y);
 	result = flood_fill(map, player_x, player_y, visited);
-	i = 0;
-	while (i < map->h)
-	{
+
+	// Deallocazione matrice visitata
+	for (i = 0; i < map->h; i++)
 		free(visited[i]);
-		i++;
-	}
 	free(visited);
+
 	return (result);
 }
 
-void	set_position_and_direction(t_state *state,
-	char direction_char, int col, int row)
+void	set_position_and_direction(t_state *state, char direction_char, int col, int row)
 {
+	if (!state)
+		return;
+
 	state->pos.x = col + 0.5;
 	state->pos.y = row + 0.5;
+
 	if (direction_char == 'N')
 		get_dir_v(&state->dir, UP);
 	else if (direction_char == 'S')
@@ -58,9 +75,11 @@ void	set_position_and_direction(t_state *state,
 
 void	parse_line(t_state *state, const char *line, int row, int *player_count)
 {
-    if (!line || !state || !player_count) return; // Add null check
 	size_t	col;
 	size_t	actual_col;
+
+	if (!line || !state || !player_count)
+		return;
 
 	actual_col = 0;
 	col = 0;
@@ -72,40 +91,58 @@ void	parse_line(t_state *state, const char *line, int row, int *player_count)
 			(*player_count)++;
 			set_position_and_direction(state, line[col], actual_col, row);
 		}
-		if (line[col] == '\t')
-			actual_col += 4;
-		else
-			actual_col++;
+		actual_col += (line[col] == '\t') ? 4 : 1;
 		col++;
 	}
 }
-
-void	parse_player(t_state *state, const char *map_path)
+int	parse_player(t_state *state, const char *map_path)
 {
-    int		fd;
-    char	*line;
-    int		row;
-    int		player_count;
+	int		fd;
+	char	*line;
+	int		row;
+	int		player_count;
 
-    player_count = 0;
-    fd = open(map_path, O_RDONLY);
-    if (fd == -1)
-    {
-        perror("Error opening map file");
-        exit(1);
-    }
-    skip_texture_info(fd);
-    row = 0;
-    while ((line = get_next_line(fd)) != NULL)
-    {
-        parse_line(state, line, row, &player_count);
-        free(line);
-        row++;
-    }
-    if (player_count != 1)
-    {
-        printf("\033[0;31mError: Invalid number of players\033[0m\n");
-        exit(1);
-    }
-    close(fd);
+	if (!state || !map_path)
+	{
+		printf("\033[0;31mError: Invalid state or map path\033[0m\n");
+		return (-1);
+	}
+
+	player_count = 0;
+
+	// Apri il file della mappa
+	fd = open(map_path, O_RDONLY);
+	if (fd == -1)
+	{
+		perror("Error opening map file");
+		return (-1);
+	}
+
+	// Salta le informazioni sulle texture
+	if (skip_texture_info(fd) == -1)
+	{
+		printf("\033[0;31mError: Failed to skip texture info\033[0m\n");
+		close(fd);
+		return (-1);
+	}
+
+	row = 0;
+	while ((line = get_next_line(fd)) != NULL)
+	{
+		// Analizza ogni riga e aggiorna il conteggio dei giocatori
+		parse_line(state, line, row, &player_count);
+		free(line);
+		row++;
+	}
+
+	close(fd);
+
+	// Verifica che ci sia esattamente un giocatore
+	if (player_count != 1)
+	{
+		printf("\033[0;31mError: Invalid number of players (%d found)\033[0m\n", player_count);
+		return (-1);
+	}
+
+	return (0);
 }
