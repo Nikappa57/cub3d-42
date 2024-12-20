@@ -6,21 +6,50 @@
 /*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 15:11:49 by lgaudino          #+#    #+#             */
-/*   Updated: 2024/12/20 15:16:00 by lgaudino         ###   ########.fr       */
+/*   Updated: 2024/12/20 15:46:45 by lgaudino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "cub3D.h"
 
-void	draw_map(t_cub3d *cube)
+static void	draw_grid(t_cub3d *cube, int block_size)
 {
-	int block_size = (int)fmin(WIN_WIDTH / cube->map.w, WIN_HEIGHT / cube->map.h);
+	int		x;
+	int		y;
+	t_point	start;
+	t_point	end;
 
-	t_point start;
-	// MAP
-	for (int y = 0; y < cube->map.h; y++)
+	y = -1;
+	start.x = 0;
+	end.x = WIN_WIDTH;
+	while (++y < cube->map.h)
 	{
-		for (int x = 0; x < cube->map.w; x++)
+		start.y = y * block_size;
+		end.y = y * block_size;
+		draw_h_line(&cube->mlx_test.data, start, end, GRAY);
+	}
+	x = -1;
+	start.y = 0;
+	end.y = WIN_HEIGHT;
+	while (++x < cube->map.w)
+	{
+		start.x = x * block_size;
+		end.x = x * block_size;
+		draw_v_line(&cube->mlx_test.data, start, end, GRAY);
+	}
+}
+
+static void	draw_wall_block(t_cub3d *cube, int block_size)
+{
+	t_point	start;
+	int		x;
+	int		y;
+
+	y = -1;
+	while (++y < cube->map.h)
+	{
+		x = -1;
+		while (++x < cube->map.w)
 		{
 			start.x = x * block_size;
 			start.y = y * block_size;
@@ -30,15 +59,15 @@ void	draw_map(t_cub3d *cube)
 				draw_square(&cube->mlx_test.data, start, block_size, BLACK);
 		}
 	}
-	for (int y = 0; y < cube->map.h; y++)
-	{
-		draw_h_line(&cube->mlx_test.data, (t_point){0, y * block_size}, (t_point){WIN_WIDTH, y * block_size}, GRAY);
-	}
-	for (int x = 0; x < cube->map.w; x++)
-	{
-		draw_v_line(&cube->mlx_test.data, (t_point){x * block_size, 0}, (t_point){x * block_size, WIN_HEIGHT}, GRAY);
-	}
+}
 
+void	draw_map(t_cub3d *cube)
+{
+	int		block_size;
+
+	block_size = (int)fmin(WIN_WIDTH / cube->map.w, WIN_HEIGHT / cube->map.h);
+	draw_wall_block(cube, block_size);
+	draw_grid(cube, block_size);
 	// POS
 	int pos_dim = block_size/4;
 	t_point pos;
