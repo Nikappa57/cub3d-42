@@ -6,7 +6,7 @@
 /*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 10:57:55 by lottavi           #+#    #+#             */
-/*   Updated: 2024/12/20 12:30:11 by lottavi          ###   ########.fr       */
+/*   Updated: 2024/12/20 14:15:30 by lottavi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,18 +17,23 @@ int	parse_color(const char *str)
 	int		r;
 	int		g;
 	int		b;
-	char	*endptr;
 
-	r = strtol(str, &endptr, 10);
-	if (*endptr != ',')
+	r = ft_atoi(str);
+	while (*str && *str != ',')
+		str++;
+	if (*str != ',')
 		return (-1);
-	str = endptr + 1;
-	g = strtol(str, &endptr, 10);
-	if (*endptr != ',')
+	str++;
+	g = ft_atoi(str);
+	while (*str && *str != ',')
+		str++;
+	if (*str != ',')
 		return (-1);
-	str = endptr + 1;
-	b = strtol(str, &endptr, 10);
-	if (*endptr != '\0' && *endptr != '\n')
+	str++;
+	b = ft_atoi(str);
+	while (*str && *str != '\0' && *str != '\n')
+		str++;
+	if (*str != '\0' && *str != '\n')
 		return (-1);
 	printf("\033[0;31mColor parsed: %d, %d, %d\033[0m\n", r, g, b);
 	return ((r << 16) | (g << 8) | b);
@@ -38,6 +43,9 @@ int	read_config(const char *file_path, t_config *config)
 {
 	FILE	*file;
 	char	line[256];
+	char	key[3];
+	char	value[256];
+	char	*trimmed_line;
 
 	file = fopen(file_path, "r");
 	if (!file)
@@ -45,18 +53,22 @@ int	read_config(const char *file_path, t_config *config)
 				file_path), (-1));
 	while (fgets(line, sizeof(line), file))
 	{
-		if (strncmp(line, "NO ", 3) == 0)
-			config->north_texture = strdup(line + 3);
-		else if (strncmp(line, "SO ", 3) == 0)
-			config->south_texture = strdup(line + 3);
-		else if (strncmp(line, "WE ", 3) == 0)
-			config->west_texture = strdup(line + 3);
-		else if (strncmp(line, "EA ", 3) == 0)
-			config->east_texture = strdup(line + 3);
-		else if (strncmp(line, "F ", 2) == 0)
-			config->floor_color = parse_color(line + 2);
-		else if (strncmp(line, "C ", 2) == 0)
-			config->ceiling_color = parse_color(line + 2);
+		trimmed_line = skip_spaces_and_tabs(line);
+		if (sscanf(trimmed_line, "%2s %255[^\n]", key, value) == 2)
+		{
+			if (strcmp(key, "NO") == 0)
+				config->north_texture = strdup(value);
+			else if (strcmp(key, "SO") == 0)
+				config->south_texture = strdup(value);
+			else if (strcmp(key, "WE") == 0)
+				config->west_texture = strdup(value);
+			else if (strcmp(key, "EA") == 0)
+				config->east_texture = strdup(value);
+			else if (strcmp(key, "F") == 0)
+				config->floor_color = parse_color(value);
+			else if (strcmp(key, "C") == 0)
+				config->ceiling_color = parse_color(value);
+		}
 	}
 	fclose(file);
 	return (0);

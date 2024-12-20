@@ -179,6 +179,7 @@ bool			flood_fill(t_map *map, int x, int y, bool **visited);
 void			skip_texture_info(FILE *file);
 void			skip_spaces(const int *line, int *len);
 void			free_map(t_map *map);
+char		  *skip_spaces_and_tabs(char *str);
 
 /* exit */
 
