@@ -6,7 +6,7 @@
 /*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 12:12:50 by lorenzogaud       #+#    #+#             */
-/*   Updated: 2024/12/20 14:38:18 by lgaudino         ###   ########.fr       */
+/*   Updated: 2024/12/20 14:53:16 by lgaudino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -208,6 +208,9 @@ bool		is_wall(t_map map, t_point p);
 /* Actions */
 
 int			move(t_cub3d *cube);
+bool		v_is_wall(t_map map, t_vector pos);
+bool		min_wall_dist(t_map map, t_vector p);
+void		check_wall(t_map map, t_vector *pos, t_vector old_pos);
 
 /* UTILS */
 
