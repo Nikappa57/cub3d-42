@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cube.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
+/*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 19:16:39 by lgaudino          #+#    #+#             */
-/*   Updated: 2024/12/18 17:46:22 by lgaudino         ###   ########.fr       */
+/*   Updated: 2024/12/20 09:59:01 by lottavi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,10 +48,10 @@ void vector_to_screen(t_vector v, t_point *r, int width, int height, int size)
 void	draw_map(t_cub3d *cube)
 {
 	int block_size = (int)fmin(WIN_WIDTH / cube->map.w, WIN_HEIGHT / cube->map.h);
-	
+
 
 	printf("h: %d, w: %d\n", cube->map.h, cube->map.w);
-	
+
 	// MAP
 	for (int y = 0; y < cube->map.h; y++)
 	{
@@ -80,7 +80,7 @@ void	draw_map(t_cub3d *cube)
 	int start_posy = pos.y - pos_dim / 2;
 	start_posx = start_posx < 0 ? 0 : start_posx;
 	start_posy = start_posy < 0 ? 0 : start_posy;
-	
+
 	draw_square(&cube->mlx_test.data, start_posx, start_posy, pos_dim, GREEN);
 
 	// DIR
@@ -237,10 +237,10 @@ static void	draw_x_window(t_cub3d *cube, int x)
 	wall_start.y = window_bound(WIN_HEIGHT / 2 - wall_height / 2, WIN_HEIGHT);
 	wall_end.y = window_bound(WIN_HEIGHT / 2 + wall_height / 2, WIN_HEIGHT);
 	if (wall_start.y != 0)
-		draw_v_line(&cube->mlx.data, ceiling_start, wall_start, BLUE);
+		draw_v_line(&cube->mlx.data, ceiling_start, wall_start, cube->ceiling_color);
 	draw_wall(cube, wall_start, wall_end, wall_height);
 	if (wall_end.y != WIN_HEIGHT - 1)
-		draw_v_line(&cube->mlx.data, wall_end, floor_end, GRAY);
+		draw_v_line(&cube->mlx.data, wall_end, floor_end, cube->floor_color);
 }
 
 int	show_cube(t_cub3d *cube)

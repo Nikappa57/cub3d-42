@@ -6,7 +6,7 @@
 /*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 18:27:42 by lgaudino          #+#    #+#             */
-/*   Updated: 2024/12/20 09:41:07 by lottavi          ###   ########.fr       */
+/*   Updated: 2024/12/20 09:56:47 by lottavi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -323,7 +323,7 @@ static int	parse_color(const char *str) {
 	b = strtol(str, &endptr, 10);
 	if (*endptr != '\0' && *endptr != '\n')
 		return -1;
-
+	printf("\033[0;31mColor parsed: %d, %d, %d\033[0m\n", r, g, b);
 	return (r << 16) | (g << 8) | b;
 }
 
@@ -402,7 +402,7 @@ static int	init_textures(t_cub3d *cube, const char *map_path) {
 	free(config.south_texture);
 	free(config.west_texture);
 	free(config.east_texture);
-
+	
 	return 0;
 }
 
