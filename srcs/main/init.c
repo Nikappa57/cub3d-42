@@ -26,6 +26,21 @@ void	*ft_calloc(size_t count, size_t size)
 	return (ptr);
 }
 
+void skip_texture_info(FILE *file)
+{
+	char line[256];
+	int i = 0;
+	while (i < 7)
+	{
+		if (fgets(line, sizeof(line), file) == NULL)
+		{
+			perror("Error reading texture info");
+			exit(1);
+		}
+		i++;
+	}
+}
+
 static int	init_mlx(t_mlx *mlx)
 {
 	mlx->mlx = mlx_init();
@@ -59,6 +74,8 @@ static int	init_map(t_map *map, const char *map_path)
 		perror("Error opening map file");
 		return -1;
 	}
+
+	skip_texture_info(file);
 
 	char	line[256];
 	int		width = 0, height = 0;
@@ -112,6 +129,8 @@ static int	init_map(t_map *map, const char *map_path)
 		free(map->m);
 		return -1;
 	}
+
+	skip_texture_info(file);
 
 	int	row = 0;
 	while (fgets(line, sizeof(line), file))
@@ -185,6 +204,9 @@ static void	parse_player(t_state *state, const char *map_path)
 	int		player_count = 0;
 
 	file = fopen(map_path, "r");
+
+	skip_texture_info(file);
+
 	row = 0;
 	while (fgets(line, sizeof(line), file))
 	{
