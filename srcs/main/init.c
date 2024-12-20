@@ -6,7 +6,7 @@
 /*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 18:27:42 by lgaudino          #+#    #+#             */
-/*   Updated: 2024/12/19 16:43:03 by lottavi          ###   ########.fr       */
+/*   Updated: 2024/12/20 09:41:07 by lottavi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,23 +41,28 @@ void skip_texture_info(FILE *file)
 	}
 }
 
-static int	init_mlx(t_mlx *mlx)
-{
+static int	init_mlx(t_mlx *mlx) {
 	mlx->mlx = mlx_init();
-	if (!mlx->mlx)
-		return (printf("Error: mlx_init failed\n"), (-1));
+	if (!mlx->mlx) {
+		fprintf(stderr, "Error: Failed to initialize mlx\n");
+		return -1;
+	}
 	mlx->win = mlx_new_window(mlx->mlx, WIN_WIDTH, WIN_HEIGHT, WIN_TITLE);
-	if (!mlx->win)
-		return (printf("Error: mlx_new_window failed\n"), (-1));
+	if (!mlx->win) {
+		fprintf(stderr, "Error: Failed to create window\n");
+		return -1;
+	}
 	mlx->data.img = mlx_new_image(mlx->mlx, WIN_WIDTH, WIN_HEIGHT);
-	if (!mlx->data.img)
-		return (printf("Error: mlx_new_image failed\n"), (-1));
-	mlx->data.addr = mlx_get_data_addr(mlx->data.img,
-			&mlx->data.bits_per_pixel, &mlx->data.line_length,
-			&mlx->data.endian);
-	if (!mlx->data.addr)
-		return (printf("Error: mlx_get_data_addr failed\n"), (-1));
-	return (0);
+	if (!mlx->data.img) {
+		fprintf(stderr, "Error: Failed to create image\n");
+		return -1;
+	}
+	mlx->data.addr = mlx_get_data_addr(mlx->data.img, &mlx->data.bits_per_pixel, &mlx->data.line_length, &mlx->data.endian);
+	if (!mlx->data.addr) {
+		fprintf(stderr, "Error: Failed to get data address\n");
+		return -1;
+	}
+	return 0;
 }
 
 static int	init_map(t_map *map, const char *map_path)
@@ -350,14 +355,21 @@ static int	read_config(const char *file_path, t_config *config) {
 }
 
 static int	load_texture(t_cub3d *cube, t_img *t, const char *path) {
+	printf("Attempting to load texture from path: %s\n", path);
 	t->img = mlx_xpm_file_to_image(cube->mlx.mlx, (char *)path, &t->img_width, &t->img_height);
 	if (!t->img) {
 		fprintf(stderr, "Error: Failed to load texture %s\n", path);
+		fprintf(stderr, "mlx_xpm_file_to_image returned NULL\n");
 		return -1;
 	}
+	printf("Texture loaded successfully: %s\n", path);
 	t->addr = mlx_get_data_addr(t->img, &t->bits_per_pixel, &t->line_length, &t->endian);
-	if (!t->addr)
+	if (!t->addr) {
+		fprintf(stderr, "Error: Failed to get data address for texture %s\n", path);
+		fprintf(stderr, "mlx_get_data_addr returned NULL\n");
 		return -1;
+	}
+	printf("Data address obtained successfully for texture: %s\n", path);
 	return 0;
 }
 
@@ -365,6 +377,12 @@ static int	init_textures(t_cub3d *cube, const char *map_path) {
 	t_config	config;
 	if (read_config(map_path, &config) == -1)
 		return -1;
+
+	// Trim newline characters from texture paths
+	config.north_texture[strcspn(config.north_texture, "\n")] = '\0';
+	config.south_texture[strcspn(config.south_texture, "\n")] = '\0';
+	config.west_texture[strcspn(config.west_texture, "\n")] = '\0';
+	config.east_texture[strcspn(config.east_texture, "\n")] = '\0';
 
 	printf("North texture path: %s\n", config.north_texture);
 	printf("South texture path: %s\n", config.south_texture);
@@ -391,8 +409,6 @@ static int	init_textures(t_cub3d *cube, const char *map_path) {
 void	init_cube(t_cub3d *cube, const char *map_path)
 {
 	ft_bzero(cube, sizeof(t_cub3d));
-	if (init_textures(cube, map_path) == -1)
-		exit_error(cube, "init_textures() failed");
 	if (init_map(&cube->map, map_path) == -1)
 		exit_error(cube, "init_map() failed");
 	if (init_state(&cube->state, map_path) == -1)
@@ -403,4 +419,6 @@ void	init_cube(t_cub3d *cube, const char *map_path)
 		exit_error(cube, "init_mlx() failed");
 	if (init_mlx(&cube->mlx_test) == -1)
 		exit_error(cube, "init_mlx() failed");
+	if (init_textures(cube, map_path) == -1)
+		exit_error(cube, "init_textures() failed");
 }

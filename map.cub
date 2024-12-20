@@ -1,7 +1,7 @@
-NO ./D:\Folders\42\cub3d-42\texture\wolfenstein\colorstone.xpm
-SO ./D:\Folders\42\cub3d-42\texture\wolfenstein\bluestone.xpm
-WE ./D:\Folders\42\cub3d-42\texture\wolfenstein\eagle.xpm
-EA ./D:\Folders\42\cub3d-42\texture\wolfenstein\redbrick.xpm
+NO ./texture/wolfenstein/bluestone.xpm
+SO ./texture/wolfenstein/colorstone.xpm
+WE ./texture/wolfenstein/eagle.xpm
+EA ./texture/wolfenstein/redbrick.xpm
 F 220,100,0
 C 225,30,0
 
