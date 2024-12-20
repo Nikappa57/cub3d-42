@@ -6,7 +6,7 @@
 /*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 10:57:55 by lottavi           #+#    #+#             */
-/*   Updated: 2024/12/20 14:37:35 by lottavi          ###   ########.fr       */
+/*   Updated: 2024/12/20 16:15:13 by lottavi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ int	read_config(const char *file_path, t_config *config)
 
 	file = fopen(file_path, "r");
 	if (!file)
-		return (printf("\033[0;31mError: Failed to open config file %s\n\033[0m",
+		return (printf("Error: Failed to open config file %s\n",
 				file_path), (-1));
 	while (fgets(line, sizeof(line), file))
 	{
