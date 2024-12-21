@@ -6,7 +6,7 @@
 /*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 12:12:50 by lorenzogaud       #+#    #+#             */
-/*   Updated: 2024/12/21 18:08:24 by lottavi          ###   ########.fr       */
+/*   Updated: 2024/12/21 19:25:08 by lottavi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,6 +171,7 @@ void			free_textures(t_cub3d *cube);
 
 //map
 int				init_map(t_map *map, const char *map_path);
+int				init_map_dimensions(t_map *map, const char *map_path);
 
 //player
 int				parse_player(t_state *state, const char *map_path);
