@@ -6,7 +6,7 @@
 /*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 11:14:35 by lottavi           #+#    #+#             */
-/*   Updated: 2024/12/21 12:09:28 by lottavi          ###   ########.fr       */
+/*   Updated: 2024/12/21 12:47:51 by lottavi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,61 +28,23 @@ void	*ft_calloc(size_t count, size_t size)
 
 int skip_texture_info(int fd)
 {
-	char *line;
-	int is_empty;
-	int i;
-	int lines_skipped = 0;
+	char *line = get_next_line(fd);
+	int n = 0;
 
-	line = get_next_line(fd);
-	if (fd < 0)
+	while(line)
 	{
-		printf("Error: Invalid file descriptor\n");
-		return (-1);
-	}
-
-	while ((line = get_next_line(fd)) != NULL)
-	{
-		is_empty = true;
-		i = 0;
-
-		while (line[i] != '\0')
+		if (ft_strcspn(line, " 01") == 0)
 		{
-			if (!ft_isspace(line[i]))
-			{
-				is_empty = false;
-				break;
-			}
-			i++;
-		}
-
-		if (is_empty)
-		{
-			free(line);
-			lines_skipped++;
-			continue;
-		}
-
-		if (ft_strncmp(line, "NO", 2) == 0 || ft_strncmp(line, "SO", 2) == 0 ||
-			ft_strncmp(line, "WE", 2) == 0 || ft_strncmp(line, "EA", 2) == 0 ||
-			ft_strncmp(line, "F", 1) == 0 || ft_strncmp(line, "C", 1) == 0)
-		{
-			free(line);
-			lines_skipped++;
-			continue;
-		}
-		else
-		{
-			if (lseek(fd, -strlen(line), SEEK_CUR) == -1)
-			{
-				printf("Error: Failed to rewind file descriptor\n");
-				free(line);
-				return (-1);
-			}
-			free(line);
 			break;
+			free(line);
+			return (n);
 		}
+		n++;
+		printf("Skipping line: %s\n", line);
+		free(line);
+		line = get_next_line(fd);
 	}
-	return (printf("\033[0;34m[DEBUG] Skipped %d lines\033[0m\n", lines_skipped), lines_skipped);
+	return (n);
 }
 
 bool	flood_fill(t_map *map, int x, int y, bool **visited)

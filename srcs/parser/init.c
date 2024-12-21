@@ -6,7 +6,7 @@
 /*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 18:27:42 by lgaudino          #+#    #+#             */
-/*   Updated: 2024/12/21 11:56:55 by lottavi          ###   ########.fr       */
+/*   Updated: 2024/12/21 12:31:02 by lottavi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,32 +66,6 @@ int init_mlx(t_mlx *mlx, int width, int height, const char *title)
     return (0);
 }
 
-int init_state(t_state *state, const char *map_path)
-{
-    if (!state || !map_path)
-    {
-        printf("\033[0;31mError: Invalid state or map path\033[0m\n");
-        return (-1);
-    }
-
-    if (parse_player(state, map_path) == -1)
-    {
-        printf("\033[0;31mError: Failed to parse player from map\033[0m\n");
-        return (-1);
-    }
-
-    state->move_x = NONE_DIR;
-    state->move_y = NONE_DIR;
-    state->rot = NONE_ROT;
-
-    // Calcola il vettore piano perpendicolare alla direzione
-    v_perp(&state->plane, state->dir);
-
-    // Scala il piano in base al campo visivo
-    v_mul(&state->plane, state->plane, tan(FOV / 2));
-
-    return (0);
-}
 
 int init_textures(t_cub3d *cube, const char *map_path)
 {

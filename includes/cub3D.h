@@ -6,7 +6,7 @@
 /*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 12:12:50 by lorenzogaud       #+#    #+#             */
-/*   Updated: 2024/12/21 12:17:19 by lottavi          ###   ########.fr       */
+/*   Updated: 2024/12/21 12:31:49 by lottavi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,6 +178,7 @@ void			parse_line(t_state *state, const char *line, int row,
 void			set_position_and_direction(t_state *state, char direction_char,
 					int col, int row);
 bool			is_map_enclosed(t_state *state, t_map *map);
+int				init_state(t_state *state, const char *map_path);
 
 //utils
 void			*ft_calloc(size_t count, size_t size);

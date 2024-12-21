@@ -6,7 +6,7 @@
 /*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 11:13:51 by lottavi           #+#    #+#             */
-/*   Updated: 2024/12/21 12:18:30 by lottavi          ###   ########.fr       */
+/*   Updated: 2024/12/21 12:38:20 by lottavi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ void	parse_line(t_state *state, const char *line, int row, int *player_count)
     if (!line || !state || !player_count)
         return;
 
-    size_t col = 0, actual_col = 1; // Start from 1:1
+    size_t col = 0, actual_col = skip_texture_info(row);
     while (col < ft_strlen(line))
     {
         char c = line[col];
@@ -108,7 +108,7 @@ int	parse_player(t_state *state, const char *map_path)
     }
 
     int fd = open(map_path, O_RDONLY);
-    if (fd == -1)
+    if (fd < 0)
     {
         perror("Error opening map file");
         return (-1);
@@ -122,7 +122,7 @@ int	parse_player(t_state *state, const char *map_path)
     }
 
     int row = 0, player_count = 0;
-    char *line = NULL;
+    char *line = get_next_line(fd);
 
     while ((line = get_next_line(fd)) != NULL)
     {
@@ -138,5 +138,32 @@ int	parse_player(t_state *state, const char *map_path)
         fprintf(stderr, "Error: Invalid number of players (%d found)\n", player_count);
         return (-1);
     }
+    return (0);
+}
+
+int init_state(t_state *state, const char *map_path)
+{
+    if (!state || !map_path)
+    {
+        printf("\033[0;31mError: Invalid state or map path\033[0m\n");
+        return (-1);
+    }
+
+    if (parse_player(state, map_path) == -1)
+    {
+        printf("\033[0;31mError: Failed to parse player from map\033[0m\n");
+        return (-1);
+    }
+
+    state->move_x = NONE_DIR;
+    state->move_y = NONE_DIR;
+    state->rot = NONE_ROT;
+
+    // Calcola il vettore piano perpendicolare alla direzione
+    v_perp(&state->plane, state->dir);
+
+    // Scala il piano in base al campo visivo
+    v_mul(&state->plane, state->plane, tan(FOV / 2));
+
     return (0);
 }
