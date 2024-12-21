@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 11:10:37 by lottavi           #+#    #+#             */
-/*   Updated: 2024/12/21 19:29:43 by lottavi          ###   ########.fr       */
+/*   Updated: 2024/12/21 20:41:01 by lgaudino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ void	process_map(t_map *map, char *line, int row, int width)
 				col = width;
 		}
 		else if (line[i] != '\n')
+		{
 			if (col < width)
 			{
 				if (line[i] == '1')
@@ -65,6 +66,7 @@ void	process_map(t_map *map, char *line, int row, int width)
 				else
 					map->m[row][col++] = 0;
 			}
+		}
 		i++;
 	}
 	printf("\033[0;34m[DEBUG MALLOC] Processed line: %s\033[0m", line);
@@ -79,6 +81,7 @@ int	init_map(t_map *map, const char *map_path)
 
 	if (init_map_dimensions(map, map_path) == -1)
 		return (-1);
+	printf("\033[0;32m[DEBUG] Map dimensions initialized w:%d, h:%d\033[0m\n", map->w, map->h);
 	fd = open(map_path, O_RDONLY);
 	if (fd < 0)
 		return (perror("Error opening map file"), -1);
