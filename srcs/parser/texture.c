@@ -6,7 +6,7 @@
 /*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 10:57:55 by lottavi           #+#    #+#             */
-/*   Updated: 2024/12/21 15:53:44 by lottavi          ###   ########.fr       */
+/*   Updated: 2024/12/21 15:58:46 by lottavi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ int	load_texture(t_cub3d *cube, t_img *t, const char *path)
 	if (!cube || !t || !path)
 		return (-1);
 
-	printf("Attempting to load texture from path: %s\n", path);
+	printf("\033[0;33m[DEBUG TEXT]Attempting to load texture from path: %s\033[0m\n", path);
 
 	t->img = mlx_xpm_file_to_image(cube->mlx.mlx,
 			(char *)path, &t->img_width, &t->img_height);
@@ -114,7 +114,7 @@ int	load_texture(t_cub3d *cube, t_img *t, const char *path)
 		return (-1);
 	}
 
-	printf("\033[0;32mTexture loaded: %s\033[0m\n", path);
+	printf("\033[0;33m[DEBUG TEXT]Texture loaded: %s\033[0m\n", path);
 
 	t->addr = mlx_get_data_addr(t->img,
 			&t->bits_per_pixel, &t->line_length, &t->endian);
@@ -125,7 +125,7 @@ int	load_texture(t_cub3d *cube, t_img *t, const char *path)
 		return (-1);
 	}
 
-	printf("\033[0;32mData address obtained successfully for texture: %s\033[0m\n", path);
+	printf("\033[0;32m[DEBUG TEXT]Data address obtained successfully for texture: %s\033[0m\n", path);
 	return (0);
 }
 
