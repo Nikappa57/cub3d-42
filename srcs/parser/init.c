@@ -6,7 +6,7 @@
 /*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 18:27:42 by lgaudino          #+#    #+#             */
-/*   Updated: 2024/12/21 12:31:02 by lottavi          ###   ########.fr       */
+/*   Updated: 2024/12/21 15:30:01 by lottavi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,48 +63,6 @@ int init_mlx(t_mlx *mlx, int width, int height, const char *title)
         cleanup_resources((t_cub3d *)mlx);
         return (printf("Error: Failed to get data address\n"), (-1));
     }
-    return (0);
-}
-
-
-int init_textures(t_cub3d *cube, const char *map_path)
-{
-    t_config config;
-
-    if (!cube || !map_path)
-        return (printf("Error: Invalid parameters\n"), (-1));
-
-    if (read_config(map_path, &config) == -1)
-        return (-1);
-
-    config.north_texture[ft_strcspn(config.north_texture, "\n")] = '\0';
-    config.south_texture[ft_strcspn(config.south_texture, "\n")] = '\0';
-    config.west_texture[ft_strcspn(config.west_texture, "\n")] = '\0';
-    config.east_texture[ft_strcspn(config.east_texture, "\n")] = '\0';
-
-    if (load_texture(cube, &cube->texture[0], config.north_texture) == -1
-        || load_texture(cube, &cube->texture[1], config.south_texture) == -1
-        || load_texture(cube, &cube->texture[2], config.west_texture) == -1
-        || load_texture(cube, &cube->texture[3], config.east_texture) == -1)
-    {
-        for (int i = 0; i < 4; i++) {
-            if (cube->texture[i].img)
-                mlx_destroy_image(cube->mlx.mlx, cube->texture[i].img);
-        }
-        free(config.north_texture);
-        free(config.south_texture);
-        free(config.west_texture);
-        free(config.east_texture);
-        return (-1);
-    }
-
-    cube->ceiling_color = config.ceiling_color;
-    cube->floor_color = config.floor_color;
-    free(config.north_texture);
-    free(config.south_texture);
-    free(config.west_texture);
-    free(config.east_texture);
-
     return (0);
 }
 

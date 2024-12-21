@@ -6,7 +6,7 @@
 /*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 10:57:55 by lottavi           #+#    #+#             */
-/*   Updated: 2024/12/21 10:57:07 by lottavi          ###   ########.fr       */
+/*   Updated: 2024/12/21 15:44:46 by lottavi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,10 +95,10 @@ int read_config(const char *file_path, t_config *config)
                 config->ceiling_color = parse_color(split_line[1]);
         }
 
-        free(line);
         for (int i = 0; split_line[i]; i++)
             free(split_line[i]);
         free(split_line);
+        free(line);
     }
 
     close(fd);
@@ -132,5 +132,44 @@ int load_texture(t_cub3d *cube, t_img *t, const char *path)
     }
 
     printf("\033[0;32mData address obtained successfully for texture: %s\033[0m\n", path);
+    return (0);
+}
+int init_textures(t_cub3d *cube, const char *map_path)
+{
+    t_config config;
+    if (!cube || !map_path)
+        return (printf("Error: Invalid parameters\n"), (-1));
+
+    if (read_config(map_path, &config) == -1)
+        return (-1);
+
+    config.north_texture[ft_strcspn(config.north_texture, "\n")] = '\0';
+    config.south_texture[ft_strcspn(config.south_texture, "\n")] = '\0';
+    config.west_texture[ft_strcspn(config.west_texture, "\n")] = '\0';
+    config.east_texture[ft_strcspn(config.east_texture, "\n")] = '\0';
+
+    if (load_texture(cube, &cube->texture[0], config.north_texture) == -1
+        || load_texture(cube, &cube->texture[1], config.south_texture) == -1
+        || load_texture(cube, &cube->texture[2], config.west_texture) == -1
+        || load_texture(cube, &cube->texture[3], config.east_texture) == -1)
+    {
+        for (int i = 0; i < 4; i++) {
+            if (cube->texture[i].img)
+                mlx_destroy_image(cube->mlx.mlx, cube->texture[i].img);
+        }
+        free(config.north_texture);
+        free(config.south_texture);
+        free(config.west_texture);
+        free(config.east_texture);
+        return (-1);
+    }
+
+    cube->ceiling_color = config.ceiling_color;
+    cube->floor_color = config.floor_color;
+    free(config.north_texture);
+    free(config.south_texture);
+    free(config.west_texture);
+    free(config.east_texture);
+
     return (0);
 }
