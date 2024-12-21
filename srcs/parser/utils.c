@@ -6,7 +6,7 @@
 /*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 11:14:35 by lottavi           #+#    #+#             */
-/*   Updated: 2024/12/21 20:08:29 by lottavi          ###   ########.fr       */
+/*   Updated: 2024/12/21 20:40:57 by lottavi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,8 @@ int	skip_texture_info(int fd)
 	int		count;
 
 	count = 0;
-	while ((line = get_next_line(fd)) != NULL)
+	line = get_next_line(fd);
+	while (line != NULL)
 	{
 		if (line[0] == '\n')
 		{
@@ -40,6 +41,7 @@ int	skip_texture_info(int fd)
 			break ;
 		}
 		free(line);
+		line = get_next_line(fd);
 		count++;
 	}
 	printf("\033[0;34m[DEBUG SKIP] Skipped %d lines of Tinfo\033[0m\n", count);

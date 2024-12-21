@@ -6,7 +6,7 @@
 /*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 11:13:51 by lottavi           #+#    #+#             */
-/*   Updated: 2024/12/21 20:10:58 by lottavi          ###   ########.fr       */
+/*   Updated: 2024/12/21 20:38:47 by lottavi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,11 +95,12 @@ int	parse_player(t_state *state, const char *map_path)
 	row = skip_texture_info(fd);
 	player_count = 0;
 	line = get_next_line(fd);
-	while ((line = get_next_line(fd)) != NULL)
+	while (line != NULL)
 	{
 		parse_line(state, line, row, &player_count);
-		free(line);
 		row++;
+		free(line);
+		line = get_next_line(fd);
 	}
 	close(fd);
 	if (player_count != 1)
