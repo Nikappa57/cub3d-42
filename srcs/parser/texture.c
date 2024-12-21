@@ -6,7 +6,7 @@
 /*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 10:57:55 by lottavi           #+#    #+#             */
-/*   Updated: 2024/12/21 18:21:35 by lottavi          ###   ########.fr       */
+/*   Updated: 2024/12/21 18:58:59 by lottavi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,16 +35,17 @@ int	parse_color(const char *str)
 	b = ft_atoi(str);
 	while (*str && *str != '\0' && *str != '\n')
 		str++;
-	if ((*str != '\0' && *str != '\n') || r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255)
+	if ((*str != '\0' && *str != '\n') || r < 0
+		|| r > 255 || g < 0 || g > 255 || b < 0 || b > 255)
 		return (-1);
-	printf("\033[0;33mColor parsed: %d, %d, %d\033[0m\n", r, g, b);
 	return ((r << 16) | (g << 8) | b);
 }
 
 char	*ft_strcpy(char *dest, const char *src)
 {
-	char *ptr = dest;
+	char	*ptr;
 
+	ptr = dest;
 	while (*src)
 		*ptr++ = *src++;
 	*ptr = '\0';
@@ -54,10 +55,10 @@ char	*ft_strcpy(char *dest, const char *src)
 // Funzione di allocazione e copia
 char	*allocate_and_copy(const char *src)
 {
-	char *dest;
+	char	*dest;
 
 	if (!src)
-		return NULL;
+		return (NULL);
 	dest = (char *)malloc(strlen(src) + 1);
 	if (dest)
 	{
@@ -73,7 +74,7 @@ int	open_config_file(const char *file_path)
 
 	fd = open(file_path, O_RDONLY);
 	if (fd == -1)
-		printf("\033[0;31mError: Failed to open config file %s\033[0m\n", file_path);
+		printf("\033[0;31mError: Failed to open Cgs File%s\033[0m\n", file_path);
 	return (fd);
 }
 
@@ -128,10 +129,10 @@ int	read_config(const char *file_path, t_config *config)
 	{
 		split_line = split_and_trim_line(line);
 		if (!split_line)
-			continue;
+			continue ;
 		parse_config_line(split_line, config, &i);
 		if (i == 6)
-			break;
+			break ;
 	}
 	close(fd);
 	return (0);
@@ -176,7 +177,7 @@ void	ft_free_texture(t_config *config)
 
 int	init_textures(t_cub3d *cube, const char *map_path)
 {
-	t_config config;
+	t_config	config;
 
 	printf("\033[0;33m[DEBUG TEXT]Initializing textures\033[0m\n");
 	if (!cube || !map_path)
