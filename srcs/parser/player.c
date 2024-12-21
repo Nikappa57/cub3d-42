@@ -6,7 +6,7 @@
 /*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 11:13:51 by lottavi           #+#    #+#             */
-/*   Updated: 2024/12/21 15:22:31 by lottavi          ###   ########.fr       */
+/*   Updated: 2024/12/21 16:29:42 by lottavi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,8 @@ int	parse_player(t_state *state, const char *map_path)
 		perror("Error opening map file");
 		return (-1);
 	}
-	int row = skip_texture_info(fd), player_count = 0;
+	int	row = skip_texture_info(fd);
+	int	player_count = 0;
 	char *line = get_next_line(fd);
 
 	while ((line = get_next_line(fd)) != NULL)

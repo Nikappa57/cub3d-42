@@ -6,7 +6,7 @@
 /*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 10:57:55 by lottavi           #+#    #+#             */
-/*   Updated: 2024/12/21 16:15:49 by lottavi          ###   ########.fr       */
+/*   Updated: 2024/12/21 16:34:38 by lottavi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -196,6 +196,6 @@ int	init_textures(t_cub3d *cube, const char *map_path)
 	cube->ceiling_color = config.ceiling_color;
 	cube->floor_color = config.floor_color;
 	ft_free_texture(cube, &config);
-
+	printf("\033[0;32m[DEBUG TEXT]Textures initialized successfully\033[0m\n");
 	return (0);
 }
