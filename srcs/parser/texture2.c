@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   texture2.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 19:34:52 by lottavi           #+#    #+#             */
-/*   Updated: 2024/12/21 20:36:16 by lottavi          ###   ########.fr       */
+/*   Updated: 2024/12/21 22:27:07 by lgaudino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,15 +16,17 @@ char	**split_and_trim_line(char *line)
 {
 	char	*trimmed_line;
 	char	**split_line;
+	char	*tmp;
 
 	trimmed_line = allocate_and_copy(line);
+	tmp = trimmed_line;
 	if (!trimmed_line)
 		return (NULL);
 	trimmed_line = skip_spaces_and_tabs(trimmed_line);
 	if (!trimmed_line)
 		return (NULL);
 	split_line = ft_split(trimmed_line, ' ');
-	return (split_line);
+	return (free(tmp), split_line);
 }
 
 int	read_config(const char *file_path, t_config *config)
@@ -39,6 +41,7 @@ int	read_config(const char *file_path, t_config *config)
 	if (fd == -1)
 		return (-1);
 	line = get_next_line(fd);
+	split_line = NULL;
 	while (line != NULL)
 	{
 		split_line = split_and_trim_line(line);
@@ -48,11 +51,11 @@ int	read_config(const char *file_path, t_config *config)
 		if (i == 6)
 			break ;
 		free(line);
-		free(split_line);
+		free_str_arr(split_line);
 		line = get_next_line(fd);
 	}
 	close(fd);
-	return (0);
+	return (free_ptr(line), free_str_arr(split_line), 0);
 }
 
 char	*allocate_and_copy(const char *src)

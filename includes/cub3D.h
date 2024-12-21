@@ -6,7 +6,7 @@
 /*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 12:12:50 by lorenzogaud       #+#    #+#             */
-/*   Updated: 2024/12/21 21:42:07 by lgaudino         ###   ########.fr       */
+/*   Updated: 2024/12/21 22:19:19 by lgaudino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -266,5 +266,6 @@ double			v_distance_pow2(t_vector v1, t_vector v2);
 
 void			draw_line(t_img *img, t_point start, t_point end,
 					t_color color);
-
+void			free_ptr(void *ptr);
+void			free_str_arr(char **ptr);
 #endif
