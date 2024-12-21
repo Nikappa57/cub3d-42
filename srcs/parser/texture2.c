@@ -6,7 +6,7 @@
 /*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 19:34:52 by lottavi           #+#    #+#             */
-/*   Updated: 2024/12/21 19:57:11 by lottavi          ###   ########.fr       */
+/*   Updated: 2024/12/21 20:36:16 by lottavi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,12 +35,11 @@ int	read_config(const char *file_path, t_config *config)
 	int		i;
 
 	i = 0;
-	if (!file_path || !config)
-		return (-1);
 	fd = open_config_file(file_path);
 	if (fd == -1)
 		return (-1);
-	while ((line = get_next_line(fd)) != NULL)
+	line = get_next_line(fd);
+	while (line != NULL)
 	{
 		split_line = split_and_trim_line(line);
 		if (!split_line)
@@ -48,6 +47,9 @@ int	read_config(const char *file_path, t_config *config)
 		parse_config_line(split_line, config, &i);
 		if (i == 6)
 			break ;
+		free(line);
+		free(split_line);
+		line = get_next_line(fd);
 	}
 	close(fd);
 	return (0);
