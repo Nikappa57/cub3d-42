@@ -6,7 +6,7 @@
 /*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 11:13:51 by lottavi           #+#    #+#             */
-/*   Updated: 2024/12/21 12:38:20 by lottavi          ###   ########.fr       */
+/*   Updated: 2024/12/21 13:19:49 by lottavi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,14 +85,14 @@ void	parse_line(t_state *state, const char *line, int row, int *player_count)
     if (!line || !state || !player_count)
         return;
 
-    size_t col = 0, actual_col = skip_texture_info(row);
+    size_t col = 0, actual_col = 0;
     while (col < ft_strlen(line))
     {
         char c = line[col];
         if (c == 'N' || c == 'S' || c == 'W' || c == 'E')
         {
             (*player_count)++;
-            set_position_and_direction(state, c, actual_col, row + 1); // Adjust row to start from 1
+            set_position_and_direction(state, c, actual_col, row);
         }
         actual_col += (c == '\t') ? 4 : 1;
         col++;
@@ -113,15 +113,7 @@ int	parse_player(t_state *state, const char *map_path)
         perror("Error opening map file");
         return (-1);
     }
-
-    if (skip_texture_info(fd) == -1)
-    {
-        fprintf(stderr, "Error: Failed to skip texture info\n");
-        close(fd);
-        return (-1);
-    }
-
-    int row = 0, player_count = 0;
+    int row = skip_texture_info(fd), player_count = 0;
     char *line = get_next_line(fd);
 
     while ((line = get_next_line(fd)) != NULL)

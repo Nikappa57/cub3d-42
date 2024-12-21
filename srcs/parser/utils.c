@@ -6,7 +6,7 @@
 /*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 11:14:35 by lottavi           #+#    #+#             */
-/*   Updated: 2024/12/21 12:47:51 by lottavi          ###   ########.fr       */
+/*   Updated: 2024/12/21 13:17:12 by lottavi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,6 @@ int skip_texture_info(int fd)
 			return (n);
 		}
 		n++;
-		printf("Skipping line: %s\n", line);
 		free(line);
 		line = get_next_line(fd);
 	}
