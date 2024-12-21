@@ -6,7 +6,7 @@
 /*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 11:13:51 by lottavi           #+#    #+#             */
-/*   Updated: 2024/12/21 20:09:29 by lottavi          ###   ########.fr       */
+/*   Updated: 2024/12/21 20:10:58 by lottavi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ int	parse_player(t_state *state, const char *map_path)
 	close(fd);
 	if (player_count != 1)
 		return (printf("Error: Invalid PG (%d found)\n", player_count), (-1));
-	printf("\033[0;32m[DEBUG] Player position: (%.2f, %.2f)\033[0m\n", state->pos.x, state->pos.y);
+	printf("[DEBUG] Player Pos: (%.2f, %.2f)\n", state->pos.x, state->pos.y);
 	return (0);
 }
 
