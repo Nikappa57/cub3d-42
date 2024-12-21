@@ -6,7 +6,7 @@
 /*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 11:13:51 by lottavi           #+#    #+#             */
-/*   Updated: 2024/12/21 18:01:34 by lottavi          ###   ########.fr       */
+/*   Updated: 2024/12/21 18:04:28 by lottavi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ bool	is_map_enclosed(t_state *state, t_map *map)
 
 	if (!state || !map || map->w <= 1 || map->h <= 0)
 		return (false);
-
 	visited = (bool **)malloc(map->h * sizeof(bool *));
 	if (!visited)
 		return (false);
@@ -38,11 +37,9 @@ bool	is_map_enclosed(t_state *state, t_map *map)
 			return (false);
 		}
 	}
-
 	player_x = (int)state->pos.x;
 	player_y = (int)state->pos.y;
 	printf("\033[0;34m[DEBUG] Player position: (%d, %d)\033[0m\n", player_x, player_y);
-
 	if (player_x < 0 || player_x >= map->w || player_y < 0 || player_y >= map->h)
 	{
 		printf("\033[0;31mError: Player position out of bounds\033[0m\n");
@@ -53,10 +50,12 @@ bool	is_map_enclosed(t_state *state, t_map *map)
 		printf("\033[0;32m[DEBUG FF] Inizio flood fill da: (%d, %d)\033[0m\n", player_x, player_y);
 		result = flood_fill(map, player_x, player_y, visited);
 	}
-
-	// Deallocazione matrice visitata
-	for (i = 0; i < map->h; i++)
+	i = 0;
+	while (i < map->h)
+	{
 		free(visited[i]);
+		i++;
+	}
 	free(visited);
 	printf("\033[0;34m[DEBUG FF]Flood Fill completato\033[0m\n");
 	return (result);

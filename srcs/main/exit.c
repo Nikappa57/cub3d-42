@@ -3,14 +3,25 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
+/*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 17:46:56 by lgaudino          #+#    #+#             */
-/*   Updated: 2024/12/20 14:43:54 by lgaudino         ###   ########.fr       */
+/*   Updated: 2024/12/21 18:09:18 by lottavi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3D.h"
+
+void	free_textures(t_cub3d *cube)
+{
+	for (int i = 0; i < 4; i++) {
+		if (cube->texture[i].img)
+		{
+			mlx_destroy_image(cube->mlx.mlx, cube->texture[i].img);
+			cube->texture[i].img = NULL;
+		}
+	}
+}
 
 static void	clear_mlx(t_mlx mlx)
 {
@@ -61,6 +72,8 @@ void	clear_exit(t_cub3d *cube, int exitcode)
 		clear_mlx(cube->mlx);
 		clear_mlx(cube->mlx_test);
 		clear_map(cube->map);
+		free_textures(cube);
 	}
 	exit(exitcode);
 }
+

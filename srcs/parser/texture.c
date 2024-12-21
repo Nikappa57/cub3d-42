@@ -6,7 +6,7 @@
 /*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 10:57:55 by lottavi           #+#    #+#             */
-/*   Updated: 2024/12/21 18:01:06 by lottavi          ###   ########.fr       */
+/*   Updated: 2024/12/21 18:11:18 by lottavi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,16 +53,19 @@ char	*ft_strcpy(char *dest, const char *src)
 }
 
 // Funzione di allocazione e copia
-char *allocate_and_copy(const char *src) {
-    if (!src)
-        return NULL;
-    char *dest = (char *)malloc(strlen(src) + 1);
-    if (dest) {
-        ft_strcpy(dest, src);
-		dest[ft_strcspn(dest, "\n")] = '\0';
-        printf("\033[0;33m[DEBUG TEXT] Allocated and copied string: %s\033[0m\n", dest);
-    }
-    return dest;
+char	*allocate_and_copy(const char *src)
+{
+	char *dest;
+
+	if (!src)
+		return NULL;
+	dest = (char *)malloc(strlen(src) + 1);
+	if (dest)
+	{
+		ft_strcpy(dest, src);
+		printf("\033[0;33m[DEBUG TEXT] Allocated and copied string: %s\033[0m\n", dest);
+	}
+	return (dest);
 }
 
 int	read_config(const char *file_path, t_config *config)
@@ -146,19 +149,8 @@ int	load_texture(t_cub3d *cube, t_img *t, const char *path)
 	return (0);
 }
 
-void	free_textures(t_cub3d *cube)
+void	ft_free_texture(t_config *config)
 {
-	for (int i = 0; i < 4; i++) {
-		if (cube->texture[i].img) {
-			mlx_destroy_image(cube->mlx.mlx, cube->texture[i].img);
-			cube->texture[i].img = NULL;
-		}
-	}
-}
-
-void	ft_free_texture(t_cub3d *cube, t_config *config)
-{
-	free_textures(cube);
 	if (config->north_texture)
 		free(config->north_texture);
 	if (config->south_texture)
@@ -190,13 +182,13 @@ int	init_textures(t_cub3d *cube, const char *map_path)
 		|| load_texture(cube, &cube->texture[2], config.west_texture) == -1
 		|| load_texture(cube, &cube->texture[3], config.east_texture) == -1)
 	{
-		ft_free_texture(cube, &config);
+		ft_free_texture(&config);
 		return (-1);
 	}
 
 	cube->ceiling_color = config.ceiling_color;
 	cube->floor_color = config.floor_color;
-	ft_free_texture(cube, &config);
+	ft_free_texture(&config);
 	printf("\033[0;32m[DEBUG TEXT]Textures initialized successfully\033[0m\n");
 	return (0);
 }
