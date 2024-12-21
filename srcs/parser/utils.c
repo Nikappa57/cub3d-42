@@ -6,7 +6,7 @@
 /*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 11:14:35 by lottavi           #+#    #+#             */
-/*   Updated: 2024/12/21 10:46:23 by lottavi          ###   ########.fr       */
+/*   Updated: 2024/12/21 12:09:28 by lottavi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,9 @@ int skip_texture_info(int fd)
 	char *line;
 	int is_empty;
 	int i;
+	int lines_skipped = 0;
 
+	line = get_next_line(fd);
 	if (fd < 0)
 	{
 		printf("Error: Invalid file descriptor\n");
@@ -56,6 +58,7 @@ int skip_texture_info(int fd)
 		if (is_empty)
 		{
 			free(line);
+			lines_skipped++;
 			continue;
 		}
 
@@ -64,6 +67,7 @@ int skip_texture_info(int fd)
 			ft_strncmp(line, "F", 1) == 0 || ft_strncmp(line, "C", 1) == 0)
 		{
 			free(line);
+			lines_skipped++;
 			continue;
 		}
 		else
@@ -78,7 +82,7 @@ int skip_texture_info(int fd)
 			break;
 		}
 	}
-	return (0);
+	return (printf("\033[0;34m[DEBUG] Skipped %d lines\033[0m\n", lines_skipped), lines_skipped);
 }
 
 bool	flood_fill(t_map *map, int x, int y, bool **visited)
@@ -129,4 +133,34 @@ char	*skip_spaces_and_tabs(char *str)
 		str++;
 
 	return (str);
+}
+
+size_t	ft_strcspn(const char *str1, const char *str2)
+{
+	const char	*s1;
+	const char	*s2;
+
+	s1 = str1;
+	while (*s1 != '\0')
+	{
+		s2 = str2;
+		while (*s2 != '\0')
+		{
+			if (*s1 == *s2)
+				return (s1 - str1);
+			s2++;
+		}
+		s1++;
+	}
+	return (s1 - str1);
+}
+
+int ft_strcmp(char *s1, char *s2)
+{
+	while (*s1 && *s2 && *s1 == *s2)
+	{
+		s1++;
+		s2++;
+	}
+	return (*s1 - *s2);
 }

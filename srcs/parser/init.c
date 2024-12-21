@@ -6,7 +6,7 @@
 /*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 18:27:42 by lgaudino          #+#    #+#             */
-/*   Updated: 2024/12/21 10:59:59 by lottavi          ###   ########.fr       */
+/*   Updated: 2024/12/21 11:56:55 by lottavi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int init_mlx(t_mlx *mlx, int width, int height, const char *title)
     if (!mlx->mlx)
         return (printf("Error: Failed to initialize mlx\n"), (-1));
 
-    mlx->win = mlx_new_window(mlx->mlx, width, height, title);
+    mlx->win = mlx_new_window(mlx->mlx, width, height, (char*)title);
     if (!mlx->win)
     {
         cleanup_resources((t_cub3d *)mlx); // Cast to parent struct

@@ -6,7 +6,7 @@
 /*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 12:12:50 by lorenzogaud       #+#    #+#             */
-/*   Updated: 2024/12/21 10:36:34 by lottavi          ###   ########.fr       */
+/*   Updated: 2024/12/21 12:17:19 by lottavi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,10 @@
 # ifndef M_PI
 #  define M_PI 3.14159265358979323846
 # endif
+
+#ifndef BUFFER_SIZE
+#define BUFFER_SIZE 1024
+#endif
 
 /* Constants */
 
@@ -112,6 +116,7 @@ typedef struct s_state
 	t_dir		move_x;
 	t_dir		move_y;
 	t_rot		rot;
+	t_map		*map;
 }				t_state;
 
 typedef struct s_dda
