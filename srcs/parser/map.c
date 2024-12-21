@@ -6,7 +6,7 @@
 /*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 11:10:37 by lottavi           #+#    #+#             */
-/*   Updated: 2024/12/21 19:25:43 by lottavi          ###   ########.fr       */
+/*   Updated: 2024/12/21 19:29:43 by lottavi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,10 +51,20 @@ void	process_map(t_map *map, char *line, int row, int width)
 	while (line[i] != '\0')
 	{
 		if (line[i] == '\t')
-			col += (col + 4 < width) ? 4 : (width - col);
+		{
+			if (col + 4 < width)
+				col += 4;
+			else
+				col = width;
+		}
 		else if (line[i] != '\n')
 			if (col < width)
-				map->m[row][col++] = (line[i] == '1') ? 1 : 0;
+			{
+				if (line[i] == '1')
+					map->m[row][col++] = 1;
+				else
+					map->m[row][col++] = 0;
+			}
 		i++;
 	}
 	printf("\033[0;34m[DEBUG MALLOC] Processed line: %s\033[0m", line);
