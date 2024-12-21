@@ -6,36 +6,11 @@
 /*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 18:27:42 by lgaudino          #+#    #+#             */
-/*   Updated: 2024/12/21 22:50:38 by lgaudino         ###   ########.fr       */
+/*   Updated: 2024/12/21 23:41:21 by lgaudino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3D.h"
-
-void	cleanup_resources(t_cub3d *cube)
-{
-	int	i;
-
-	if (cube->mlx.mlx)
-	{
-		if (cube->mlx.data.img)
-			mlx_destroy_image(cube->mlx.mlx, cube->mlx.data.img);
-		if (cube->mlx.win)
-			mlx_destroy_window(cube->mlx.mlx, cube->mlx.win);
-		i = 0;
-		while (i < 4)
-		{
-			if (cube->texture[i].img)
-				mlx_destroy_image(cube->mlx.mlx, cube->texture[i].img);
-			i++;
-		}
-		mlx_destroy_display(cube->mlx.mlx);
-		free(cube->mlx.mlx);
-	}
-	cube->mlx.mlx = NULL;
-	cube->mlx.win = NULL;
-	cube->mlx.data.img = NULL;
-}
 
 int	init_mlx(t_mlx *mlx)
 {
@@ -59,7 +34,7 @@ int	init_mlx(t_mlx *mlx)
 void	init_cube(t_cub3d *cube, const char *map_path)
 {
 	ft_bzero(cube, sizeof(t_cub3d));
-	if (check_cub_file_syntax(map_path) == -1)
+	if (check_cub_file_syntax(map_path) == 0)
 		exit_error(cube, "Error\nInvalid .cub file syntax");
 	if (init_map(&cube->map, map_path) == -1)
 		exit_error(cube, "Error\ninit_map() failed");
@@ -72,8 +47,5 @@ void	init_cube(t_cub3d *cube, const char *map_path)
 	if (init_mlx(&cube->mlx_test) == -1)
 		exit_error(cube, "Error\ninit_mlx() failed");
 	if (init_textures(cube, map_path) == -1)
-	{
-		cleanup_resources(cube);
 		exit_error(cube, "Error\ninit_textures() failed");
-	}
 }

@@ -6,7 +6,7 @@
 /*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 21:09:20 by lottavi           #+#    #+#             */
-/*   Updated: 2024/12/21 22:47:20 by lgaudino         ###   ########.fr       */
+/*   Updated: 2024/12/21 23:50:27 by lgaudino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 bool	is_texture_info(const char *line)
 {
 	const char	*valid_chars = "NOSOWEA\n";
-	if(line == NULL)
+	if (line == NULL)
 		return (false);
 	while (*line)
 	{
@@ -28,13 +28,17 @@ bool	is_texture_info(const char *line)
 
 int	is_map_info(const char *line)
 {
-	int	has_direction = 0;
-	if(line == NULL)
+	int	has_direction;
+
+	has_direction = 0;
+	if (line == NULL)
 		return (0);
 	while (*line)
 	{
-		if (*line != '0' && *line != '1' && *line != ' ' && !strchr("NSWE", *line))
-			break ;
+		if (*line != '0' && *line != '1'
+			&& *line != ' ' && *line != '\0'
+			&& *line != '\n' && !ft_strchr("NSWE", *line))
+			return (2);
 		if (strchr("NSWE", *line))
 			has_direction++;
 		line++;
@@ -52,12 +56,7 @@ int	check_cub_file_syntax(const char *file_path)
 	}
 	char	*line;
 	int		has_dir = 0;
-	line = get_next_line(fd);
-	while (is_texture_info(line))
-	{
-		free(line);
-		line = get_next_line(fd);
-	}
+	line = skip_texture(fd);
 	while(line)
 	{
 		has_dir += is_map_info(line);
