@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   player2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 19:43:42 by lottavi           #+#    #+#             */
-/*   Updated: 2024/12/21 20:05:25 by lottavi          ###   ########.fr       */
+/*   Updated: 2024/12/21 22:48:40 by lgaudino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ bool	is_player_position_valid(t_state *state, t_map *map)
 	if (pl_x < 0 || pl_x >= map->w
 		|| pl_y < 0 || pl_y >= map->h)
 	{
-		printf("\033[0;31mError: Player position out of bounds\033[0m\n");
+		printf("\033[0;31mError\n Player position out of bounds\033[0m\n");
 		return (false);
 	}
 	return (true);

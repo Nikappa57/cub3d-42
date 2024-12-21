@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 21:09:20 by lottavi           #+#    #+#             */
-/*   Updated: 2024/12/21 21:12:02 by lottavi          ###   ########.fr       */
+/*   Updated: 2024/12/21 22:47:20 by lgaudino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ int	check_cub_file_syntax(const char *file_path)
 	int		fd = open(file_path, O_RDONLY);
 	if (fd < 0)
 	{
-		perror("Error opening .cub file");
+		perror("Error\n opening .cub file");
 		return (false);
 	}
 	char	*line;

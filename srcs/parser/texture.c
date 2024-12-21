@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   texture.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 10:57:55 by lottavi           #+#    #+#             */
-/*   Updated: 2024/12/21 22:04:37 by lottavi          ###   ########.fr       */
+/*   Updated: 2024/12/21 22:48:19 by lgaudino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ int	load_texture(t_cub3d *cube, t_img *t, const char *path)
 			(char *)path, &t->img_width, &t->img_height);
 	if (!t->img)
 	{
-		printf("\033[0;31mError: Failed to load texture %s\033[0m\n", path);
+		printf("\033[0;31mError\n Failed to load texture %s\033[0m\n", path);
 		return (-1);
 	}
 	printf("\033[0;33m[DEBUG]Texture loaded: %s\033[0m\n", path);
@@ -64,7 +64,7 @@ int	load_texture(t_cub3d *cube, t_img *t, const char *path)
 			&t->bits_per_pixel, &t->line_length, &t->endian);
 	if (!t->addr)
 	{
-		printf("\033[0;31mError: Failed to obtain data %s\033[0m\n", path);
+		printf("\033[0;31mError\n Failed to obtain data %s\033[0m\n", path);
 		mlx_destroy_image(cube->mlx.mlx, t->img);
 		return (-1);
 	}
@@ -90,7 +90,7 @@ int	init_textures(t_cub3d *cube, const char *map_path)
 
 	printf("\033[0;33m[DEBUG]Initializing textures\033[0m\n");
 	if (!cube || !map_path)
-		return (printf("Error: Invalid parameters\n"), (-1));
+		return (printf("Error\n Invalid parameters\n"), (-1));
 	if (read_config(map_path, &config) == -1)
 		return (-1);
 	config.north_texture[ft_strcspn(config.north_texture, "\n")] = '\0';

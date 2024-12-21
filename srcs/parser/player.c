@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   player.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 11:13:51 by lottavi           #+#    #+#             */
-/*   Updated: 2024/12/21 21:51:20 by lottavi          ###   ########.fr       */
+/*   Updated: 2024/12/21 22:49:06 by lgaudino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,10 +85,10 @@ int	parse_player(t_state *state, const char *map_path)
 	char	*line;
 
 	if (!state || !map_path)
-		return (printf("\033[0;31mError: Invalid state/map\033[0m\n"), (-1));
+		return (printf("\033[0;31mError\n Invalid state/map\033[0m\n"), (-1));
 	fd = open(map_path, O_RDONLY);
 	if (fd < 0)
-		return (perror("Error opening map file"), (-1));
+		return (perror("Error\n opening map file"), (-1));
 	line = skip_texture(fd);
 	row = 0;
 	while (line != NULL)
@@ -106,9 +106,9 @@ int	parse_player(t_state *state, const char *map_path)
 int	init_state(t_state *state, const char *map_path)
 {
 	if (!state || !map_path)
-		return (printf("\033[0;31mError: Invalid state/path\033[0m\n"), (-1));
+		return (printf("\033[0;31mError\n Invalid state/path\033[0m\n"), (-1));
 	if (parse_player(state, map_path) == -1)
-		return (printf("\033[0;31mError: Failed to parse PG\033[0m\n"), (-1));
+		return (printf("\033[0;31mError\n Failed to parse PG\033[0m\n"), (-1));
 	state->move_x = NONE_DIR;
 	state->move_y = NONE_DIR;
 	state->rot = NONE_ROT;

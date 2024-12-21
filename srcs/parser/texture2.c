@@ -6,7 +6,7 @@
 /*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 19:34:52 by lottavi           #+#    #+#             */
-/*   Updated: 2024/12/21 22:27:07 by lgaudino         ###   ########.fr       */
+/*   Updated: 2024/12/21 22:47:54 by lgaudino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,6 @@ int	open_config_file(const char *file_path)
 
 	fd = open(file_path, O_RDONLY);
 	if (fd == -1)
-		printf("\033[0;31mError: no open Configs%s\033[0m\n", file_path);
+		printf("\033[0;31mError\n no open Configs%s\033[0m\n", file_path);
 	return (fd);
 }

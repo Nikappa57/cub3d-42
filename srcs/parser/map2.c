@@ -6,7 +6,7 @@
 /*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 19:21:44 by lottavi           #+#    #+#             */
-/*   Updated: 2024/12/21 21:36:32 by lgaudino         ###   ########.fr       */
+/*   Updated: 2024/12/21 22:51:31 by lgaudino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,12 +33,10 @@ char	*skip_texture(int fd)
 	count = 0;
 	while (is_texture(line))
 	{
-		printf("skip: %s\n", line);
 		free(line);
 		line = get_next_line(fd);
 		count++;
 	}
-	printf("not texture: %s\n", line);
 	return (line);
 }
 
@@ -51,7 +49,7 @@ int	get_map_width(const char *map_path)
 
 	fd = open(map_path, O_RDONLY);
 	if (fd < 0)
-		return (perror("Error opening map file"), (-1));
+		return (perror("Error\n opening map file"), (-1));
 
 	line = skip_texture(fd);
 	width = 0;
@@ -75,12 +73,11 @@ int	get_map_height(const char *map_path)
 
 	fd = open(map_path, O_RDONLY);
 	if (fd < 0)
-		return (perror("Error opening map file"), (-1));
+		return (perror("Error\n opening map file"), (-1));
 	height = 0;
 	line = skip_texture(fd);
 	while (line)
 	{
-		printf("line: %s\n", line);
 		height++;
 		free(line);
 		line = get_next_line(fd);

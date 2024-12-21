@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 18:27:42 by lgaudino          #+#    #+#             */
-/*   Updated: 2024/12/21 21:10:24 by lottavi          ###   ########.fr       */
+/*   Updated: 2024/12/21 22:50:38 by lgaudino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,18 +41,18 @@ int	init_mlx(t_mlx *mlx)
 {
 	mlx->mlx = mlx_init();
 	if (!mlx->mlx)
-		return (printf("Error: Failed to initialize mlx\n"), (-1));
+		return (printf("Error\n Failed to initialize mlx\n"), (-1));
 	mlx->win = mlx_new_window(mlx->mlx, WIN_WIDTH, WIN_HEIGHT, WIN_TITLE);
 	if (!mlx->win)
-		return (printf("Error: Failed to create window\n"), (-1));
+		return (printf("Error\n Failed to create window\n"), (-1));
 	mlx->data.img = mlx_new_image(mlx->mlx, WIN_WIDTH, WIN_HEIGHT);
 	if (!mlx->data.img)
-		return (printf("Error: Failed to create image\n"), (-1));
+		return (printf("Error\n Failed to create image\n"), (-1));
 	mlx->data.addr = mlx_get_data_addr(mlx->data.img,
 			&mlx->data.bits_per_pixel,
 			&mlx->data.line_length, &mlx->data.endian);
 	if (!mlx->data.addr)
-		return (printf("Error: Failed to get data address\n"), (-1));
+		return (printf("Error\n Failed to get data address\n"), (-1));
 	return (0);
 }
 
@@ -60,20 +60,20 @@ void	init_cube(t_cub3d *cube, const char *map_path)
 {
 	ft_bzero(cube, sizeof(t_cub3d));
 	if (check_cub_file_syntax(map_path) == -1)
-		exit_error(cube, "Invalid .cub file syntax");
+		exit_error(cube, "Error\nInvalid .cub file syntax");
 	if (init_map(&cube->map, map_path) == -1)
-		exit_error(cube, "init_map() failed");
+		exit_error(cube, "Error\ninit_map() failed");
 	if (init_state(&cube->state, map_path) == -1)
-		exit_error(cube, "init_state() failed");
+		exit_error(cube, "Error\ninit_state() failed");
 	if (!is_map_enclosed(&cube->state, &cube->map))
-		exit_error(cube, "Map is not enclosed");
+		exit_error(cube, "Error\nMap is not enclosed");
 	if (init_mlx(&cube->mlx) == -1)
-		exit_error(cube, "init_mlx() failed");
+		exit_error(cube, "Error\ninit_mlx() failed");
 	if (init_mlx(&cube->mlx_test) == -1)
-		exit_error(cube, "init_mlx() failed");
+		exit_error(cube, "Error\ninit_mlx() failed");
 	if (init_textures(cube, map_path) == -1)
 	{
 		cleanup_resources(cube);
-		exit_error(cube, "init_textures() failed");
+		exit_error(cube, "Error\ninit_textures() failed");
 	}
 }
