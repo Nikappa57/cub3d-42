@@ -6,7 +6,7 @@
 /*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 19:34:52 by lottavi           #+#    #+#             */
-/*   Updated: 2024/12/21 19:39:04 by lottavi          ###   ########.fr       */
+/*   Updated: 2024/12/21 19:57:11 by lottavi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ char	*allocate_and_copy(const char *src)
 	if (dest)
 	{
 		ft_strcpy(dest, src);
-		printf("\033[0;33m[DEBUG TEXT] Allocated and copied string: %s\033[0m", dest);
+		printf("\033[0;33m[DEBUG] Allocated/Copied Str: %s\033[0m", dest);
 	}
 	return (dest);
 }
@@ -74,25 +74,6 @@ int	open_config_file(const char *file_path)
 
 	fd = open(file_path, O_RDONLY);
 	if (fd == -1)
-		printf("\033[0;31mError: Failed to open Cgs File%s\033[0m\n", file_path);
+		printf("\033[0;31mError: no open Configs%s\033[0m\n", file_path);
 	return (fd);
-}
-
-void	parse_config_line(char **split_line, t_config *config, int *i)
-{
-	if (split_line[0] && split_line[1])
-	{
-		if (ft_strcmp(split_line[0], "NO") == 0)
-			config->north_texture = allocate_and_copy(split_line[1]), (*i)++;
-		else if (ft_strcmp(split_line[0], "SO") == 0)
-			config->south_texture = allocate_and_copy(split_line[1]), (*i)++;
-		else if (ft_strcmp(split_line[0], "WE") == 0)
-			config->west_texture = allocate_and_copy(split_line[1]), (*i)++;
-		else if (ft_strcmp(split_line[0], "EA") == 0)
-			config->east_texture = allocate_and_copy(split_line[1]), (*i)++;
-		else if (ft_strcmp(split_line[0], "F") == 0)
-			config->floor_color = parse_color(split_line[1]), (*i)++;
-		else if (ft_strcmp(split_line[0], "C") == 0)
-			config->ceiling_color = parse_color(split_line[1]), (*i)++;
-	}
 }

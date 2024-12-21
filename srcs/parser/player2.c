@@ -6,7 +6,7 @@
 /*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 19:43:42 by lottavi           #+#    #+#             */
-/*   Updated: 2024/12/21 19:45:48 by lottavi          ###   ########.fr       */
+/*   Updated: 2024/12/21 20:05:25 by lottavi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,4 +47,21 @@ void	free_visited(bool **visited, int height)
 		i++;
 	}
 	free(visited);
+}
+
+bool	is_player_position_valid(t_state *state, t_map *map)
+{
+	int	pl_x;
+	int	pl_y;
+
+	pl_x = (int)state->pos.x;
+	pl_y = (int)state->pos.y;
+	printf("\033[0;34m[DEBUG] PG position: (%d, %d)\033[0m\n", pl_x, pl_y);
+	if (pl_x < 0 || pl_x >= map->w
+		|| pl_y < 0 || pl_y >= map->h)
+	{
+		printf("\033[0;31mError: Player position out of bounds\033[0m\n");
+		return (false);
+	}
+	return (true);
 }

@@ -6,7 +6,7 @@
 /*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 12:12:50 by lorenzogaud       #+#    #+#             */
-/*   Updated: 2024/12/21 19:46:59 by lottavi          ###   ########.fr       */
+/*   Updated: 2024/12/21 20:05:35 by lottavi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,6 +172,10 @@ void			parse_config_line(char **split_line, t_config *config, int *i);
 char			*allocate_and_copy(const char *src);
 int				open_config_file(const char *file_path);
 int				read_config(const char *file_path, t_config *config);
+void			parse_config_line(char **split_line, t_config *config, int *i);
+bool			is_player_position_valid(t_state *state, t_map *map);
+
+
 
 //map
 int				init_map(t_map *map, const char *map_path);

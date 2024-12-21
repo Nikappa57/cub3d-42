@@ -6,34 +6,18 @@
 /*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 11:13:51 by lottavi           #+#    #+#             */
-/*   Updated: 2024/12/21 19:45:45 by lottavi          ###   ########.fr       */
+/*   Updated: 2024/12/21 20:05:17 by lottavi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3D.h"
 
-bool	is_player_position_valid(t_state *state, t_map *map)
-{
-	int	player_x;
-	int	player_y;
-
-	player_x = (int)state->pos.x;
-	player_y = (int)state->pos.y;
-	printf("\033[0;34m[DEBUG] Player position: (%d, %d)\033[0m\n", player_x, player_y);
-	if (player_x < 0 || player_x >= map->w || player_y < 0 || player_y >= map->h)
-	{
-		printf("\033[0;31mError: Player position out of bounds\033[0m\n");
-		return (false);
-	}
-	return (true);
-}
-
 bool	is_map_enclosed(t_state *state, t_map *map)
 {
 	bool	**visited;
 	bool	result;
-	int		player_x;
-	int		player_y;
+	int		pgx;
+	int		pgy;
 
 	if (!state || !map || map->w <= 1 || map->h <= 0)
 		return (false);
@@ -45,28 +29,28 @@ bool	is_map_enclosed(t_state *state, t_map *map)
 		free_visited(visited, map->h);
 		return (false);
 	}
-	player_x = (int)state->pos.x;
-	player_y = (int)state->pos.y;
-	printf("\033[0;32m[DEBUG FF] Inizio flood fill da: (%d, %d)\033[0m\n", player_x, player_y);
-	result = flood_fill(map, player_x, player_y, visited);
+	pgx = (int)state->pos.x;
+	pgy = (int)state->pos.y;
+	printf("\033[0;32m[DEBUG] Inizio FF da: (%d, %d)\033[0m\n", pgx, pgy);
+	result = flood_fill(map, pgx, pgy, visited);
 	free_visited(visited, map->h);
 	printf("\033[0;34m[DEBUG FF] Flood Fill completato\033[0m\n");
 	return (result);
 }
 
-void	set_position_and_direction(t_state *state, char direction_char, int col, int row)
+void	set_position_and_direction(t_state *state, char dir_c, int col, int row)
 {
 	if (!state)
 		return ;
 	state->pos.x = col + 0.5;
 	state->pos.y = row + 0.5;
-	if (direction_char == 'N')
+	if (dir_c == 'N')
 		get_dir_v(&state->dir, UP);
-	else if (direction_char == 'S')
+	else if (dir_c == 'S')
 		get_dir_v(&state->dir, DOWN);
-	else if (direction_char == 'W')
+	else if (dir_c == 'W')
 		get_dir_v(&state->dir, LEFT);
-	else if (direction_char == 'E')
+	else if (dir_c == 'E')
 		get_dir_v(&state->dir, RIGHT);
 }
 
@@ -77,8 +61,9 @@ void	parse_line(t_state *state, const char *line, int row, int *player_count)
 	char	c;
 
 	if (!line || !state || !player_count)
-		return;
-	col = 0, actual_col = 0;
+		return ;
+	col = 0;
+	actual_col = 0;
 	while (col < ft_strlen(line))
 	{
 		c = line[col];
@@ -87,7 +72,10 @@ void	parse_line(t_state *state, const char *line, int row, int *player_count)
 			(*player_count)++;
 			set_position_and_direction(state, c, actual_col, row);
 		}
-		actual_col += (c == '\t') ? 4 : 1;
+		if (c == '\t')
+			actual_col += 4;
+		else
+			actual_col += 1;
 		col++;
 	}
 }
@@ -100,7 +88,7 @@ int	parse_player(t_state *state, const char *map_path)
 	char	*line;
 
 	if (!state || !map_path)
-		return (printf("\033[0;31mError: Invalid state or map path\033[0m\n"), (-1));
+		return (printf("\033[0;31mError: Invalid state/map\033[0m\n"), (-1));
 	fd = open(map_path, O_RDONLY);
 	if (fd < 0)
 		return (perror("Error opening map file"), (-1));
@@ -115,8 +103,8 @@ int	parse_player(t_state *state, const char *map_path)
 	}
 	close(fd);
 	if (player_count != 1)
-		return (printf("\033[0;31mError: Invalid number of players (%d found)\033[0m\n", player_count), (-1));
-	printf("\033[0;32m[DEBUG PLAYER] Player position: (%.2f, %.2f)\033[0m\n", state->pos.x, state->pos.y);
+		return (printf("Error: Invalid PG (%d found)\n", player_count), (-1));
+	printf("\033[0;32m[DEBUG] Player position: (%.2f, %.2f)\033[0m\n", state->pos.x, state->pos.y);
 	return (0);
 }
 
