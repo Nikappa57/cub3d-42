@@ -6,7 +6,7 @@
 /*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 11:13:51 by lottavi           #+#    #+#             */
-/*   Updated: 2024/12/21 20:05:17 by lottavi          ###   ########.fr       */
+/*   Updated: 2024/12/21 20:09:29 by lottavi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,7 +113,7 @@ int	init_state(t_state *state, const char *map_path)
 	if (!state || !map_path)
 		return (printf("\033[0;31mError: Invalid state/path\033[0m\n"), (-1));
 	if (parse_player(state, map_path) == -1)
-		return (printf("\033[0;31mError: Failed to parse player\033[0m\n"), (-1));
+		return (printf("\033[0;31mError: Failed to parse PG\033[0m\n"), (-1));
 	state->move_x = NONE_DIR;
 	state->move_y = NONE_DIR;
 	state->rot = NONE_ROT;

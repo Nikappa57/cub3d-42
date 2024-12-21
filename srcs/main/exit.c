@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
+/*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 17:46:56 by lgaudino          #+#    #+#             */
-/*   Updated: 2024/12/21 19:44:10 by lgaudino         ###   ########.fr       */
+/*   Updated: 2024/12/21 20:06:48 by lottavi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,4 +64,3 @@ void	clear_exit(t_cub3d *cube, int exitcode)
 	}
 	exit(exitcode);
 }
-

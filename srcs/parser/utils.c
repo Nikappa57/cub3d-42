@@ -6,7 +6,7 @@
 /*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 11:14:35 by lottavi           #+#    #+#             */
-/*   Updated: 2024/12/21 19:03:46 by lottavi          ###   ########.fr       */
+/*   Updated: 2024/12/21 20:08:29 by lottavi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ bool	flood_fill(t_map *map, int x, int y, bool **visited)
 	}
 	if (map->m[y][x] == 1 || visited[y][x])
 	{
-		printf("\033[0;32m[DEBUG FF]Hit Wall or visited: (%d, %d)\033[0m\n", x, y);
+		printf("\033[0;32m[DEBUG FF]Passed: (%d, %d)\033[0m\n", x, y);
 		return (true);
 	}
 	visited[y][x] = true;
