@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 12:12:50 by lorenzogaud       #+#    #+#             */
-/*   Updated: 2024/12/21 21:10:06 by lottavi          ###   ########.fr       */
+/*   Updated: 2024/12/21 21:42:07 by lgaudino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -179,13 +179,13 @@ bool			is_player_position_valid(t_state *state, t_map *map);
 int				check_cub_file_syntax(const char *file_path);
 
 //map
+char			*skip_texture(int fd);
 int				init_map(t_map *map, const char *map_path);
 int				init_map_dimensions(t_map *map, const char *map_path);
 
 //player
 int				parse_player(t_state *state, const char *map_path);
-void			parse_line(t_state *state, const char *line, int row,
-					int *player_count);
+void			parse_line(t_state *state, const char *line, int row);
 void			set_position_and_direction(t_state *state, char direction_char,
 					int col, int row);
 bool			is_map_enclosed(t_state *state, t_map *map);

@@ -6,7 +6,7 @@
 /*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 19:21:44 by lottavi           #+#    #+#             */
-/*   Updated: 2024/12/21 21:30:13 by lgaudino         ###   ########.fr       */
+/*   Updated: 2024/12/21 21:36:32 by lgaudino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static bool	is_texture(char *line)
 		|| !ft_strncmp("\n", line, 1));
 }
 
-char *skip_texture(int fd)
+char	*skip_texture(int fd)
 {
 	char	*line;
 	int		count;

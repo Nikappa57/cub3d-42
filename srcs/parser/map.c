@@ -6,7 +6,7 @@
 /*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 11:10:37 by lottavi           #+#    #+#             */
-/*   Updated: 2024/12/21 20:41:01 by lgaudino         ###   ########.fr       */
+/*   Updated: 2024/12/21 21:41:31 by lgaudino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,14 +50,7 @@ void	process_map(t_map *map, char *line, int row, int width)
 	i = 0;
 	while (line[i] != '\0')
 	{
-		if (line[i] == '\t')
-		{
-			if (col + 4 < width)
-				col += 4;
-			else
-				col = width;
-		}
-		else if (line[i] != '\n')
+		if (line[i] != '\n')
 		{
 			if (col < width)
 			{

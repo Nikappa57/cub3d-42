@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   player.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 11:13:51 by lottavi           #+#    #+#             */
-/*   Updated: 2024/12/21 20:38:47 by lottavi          ###   ########.fr       */
+/*   Updated: 2024/12/21 21:45:55 by lgaudino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,13 +54,13 @@ void	set_position_and_direction(t_state *state, char dir_c, int col, int row)
 		get_dir_v(&state->dir, RIGHT);
 }
 
-void	parse_line(t_state *state, const char *line, int row, int *player_count)
+void	parse_line(t_state *state, const char *line, int row)
 {
 	size_t	col;
 	size_t	actual_col;
 	char	c;
 
-	if (!line || !state || !player_count)
+	if (!line || !state)
 		return ;
 	col = 0;
 	actual_col = 0;
@@ -69,11 +69,9 @@ void	parse_line(t_state *state, const char *line, int row, int *player_count)
 		c = line[col];
 		if (c == 'N' || c == 'S' || c == 'W' || c == 'E')
 		{
-			(*player_count)++;
 			set_position_and_direction(state, c, actual_col, row);
+			break ;
 		}
-		if (c == '\t')
-			actual_col += 4;
 		else
 			actual_col += 1;
 		col++;
@@ -84,7 +82,6 @@ int	parse_player(t_state *state, const char *map_path)
 {
 	int		fd;
 	int		row;
-	int		player_count;
 	char	*line;
 
 	if (!state || !map_path)
@@ -92,19 +89,16 @@ int	parse_player(t_state *state, const char *map_path)
 	fd = open(map_path, O_RDONLY);
 	if (fd < 0)
 		return (perror("Error opening map file"), (-1));
-	row = skip_texture_info(fd);
-	player_count = 0;
-	line = get_next_line(fd);
+	line = skip_texture(fd);
+	row = 0;
 	while (line != NULL)
 	{
-		parse_line(state, line, row, &player_count);
+		parse_line(state, line, row);
 		row++;
 		free(line);
 		line = get_next_line(fd);
 	}
 	close(fd);
-	if (player_count != 1)
-		return (printf("Error: Invalid PG (%d found)\n", player_count), (-1));
 	printf("[DEBUG] Player Pos: (%.2f, %.2f)\n", state->pos.x, state->pos.y);
 	return (0);
 }
