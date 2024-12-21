@@ -6,7 +6,7 @@
 /*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 11:14:35 by lottavi           #+#    #+#             */
-/*   Updated: 2024/12/21 13:17:12 by lottavi          ###   ########.fr       */
+/*   Updated: 2024/12/21 14:57:33 by lottavi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,24 +26,23 @@ void	*ft_calloc(size_t count, size_t size)
 	return (ptr);
 }
 
-int skip_texture_info(int fd)
+int	skip_texture_info(int fd)
 {
-	char *line = get_next_line(fd);
-	int n = 0;
+	char *line;
+	int count = 0;
 
-	while(line)
+	while ((line = get_next_line(fd)) != NULL)
 	{
-		if (ft_strcspn(line, " 01") == 0)
+		if (line[0] == '\n')
 		{
-			break;
 			free(line);
-			return (n);
+			break;
 		}
-		n++;
 		free(line);
-		line = get_next_line(fd);
+		count++;
 	}
-	return (n);
+	printf("\033[0;34m[DEBUG SKIP] Skipped %d lines of texture info\033[0m\n", count);
+	return count;
 }
 
 bool	flood_fill(t_map *map, int x, int y, bool **visited)
