@@ -6,7 +6,7 @@
 /*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 12:12:50 by lorenzogaud       #+#    #+#             */
-/*   Updated: 2024/12/21 19:25:08 by lottavi          ###   ########.fr       */
+/*   Updated: 2024/12/21 19:38:19 by lottavi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,6 +168,10 @@ int				init_textures(t_cub3d *cube, const char *map_path);
 int				read_config(const char *map_path, t_config *config);
 int				parse_color(const char *line);
 void			free_textures(t_cub3d *cube);
+void			parse_config_line(char **split_line, t_config *config, int *i);
+char			*allocate_and_copy(const char *src);
+int				open_config_file(const char *file_path);
+int				read_config(const char *file_path, t_config *config);
 
 //map
 int				init_map(t_map *map, const char *map_path);
@@ -190,6 +194,7 @@ void			skip_spaces(const int *line, int *len);
 void			free_map(t_map *map);
 char			*skip_spaces_and_tabs(char *str);
 char			*get_next_line(int fd);
+char			*ft_strcpy(char *dest, const char *src);
 
 //utils2
 size_t			ft_strcspn(const char *s, const char *reject);

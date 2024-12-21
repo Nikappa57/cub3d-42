@@ -6,7 +6,7 @@
 /*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 19:21:44 by lottavi           #+#    #+#             */
-/*   Updated: 2024/12/21 19:24:49 by lottavi          ###   ########.fr       */
+/*   Updated: 2024/12/21 19:31:05 by lottavi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,6 @@ int	get_map_height(const char *map_path)
 	close(fd);
 	return (height);
 }
-
 
 int	init_map_dimensions(t_map *map, const char *map_path)
 {
