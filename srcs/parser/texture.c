@@ -6,7 +6,7 @@
 /*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 10:57:55 by lottavi           #+#    #+#             */
-/*   Updated: 2024/12/21 16:34:38 by lottavi          ###   ########.fr       */
+/*   Updated: 2024/12/21 18:01:06 by lottavi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,8 @@ char *allocate_and_copy(const char *src) {
         return NULL;
     char *dest = (char *)malloc(strlen(src) + 1);
     if (dest) {
-        strcpy(dest, src);
+        ft_strcpy(dest, src);
+		dest[ft_strcspn(dest, "\n")] = '\0';
         printf("\033[0;33m[DEBUG TEXT] Allocated and copied string: %s\033[0m\n", dest);
     }
     return dest;
