@@ -6,13 +6,12 @@
 /*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 10:57:55 by lottavi           #+#    #+#             */
-/*   Updated: 2024/12/21 15:58:46 by lottavi          ###   ########.fr       */
+/*   Updated: 2024/12/21 16:15:49 by lottavi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3D.h"
 
-// Funzione per il parsing del colore
 int	parse_color(const char *str)
 {
 	int	r, g, b;
@@ -43,62 +42,79 @@ int	parse_color(const char *str)
 	return ((r << 16) | (g << 8) | b);
 }
 
-// Funzione per leggere il file di configurazione
+char	*ft_strcpy(char *dest, const char *src)
+{
+	char *ptr = dest;
+
+	while (*src)
+		*ptr++ = *src++;
+	*ptr = '\0';
+	return (dest);
+}
+
+// Funzione di allocazione e copia
+char *allocate_and_copy(const char *src) {
+    if (!src)
+        return NULL;
+    char *dest = (char *)malloc(strlen(src) + 1);
+    if (dest) {
+        strcpy(dest, src);
+        printf("\033[0;33m[DEBUG TEXT] Allocated and copied string: %s\033[0m\n", dest);
+    }
+    return dest;
+}
+
 int	read_config(const char *file_path, t_config *config)
 {
 	int		fd;
 	char	*line;
 	char	**split_line;
 	char	*trimmed_line;
-	printf("\033[0;33m[DEBUG TEXT]Reading config\033[0m\n");
+	int		i = 0;
+
 	if (!file_path || !config)
 		return (-1);
 
 	fd = open(file_path, O_RDONLY);
 	if (fd == -1)
-	{
-		printf("\033[0;31mError: Failed to open config file %s\033[0m\n", file_path);
 		return (-1);
-	}
 
 	while ((line = get_next_line(fd)) != NULL)
 	{
-		trimmed_line = skip_spaces_and_tabs(line);
+		trimmed_line = allocate_and_copy(line);
 		if (!trimmed_line)
-		{
 			continue;
-		}
+
+		trimmed_line = skip_spaces_and_tabs(trimmed_line);
+		if (!trimmed_line)
+			continue;
 
 		split_line = ft_split(trimmed_line, ' ');
-
 		if (!split_line)
-		{
 			continue;
-		}
 
 		if (split_line[0] && split_line[1])
 		{
 			if (ft_strcmp(split_line[0], "NO") == 0)
-				config->north_texture = ft_strdup(split_line[1]);
+				config->north_texture = allocate_and_copy(split_line[1]), i++;
 			else if (ft_strcmp(split_line[0], "SO") == 0)
-				config->south_texture = ft_strdup(split_line[1]);
+				config->south_texture = allocate_and_copy(split_line[1]), i++;
 			else if (ft_strcmp(split_line[0], "WE") == 0)
-				config->west_texture = ft_strdup(split_line[1]);
+				config->west_texture = allocate_and_copy(split_line[1]), i++;
 			else if (ft_strcmp(split_line[0], "EA") == 0)
-				config->east_texture = ft_strdup(split_line[1]);
+				config->east_texture = allocate_and_copy(split_line[1]), i++;
 			else if (ft_strcmp(split_line[0], "F") == 0)
-				config->floor_color = parse_color(split_line[1]);
+				config->floor_color = parse_color(split_line[1]), i++;
 			else if (ft_strcmp(split_line[0], "C") == 0)
-				config->ceiling_color = parse_color(split_line[1]);
+				config->ceiling_color = parse_color(split_line[1]), i++;
 		}
+		if(i == 6)
+			break;
 	}
-
 	close(fd);
-	printf("\033[0;33m[DEBUG TEXT]Config read\033[0m\n");
 	return (0);
 }
 
-// Funzione per caricare la texture
 int	load_texture(t_cub3d *cube, t_img *t, const char *path)
 {
 	if (!cube || !t || !path)
@@ -121,7 +137,7 @@ int	load_texture(t_cub3d *cube, t_img *t, const char *path)
 	if (!t->addr)
 	{
 		printf("\033[0;31mError: Failed to obtain data address for texture %s\033[0m\n", path);
-		mlx_destroy_image(cube->mlx.mlx, t->img); // Free the image if data address retrieval fails
+		mlx_destroy_image(cube->mlx.mlx, t->img);
 		return (-1);
 	}
 
