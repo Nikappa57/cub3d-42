@@ -6,7 +6,7 @@
 /*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 18:27:42 by lgaudino          #+#    #+#             */
-/*   Updated: 2024/12/21 17:36:47 by lottavi          ###   ########.fr       */
+/*   Updated: 2024/12/21 21:10:24 by lottavi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,8 @@ int	init_mlx(t_mlx *mlx)
 void	init_cube(t_cub3d *cube, const char *map_path)
 {
 	ft_bzero(cube, sizeof(t_cub3d));
+	if (check_cub_file_syntax(map_path) == -1)
+		exit_error(cube, "Invalid .cub file syntax");
 	if (init_map(&cube->map, map_path) == -1)
 		exit_error(cube, "init_map() failed");
 	if (init_state(&cube->state, map_path) == -1)
