@@ -6,7 +6,7 @@
 /*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 10:57:55 by lottavi           #+#    #+#             */
-/*   Updated: 2024/12/21 19:55:55 by lottavi          ###   ########.fr       */
+/*   Updated: 2024/12/21 22:04:37 by lottavi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,20 +20,26 @@ int	parse_color(const char *str)
 
 	if (!str)
 		return (-1);
+	while (*str == ' ')
+		str++;
 	r = ft_atoi(str);
 	while (*str && *str != ',')
 		str++;
 	if (*str != ',')
 		return (-1);
 	str++;
+	while (*str == ' ')
+		str++;
 	g = ft_atoi(str);
 	while (*str && *str != ',')
 		str++;
 	if (*str != ',')
 		return (-1);
 	str++;
+	while (*str == ' ')
+		str++;
 	b = ft_atoi(str);
-	while (*str && *str != '\0' && *str != '\n')
+	while (*str && *str != '\0' && *str != '\n' && *str != ' ')
 		str++;
 	if ((*str != '\0' && *str != '\n') || r < 0
 		|| r > 255 || g < 0 || g > 255 || b < 0 || b > 255)
