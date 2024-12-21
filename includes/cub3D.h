@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
+/*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 12:12:50 by lorenzogaud       #+#    #+#             */
-/*   Updated: 2024/12/21 22:19:19 by lgaudino         ###   ########.fr       */
+/*   Updated: 2024/12/22 00:13:19 by lottavi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -177,7 +177,7 @@ bool			is_player_position_valid(t_state *state, t_map *map);
 
 //syntax
 int				check_cub_file_syntax(const char *file_path);
-
+int				validate_cub_file(const char *filename);
 //map
 char			*skip_texture(int fd);
 int				init_map(t_map *map, const char *map_path);

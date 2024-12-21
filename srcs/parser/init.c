@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
+/*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 18:27:42 by lgaudino          #+#    #+#             */
-/*   Updated: 2024/12/21 23:41:21 by lgaudino         ###   ########.fr       */
+/*   Updated: 2024/12/22 00:12:34 by lottavi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ int	init_mlx(t_mlx *mlx)
 void	init_cube(t_cub3d *cube, const char *map_path)
 {
 	ft_bzero(cube, sizeof(t_cub3d));
-	if (check_cub_file_syntax(map_path) == 0)
+	if (validate_cub_file(map_path) == 0)
 		exit_error(cube, "Error\nInvalid .cub file syntax");
 	if (init_map(&cube->map, map_path) == -1)
 		exit_error(cube, "Error\ninit_map() failed");
