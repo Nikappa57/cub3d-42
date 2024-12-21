@@ -6,7 +6,7 @@
 /*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 11:14:35 by lottavi           #+#    #+#             */
-/*   Updated: 2024/12/21 20:40:57 by lottavi          ###   ########.fr       */
+/*   Updated: 2024/12/21 21:55:01 by lottavi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,8 @@ bool	flood_fill(t_map *map, int x, int y, bool **visited)
 {
 	if (x < 0 || y < 0 || x >= map->w || y >= map->h)
 	{
-		printf("\033[0;31[DEBUG FF]mOut of bounds: (%d, %d)\033[0m\n", x, y);
+		printf("\033[0;31[DEBUG FF]cehck: (%d, %d)\033[0m\n", map->w, map->h);
+		printf("\033[0;31[DEBUG FF]Out of bounds: (%d, %d)\033[0m\n", x, y);
 		return (false);
 	}
 	if (map->m[y][x] == 1 || visited[y][x])

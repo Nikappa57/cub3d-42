@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
+/*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 11:10:37 by lottavi           #+#    #+#             */
-/*   Updated: 2024/12/21 21:41:31 by lgaudino         ###   ########.fr       */
+/*   Updated: 2024/12/21 21:59:52 by lottavi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,17 +23,15 @@ int	allocate_map_memory(t_map *map, int height, int width)
 	i = 0;
 	while (i < height)
 	{
-		map->m[i] = (int *)calloc(width, sizeof(int));
+		map->m[i] = (int *)ft_calloc(width, sizeof(int));
 		if (!map->m[i])
 		{
 			printf("Error: Memory allocation failed for map row\n");
 			j = 0;
 			while (j < i)
-			{
-				free(map->m[j]);
-				j++;
-			}
+				free(map->m[j++]);
 			free(map->m);
+			map->m = NULL;
 			return (-1);
 		}
 		i++;
@@ -68,7 +66,6 @@ void	process_map(t_map *map, char *line, int row, int width)
 int	init_map(t_map *map, const char *map_path)
 {
 	int		fd;
-	int		skip_info;
 	char	*line;
 	int		row;
 
@@ -78,18 +75,18 @@ int	init_map(t_map *map, const char *map_path)
 	fd = open(map_path, O_RDONLY);
 	if (fd < 0)
 		return (perror("Error opening map file"), -1);
-	skip_info = skip_texture_info(fd);
 	if (allocate_map_memory(map, map->h, map->w) == -1)
 	{
 		close(fd);
 		return (printf("\033[0;31mError: Allocation failed\033[0m\n"), -1);
 	}
-	map->h -= skip_info;
+	line = skip_texture(fd);
 	row = 0;
-	while ((line = get_next_line(fd)) != NULL)
+	while (line != NULL)
 	{
 		process_map(map, line, row++, map->w);
 		free(line);
+		line = get_next_line(fd);
 	}
 	close(fd);
 	return (printf("\033[0;32m[DEBUG] Map initialized\033[0m\n"), 0);

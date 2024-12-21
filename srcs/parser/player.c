@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   player.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
+/*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 11:13:51 by lottavi           #+#    #+#             */
-/*   Updated: 2024/12/21 21:45:55 by lgaudino         ###   ########.fr       */
+/*   Updated: 2024/12/21 21:51:20 by lottavi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ bool	is_map_enclosed(t_state *state, t_map *map)
 	int		pgx;
 	int		pgy;
 
-	if (!state || !map || map->w <= 1 || map->h <= 0)
+	if (!state || !map || map->w <= 0 || map->h <= 0)
 		return (false);
 	visited = allocate_visited(map->w, map->h);
 	if (!visited)
