@@ -6,69 +6,60 @@
 /*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 11:13:51 by lottavi           #+#    #+#             */
-/*   Updated: 2024/12/21 18:04:28 by lottavi          ###   ########.fr       */
+/*   Updated: 2024/12/21 19:45:45 by lottavi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3D.h"
 
-bool	is_map_enclosed(t_state *state, t_map *map)
+bool	is_player_position_valid(t_state *state, t_map *map)
 {
-	bool	**visited;
-	int		i;
-	int		player_x;
-	int		player_y;
-	bool	result;
+	int	player_x;
+	int	player_y;
 
-	if (!state || !map || map->w <= 1 || map->h <= 0)
-		return (false);
-	visited = (bool **)malloc(map->h * sizeof(bool *));
-	if (!visited)
-		return (false);
-	for (i = 0; i < map->h; i++)
-	{
-		visited[i] = (bool *)ft_calloc(map->w, sizeof(bool));
-		if (!visited[i])
-		{
-			while (--i >= 0)
-				free(visited[i]);
-			free(visited);
-			visited = NULL;
-			return (false);
-		}
-	}
 	player_x = (int)state->pos.x;
 	player_y = (int)state->pos.y;
 	printf("\033[0;34m[DEBUG] Player position: (%d, %d)\033[0m\n", player_x, player_y);
 	if (player_x < 0 || player_x >= map->w || player_y < 0 || player_y >= map->h)
 	{
 		printf("\033[0;31mError: Player position out of bounds\033[0m\n");
-		result = false;
+		return (false);
 	}
-	else
+	return (true);
+}
+
+bool	is_map_enclosed(t_state *state, t_map *map)
+{
+	bool	**visited;
+	bool	result;
+	int		player_x;
+	int		player_y;
+
+	if (!state || !map || map->w <= 1 || map->h <= 0)
+		return (false);
+	visited = allocate_visited(map->w, map->h);
+	if (!visited)
+		return (false);
+	if (!is_player_position_valid(state, map))
 	{
-		printf("\033[0;32m[DEBUG FF] Inizio flood fill da: (%d, %d)\033[0m\n", player_x, player_y);
-		result = flood_fill(map, player_x, player_y, visited);
+		free_visited(visited, map->h);
+		return (false);
 	}
-	i = 0;
-	while (i < map->h)
-	{
-		free(visited[i]);
-		i++;
-	}
-	free(visited);
-	printf("\033[0;34m[DEBUG FF]Flood Fill completato\033[0m\n");
+	player_x = (int)state->pos.x;
+	player_y = (int)state->pos.y;
+	printf("\033[0;32m[DEBUG FF] Inizio flood fill da: (%d, %d)\033[0m\n", player_x, player_y);
+	result = flood_fill(map, player_x, player_y, visited);
+	free_visited(visited, map->h);
+	printf("\033[0;34m[DEBUG FF] Flood Fill completato\033[0m\n");
 	return (result);
 }
 
 void	set_position_and_direction(t_state *state, char direction_char, int col, int row)
 {
 	if (!state)
-		return;
-
+		return ;
 	state->pos.x = col + 0.5;
 	state->pos.y = row + 0.5;
-
 	if (direction_char == 'N')
 		get_dir_v(&state->dir, UP);
 	else if (direction_char == 'S')
