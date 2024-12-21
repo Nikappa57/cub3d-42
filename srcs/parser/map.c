@@ -6,95 +6,128 @@
 /*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 11:10:37 by lottavi           #+#    #+#             */
-/*   Updated: 2024/12/21 13:15:16 by lottavi          ###   ########.fr       */
+/*   Updated: 2024/12/21 15:02:36 by lottavi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3D.h"
 
+int get_map_width(const char *map_path)
+{
+	int fd = open(map_path, O_RDONLY);
+	if (fd < 0) {
+		perror("Error opening map file");
+		return -1;
+	}
+
+	char *line = get_next_line(fd);
+	int width = 0;
+
+	if (line) {
+		for (size_t i = 0; line[i] != '\0'; i++) {
+			if (line[i] == '\t') {
+				width += 4;
+			} else if (line[i] != '\n') {
+				width++;
+			}
+		}
+		free(line);
+	}
+	close(fd);
+	return width;
+}
+
+int get_map_height(const char *map_path) {
+	int fd = open(map_path, O_RDONLY);
+	if (fd < 0) {
+		perror("Error opening map file");
+		return -1;
+	}
+
+	char *line;
+	int height = 0;
+
+	while ((line = get_next_line(fd)) != NULL) {
+		height++;
+		free(line);
+	}
+	close(fd);
+	return height;
+}
+
+int allocate_map_memory(t_map *map, int height, int width) {
+	map->m = (int **)malloc(height * sizeof(int *));
+	if (!map->m) {
+		fprintf(stderr, "Error: Memory allocation failed for map matrix\n");
+		return -1;
+	}
+
+	for (int i = 0; i < height; i++) {
+		map->m[i] = (int *)calloc(width, sizeof(int));
+		if (!map->m[i]) {
+			fprintf(stderr, "Error: Memory allocation failed for map row\n");
+			for (int j = 0; j < i; j++) {
+				free(map->m[j]);
+			}
+			free(map->m);
+			return -1;
+		}
+	}
+	return 0;
+}
+
+void process_map(t_map *map, char *line, int row, int width) {
+	int col = 0;
+	size_t i = 0;
+
+	while (line[i] != '\0') {
+		if (line[i] == '\t') {
+			col += (col + 4 < width) ? 4 : (width - col);
+		} else if (line[i] != '\n') {
+			if (col < width) {
+				map->m[row][col++] = (line[i] == '1') ? 1 : 0;
+			}
+		}
+		i++;
+	}
+	printf("\033[0;34m[DEBUG MALLOC] Processed line: %s\033[0m", line);
+}
+
 int init_map(t_map *map, const char *map_path) {
-    if (!map || !map_path) {
-        fprintf(stderr, "Error: Invalid map or path\n");
-        return -1;
-    }
+	int fd;
+	int width;
+	int height;
+	int skip_info;
 
-    int fd = open(map_path, O_RDONLY);
-    if (fd == -1) {
-        perror("Error opening map file");
-        return -1;
-    }
+	width = get_map_width(map_path);
+	height = get_map_height(map_path);
 
-    skip_texture_info(fd);
-    char *line = NULL;
-    int width = 0, height = 0;
+	if (width == -1 || height == -1) {
+		return -1;
+	}
 
-    // Calcola dimensioni della mappa
-    while ((line = get_next_line(fd)) != NULL) {
-        int line_length = 0;
-        for (size_t i = 0; i < ft_strlen(line); i++) {
-            line_length += (line[i] == '\t') ? 4 : 1;
-        }
-        if (line[line_length - 1] == '\n') {
-            line_length--;
-        }
-        if (line_length > width) {
-            width = line_length;
-        }
-        height++;
-        free(line);
-    }
+	fd = open(map_path, O_RDONLY);
+	if (fd < 0) {
+		return (perror("Error opening map file"), -1);
+	}
 
-    close(fd);
+	skip_info = skip_texture_info(fd);
 
-    map->w = width;
-    map->h = height;
+	if (allocate_map_memory(map, height, width) == -1) {
+		close(fd);
+		return (printf("\033[0;31mError: Memory allocation failed\033[0m\n"), -1);
+	}
 
-    map->m = (int **)malloc(height * sizeof(int *));
-    if (!map->m) {
-        fprintf(stderr, "Error: Memory allocation failed for map matrix\n");
-        return -1;
-    }
+	map->w = width;
+	map->h = height - skip_info;
 
-    for (int i = 0; i < height; i++) {
-        map->m[i] = (int *)calloc(width, sizeof(int));
-        if (!map->m[i]) {
-            fprintf(stderr, "Error: Memory allocation failed for map row\n");
-            for (int j = 0; j < i; j++) {
-                free(map->m[j]);
-            }
-            free(map->m);
-            return -1;
-        }
-    }
+	char *line;
+	int row = 0;
+	while ((line = get_next_line(fd)) != NULL) {
+		process_map(map, line, row++, width);
+		free(line);
+	}
 
-    fd = open(map_path, O_RDONLY);
-    if (fd == -1) {
-        perror("Error reopening map file");
-        for (int i = 0; i < height; i++) {
-            free(map->m[i]);
-        }
-        free(map->m);
-        return -1;
-    }
-
-    skip_texture_info(fd);
-    int row = 0;
-
-    while ((line = get_next_line(fd)) != NULL) {
-        int col = 0;
-        for (size_t i = 0; line[i] != '\0'; i++) {
-            if (line[i] == '\t') {
-                col += (col + 4 < width) ? 4 : (width - col);
-            } else if (line[i] != '\n') {
-                if (col < width) {
-                    map->m[row][col++] = (line[i] == '1') ? 1 : 0;
-                }
-            }
-        }
-        free(line);
-        row++;
-    }
-
-    close(fd);
-    return 0;
+	close(fd);
+	return (printf("\033[0;32m[DEBUG] Map initialized successfully\033[0m\n"), 0);
 }
