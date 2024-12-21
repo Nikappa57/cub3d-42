@@ -6,7 +6,7 @@
 /*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/28 18:27:42 by lgaudino          #+#    #+#             */
-/*   Updated: 2024/12/20 12:04:26 by lottavi          ###   ########.fr       */
+/*   Updated: 2024/12/21 10:46:23 by lottavi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,6 @@ int	init_textures(t_cub3d *cube, const char *map_path)
 	if (read_config(map_path, &config) == -1)
 		return (-1);
 
-	// Rimuovere i caratteri di newline dalle stringhe
 	config.north_texture[ft_strcspn(config.north_texture, "\n")] = '\0';
 	config.south_texture[ft_strcspn(config.south_texture, "\n")] = '\0';
 	config.west_texture[ft_strcspn(config.west_texture, "\n")] = '\0';
@@ -109,7 +108,6 @@ int	init_textures(t_cub3d *cube, const char *map_path)
 	free(config.east_texture);
 	return (0);
 }
-
 
 void	init_cube(t_cub3d *cube, const char *map_path)
 {

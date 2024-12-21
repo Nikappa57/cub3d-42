@@ -6,7 +6,7 @@
 /*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 11:13:51 by lottavi           #+#    #+#             */
-/*   Updated: 2024/12/20 12:21:53 by lottavi          ###   ########.fr       */
+/*   Updated: 2024/12/21 10:46:23 by lottavi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,7 @@ void	parse_line(t_state *state, const char *line, int row, int *player_count)
 		col++;
 	}
 }
+
 int	parse_player(t_state *state, const char *map_path)
 {
 	int		fd;
@@ -110,7 +111,6 @@ int	parse_player(t_state *state, const char *map_path)
 
 	player_count = 0;
 
-	// Apri il file della mappa
 	fd = open(map_path, O_RDONLY);
 	if (fd == -1)
 	{
@@ -118,7 +118,6 @@ int	parse_player(t_state *state, const char *map_path)
 		return (-1);
 	}
 
-	// Salta le informazioni sulle texture
 	if (skip_texture_info(fd) == -1)
 	{
 		printf("\033[0;31mError: Failed to skip texture info\033[0m\n");
@@ -129,7 +128,6 @@ int	parse_player(t_state *state, const char *map_path)
 	row = 0;
 	while ((line = get_next_line(fd)) != NULL)
 	{
-		// Analizza ogni riga e aggiorna il conteggio dei giocatori
 		parse_line(state, line, row, &player_count);
 		free(line);
 		row++;
@@ -137,7 +135,6 @@ int	parse_player(t_state *state, const char *map_path)
 
 	close(fd);
 
-	// Verifica che ci sia esattamente un giocatore
 	if (player_count != 1)
 	{
 		printf("\033[0;31mError: Invalid number of players (%d found)\033[0m\n", player_count);

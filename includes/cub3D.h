@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
+/*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 12:12:50 by lorenzogaud       #+#    #+#             */
-/*   Updated: 2024/12/20 16:25:45 by lgaudino         ###   ########.fr       */
+/*   Updated: 2024/12/21 10:36:34 by lottavi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,6 +181,7 @@ int				skip_texture_info(int fd);
 void			skip_spaces(const int *line, int *len);
 void			free_map(t_map *map);
 char			*skip_spaces_and_tabs(char *str);
+char			*get_next_line(int fd);
 
 //utils2
 size_t			ft_strcspn(const char *s, const char *reject);

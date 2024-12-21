@@ -6,7 +6,7 @@
 /*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 11:14:35 by lottavi           #+#    #+#             */
-/*   Updated: 2024/12/20 14:50:36 by lottavi          ###   ########.fr       */
+/*   Updated: 2024/12/21 10:46:23 by lottavi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ int skip_texture_info(int fd)
 	int is_empty;
 	int i;
 
-	// Controllo del file descriptor
 	if (fd < 0)
 	{
 		printf("Error: Invalid file descriptor\n");
@@ -44,7 +43,6 @@ int skip_texture_info(int fd)
 		is_empty = true;
 		i = 0;
 
-		// Check if the line is empty or contains only spaces/tabs
 		while (line[i] != '\0')
 		{
 			if (!ft_isspace(line[i]))
@@ -61,7 +59,6 @@ int skip_texture_info(int fd)
 			continue;
 		}
 
-		// Skip lines containing texture identifiers
 		if (ft_strncmp(line, "NO", 2) == 0 || ft_strncmp(line, "SO", 2) == 0 ||
 			ft_strncmp(line, "WE", 2) == 0 || ft_strncmp(line, "EA", 2) == 0 ||
 			ft_strncmp(line, "F", 1) == 0 || ft_strncmp(line, "C", 1) == 0)
@@ -71,7 +68,6 @@ int skip_texture_info(int fd)
 		}
 		else
 		{
-			// Rewind the file descriptor to re-read the current line
 			if (lseek(fd, -strlen(line), SEEK_CUR) == -1)
 			{
 				printf("Error: Failed to rewind file descriptor\n");
@@ -82,9 +78,8 @@ int skip_texture_info(int fd)
 			break;
 		}
 	}
-	return (0); // Success
+	return (0);
 }
-
 
 bool	flood_fill(t_map *map, int x, int y, bool **visited)
 {

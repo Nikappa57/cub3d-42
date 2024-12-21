@@ -6,7 +6,7 @@
 /*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 11:10:37 by lottavi           #+#    #+#             */
-/*   Updated: 2024/12/20 11:20:45 by lottavi          ###   ########.fr       */
+/*   Updated: 2024/12/21 10:46:23 by lottavi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,7 @@ int init_map(t_map *map, const char *map_path) {
     int width = 0, height = 0;
 
     // Calcola dimensioni della mappa
-	while ((line = get_next_line(fd)) != NULL) {
-
+    while ((line = get_next_line(fd)) != NULL) {
         int line_length = 0;
         for (size_t i = 0; i < ft_strlen(line); i++) {
             line_length += (line[i] == '\t') ? 4 : 1;
@@ -44,9 +43,9 @@ int init_map(t_map *map, const char *map_path) {
             width = line_length;
         }
         height++;
+        free(line); // Free the line after processing
     }
 
-    free(line);
     close(fd);
 
     map->w = width;
@@ -81,7 +80,7 @@ int init_map(t_map *map, const char *map_path) {
     }
 
     skip_texture_info(fd);
-	printf("width: %d, height: %d\n", width, height);
+    printf("width: %d, height: %d\n", width, height);
     int row = 0;
     line = malloc(len);
     if (!line) {
