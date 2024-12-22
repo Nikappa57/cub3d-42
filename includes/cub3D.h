@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 12:12:50 by lorenzogaud       #+#    #+#             */
-/*   Updated: 2024/12/22 14:14:21 by lottavi          ###   ########.fr       */
+/*   Updated: 2024/12/22 14:28:54 by lgaudino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -217,7 +217,6 @@ bool			**allocate_visited(int width, int height);
 void			free_visited(bool **visited, int height);
 
 //utils
-void			*ft_calloc(size_t count, size_t size);
 bool			flood_fill(t_map *map, int x, int y, bool **visited);
 int				skip_texture_info(int fd);
 void			skip_spaces(const int *line, int *len);
@@ -257,7 +256,6 @@ int				cube_loop(t_cub3d *cube);
 void			dda_distance(t_cub3d *cube, int x);
 int				window_bound(int p, int max);
 bool			is_wall(t_map map, t_point p);
-int				min(int a, int b);
 void			vector_to_screen(t_vector v, t_point *r, int size);
 t_color			get_color(t_dda dda);
 t_dir			get_dir(t_vector dir, int side);

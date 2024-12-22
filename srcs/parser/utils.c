@@ -6,25 +6,11 @@
 /*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 11:14:35 by lottavi           #+#    #+#             */
-/*   Updated: 2024/12/21 22:47:38 by lgaudino         ###   ########.fr       */
+/*   Updated: 2024/12/22 14:30:38 by lgaudino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3D.h"
-
-void	*ft_calloc(size_t count, size_t size)
-{
-	void	*ptr;
-
-	ptr = malloc(count * size);
-	if (!ptr)
-	{
-		perror("Error\n allocating memory");
-		return (NULL);
-	}
-	memset(ptr, 0, count * size);
-	return (ptr);
-}
 
 int	skip_texture_info(int fd)
 {

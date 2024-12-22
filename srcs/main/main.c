@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 12:11:01 by lorenzogaud       #+#    #+#             */
-/*   Updated: 2024/12/21 10:46:23 by lottavi          ###   ########.fr       */
+/*   Updated: 2024/12/22 14:19:57 by lgaudino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,9 @@ int	main(int argc, char **argv)
 
 	if (argc != 2)
 	{
-		fprintf(stderr, "Usage: %s <map_file.cub>\n", argv[0]);
+		ft_putstr_fd("Usage: ", 2);
+		ft_putstr_fd(argv[0], 2);
+		ft_putstr_fd(" <map_file.cub>\n", 2);
 		return (1);
 	}
 	init_cube(&cube, argv[1]);

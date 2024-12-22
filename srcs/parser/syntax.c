@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 21:09:20 by lottavi           #+#    #+#             */
-/*   Updated: 2024/12/22 14:15:46 by lottavi          ###   ########.fr       */
+/*   Updated: 2024/12/22 14:27:01 by lgaudino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ int	validate_line(const char *line, t_directives *directives)
 		if (!validate_floor_color(line + 2, directives))
 			return (0);
 	}
-	else if (strncmp(line, "C ", 2) == 0)
+	else if (ft_strncmp(line, "C ", 2) == 0)
 	{
 		if (!validate_ceiling_color(line + 2, directives))
 			return (0);
@@ -97,7 +97,7 @@ int	validate_cub_file(const char *filename)
 	line = get_next_line(fd);
 	while (line != NULL)
 	{
-		line[strcspn(line, "\n")] = '\0';
+		line[ft_strcspn(line, "\n")] = '\0';
 		if (!validate_line(line, &directives))
 		{
 			free(line);
