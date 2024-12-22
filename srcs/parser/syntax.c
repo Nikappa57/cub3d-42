@@ -6,7 +6,7 @@
 /*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 21:09:20 by lottavi           #+#    #+#             */
-/*   Updated: 2024/12/22 15:20:24 by lgaudino         ###   ########.fr       */
+/*   Updated: 2024/12/22 15:28:17 by lgaudino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,8 @@ int	validate_map_line(const char *line, t_directives *directives)
 	i = -1;
 	while (line[++i])
 	{
-		if (line[i] == 'N' || line[i] == 'S' || line[i] == 'W' || line[i] == 'E')
+		if (line[i] == 'N' || line[i] == 'S'
+			|| line[i] == 'W' || line[i] == 'E')
 			directives->dir_count++;
 		else if (line[i] != '1' && line[i] != '0'
 			&& line[i] != ' ' && line[i] != '\n')
@@ -48,9 +49,10 @@ int	validate_map_line(const char *line, t_directives *directives)
 
 int	check_directives_count(t_directives *directives)
 {
-	printf("NO: %d\nSO: %d\nWE: %d\nEA: %d\nF: %d\nC: %d\nIS_MAP: %d, DIR C: %d\n",
+	printf("NO: %d\nSO: %d\nWE: %d\nEA: %d\nF: %d\nC: %d\n",
 		directives->found_no, directives->found_so, directives->found_we,
-		directives->found_ea, directives->found_f, directives->found_c,
+		directives->found_ea, directives->found_f, directives->found_c);
+	printf("IS_MAP: %d, DIR C: %d\n",
 		directives->is_map, directives->dir_count);
 	if (directives->found_no != 1 || directives->found_so != 1
 		|| directives->found_we != 1 || directives->found_ea != 1
@@ -86,7 +88,7 @@ int	validate_line(const char *line, t_directives *directives)
 	else if (*line == '\0' || *line == '\n')
 		return (1);
 	else if (!validate_map_line(line, directives))
-			return (0);
+		return (0);
 	return (1);
 }
 

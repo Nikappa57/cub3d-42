@@ -1,9 +1,8 @@
+
 NO ./texture/wolfenstein/bluestone.xpm
 SO ./texture/wolfenstein/colorstone.xpm
 WE ./texture/wolfenstein/eagle.xpm
 EA ./texture/wolfenstein/redbrick.xpm
-F 220,100,0
-C 225,30,0
 
 11111111111111111111
 11000000000000000011
@@ -15,3 +14,6 @@ C 225,30,0
 1000000001
 1000000001
 1111111111
+
+
+
