@@ -6,11 +6,29 @@
 /*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/22 14:03:17 by lottavi           #+#    #+#             */
-/*   Updated: 2024/12/22 14:11:27 by lottavi          ###   ########.fr       */
+/*   Updated: 2024/12/22 14:53:39 by lottavi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3D.h"
+
+char	*ft_strncpy(char *dest, const char *src, size_t n)
+{
+	size_t	i;
+
+	i = 0;
+	while (i < n && src[i] != '\0')
+	{
+		dest[i] = src[i];
+		i++;
+	}
+	while (i < n)
+	{
+		dest[i] = '\0';
+		i++;
+	}
+	return (dest);
+}
 
 int	is_valid_number(const char *str)
 {
@@ -35,9 +53,9 @@ int	is_valid_color(const char *str)
 	int		count;
 	int		value;
 
-	strncpy(buffer, str, MAX_LINE_LENGTH);
+	ft_strncpy(buffer, str, MAX_LINE_LENGTH);
 	count = 0;
-	token = strtok(buffer, ",");
+	token = ft_strtok(buffer, ",");
 	while (token)
 	{
 		if (!is_valid_number(token))
@@ -46,7 +64,7 @@ int	is_valid_color(const char *str)
 		if (value < 0 || value > 255)
 			return (0);
 		count++;
-		token = strtok(NULL, ",");
+		token = ft_strtok(NULL, ",");
 	}
 	return (count == 3);
 }

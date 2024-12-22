@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
+/*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 12:12:50 by lorenzogaud       #+#    #+#             */
-/*   Updated: 2024/12/22 14:28:54 by lgaudino         ###   ########.fr       */
+/*   Updated: 2024/12/22 14:52:55 by lottavi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -224,6 +224,7 @@ void			free_map(t_map *map);
 char			*skip_spaces_and_tabs(char *str);
 char			*get_next_line(int fd);
 char			*ft_strcpy(char *dest, const char *src);
+char			*ft_strtok(char *str, const char *delimiters);
 
 //utils2
 size_t			ft_strcspn(const char *s, const char *reject);

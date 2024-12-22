@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   syntax.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
+/*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 21:09:20 by lottavi           #+#    #+#             */
-/*   Updated: 2024/12/22 14:27:01 by lgaudino         ###   ########.fr       */
+/*   Updated: 2024/12/22 14:54:36 by lottavi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,15 +58,15 @@ int	check_directives_count(t_directives *directives)
 
 int	validate_line(const char *line, t_directives *directives)
 {
-	if (strncmp(line, "NO ", 3) == 0)
+	if (ft_strncmp(line, "NO ", 3) == 0)
 		directives->found_no++;
-	else if (strncmp(line, "SO ", 3) == 0)
+	else if (ft_strncmp(line, "SO ", 3) == 0)
 		directives->found_so++;
-	else if (strncmp(line, "WE ", 3) == 0)
+	else if (ft_strncmp(line, "WE ", 3) == 0)
 		directives->found_we++;
-	else if (strncmp(line, "EA ", 3) == 0)
+	else if (ft_strncmp(line, "EA ", 3) == 0)
 		directives->found_ea++;
-	else if (strncmp(line, "F ", 2) == 0)
+	else if (ft_strncmp(line, "F ", 2) == 0)
 	{
 		if (!validate_floor_color(line + 2, directives))
 			return (0);

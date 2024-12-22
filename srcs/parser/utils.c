@@ -3,14 +3,43 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
+/*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 11:14:35 by lottavi           #+#    #+#             */
-/*   Updated: 2024/12/22 14:39:13 by lgaudino         ###   ########.fr       */
+/*   Updated: 2024/12/22 14:52:40 by lottavi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3D.h"
+
+char	*ft_strtok(char *str, const char *delimiters)
+{
+	static char	*next;
+	char		*token_start;
+
+	if (str == NULL)
+		str = next;
+	if (str == NULL)
+		return (NULL);
+	while (*str && ft_strchr(delimiters, *str))
+		str++;
+	if (*str == '\0')
+	{
+		next = NULL;
+		return (NULL);
+	}
+	token_start = str;
+	while (*str && !ft_strchr(delimiters, *str))
+		str++;
+	if (*str)
+	{
+		*str = '\0';
+		next = str + 1;
+	}
+	else
+		next = NULL;
+	return (token_start);
+}
 
 int	skip_texture_info(int fd)
 {
