@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map2.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
+/*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 19:21:44 by lottavi           #+#    #+#             */
-/*   Updated: 2024/12/21 22:51:31 by lgaudino         ###   ########.fr       */
+/*   Updated: 2024/12/22 13:58:33 by lottavi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,6 @@ int	get_map_width(const char *map_path)
 	fd = open(map_path, O_RDONLY);
 	if (fd < 0)
 		return (perror("Error\n opening map file"), (-1));
-
 	line = skip_texture(fd);
 	width = 0;
 	while (line)

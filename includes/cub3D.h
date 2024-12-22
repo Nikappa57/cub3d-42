@@ -6,7 +6,7 @@
 /*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 12:12:50 by lorenzogaud       #+#    #+#             */
-/*   Updated: 2024/12/22 13:42:46 by lottavi          ###   ########.fr       */
+/*   Updated: 2024/12/22 14:06:18 by lottavi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -191,6 +191,16 @@ bool			is_player_position_valid(t_state *state, t_map *map);
 //syntax
 int				check_cub_file_syntax(const char *file_path);
 int				validate_cub_file(const char *filename);
+int				validate_line(const char *line, Directives *directives);
+int				validate_map_line(const char *line);
+int				has_extra_characters(const char *line);
+
+//syntax_utils
+int				validate_ceiling_color(const char *line, Directives *directives);
+int				validate_floor_color(const char *line, Directives *directives);
+int				is_valid_color(const char *str);
+int				is_valid_number(const char *str);
+
 //map
 char			*skip_texture(int fd);
 int				init_map(t_map *map, const char *map_path);

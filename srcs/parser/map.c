@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
+/*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 11:10:37 by lottavi           #+#    #+#             */
-/*   Updated: 2024/12/21 22:49:58 by lgaudino         ###   ########.fr       */
+/*   Updated: 2024/12/22 13:59:11 by lottavi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ int	init_map(t_map *map, const char *map_path)
 
 	if (init_map_dimensions(map, map_path) == -1)
 		return (-1);
-	printf("\033[0;32m[DEBUG] Map dimensions initialized w:%d, h:%d\033[0m\n", map->w, map->h);
+	printf("[DEBUG] Map initialized w:%d, h:%d\n", map->w, map->h);
 	fd = open(map_path, O_RDONLY);
 	if (fd < 0)
 		return (perror("Error\n opening map file"), -1);
