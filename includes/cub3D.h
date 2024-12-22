@@ -6,7 +6,7 @@
 /*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 12:12:50 by lorenzogaud       #+#    #+#             */
-/*   Updated: 2024/12/22 00:13:19 by lottavi          ###   ########.fr       */
+/*   Updated: 2024/12/22 13:42:46 by lottavi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,10 @@
 
 #ifndef BUFFER_SIZE
 #define BUFFER_SIZE 1024
+#define MAX_LINE_LENGTH 1024
+
 #endif
+
 
 /* Constants */
 
@@ -52,6 +55,16 @@
 /* data structure */
 
 // direction
+
+typedef struct s_directives
+{
+	int	found_no;
+	int	found_so;
+	int	found_we;
+	int	found_ea;
+	int	found_f;
+	int	found_c;
+}	Directives;
 
 typedef enum e_dir
 {
