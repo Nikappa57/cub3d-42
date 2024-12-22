@@ -6,7 +6,7 @@
 /*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 21:09:20 by lottavi           #+#    #+#             */
-/*   Updated: 2024/12/22 13:52:13 by lottavi          ###   ########.fr       */
+/*   Updated: 2024/12/22 13:56:46 by lottavi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,7 +153,8 @@ int	validate_cub_file(const char *filename)
 		return 0;
 	}
 	Directives directives = {0, 0, 0, 0, 0, 0};
-	while ((line = get_next_line(fd)) != NULL)
+	line = get_next_line(fd);
+	while (line != NULL)
 	{
 		line[strcspn(line, "\n")] = '\0';
 		if (!validate_line(line, &directives))
@@ -163,6 +164,7 @@ int	validate_cub_file(const char *filename)
 			return (0);
 		}
 		free(line);
+		line = get_next_line(fd);
 	}
 	close(fd);
 	return (check_directives_count(&directives));
