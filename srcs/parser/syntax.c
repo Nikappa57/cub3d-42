@@ -6,7 +6,7 @@
 /*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 21:09:20 by lottavi           #+#    #+#             */
-/*   Updated: 2024/12/22 13:47:02 by lottavi          ###   ########.fr       */
+/*   Updated: 2024/12/22 13:48:35 by lottavi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,42 +66,51 @@ int	has_extra_characters(const char *line)
 	return (0);
 }
 
-int	validate_floor_color(const char *line, Directives *directives) {
-	if (has_extra_characters(line) || !is_valid_color(line)) {
+int	validate_floor_color(const char *line, Directives *directives)
+{
+	if (has_extra_characters(line) || !is_valid_color(line))
+	{
 		printf("Errore: colore del pavimento (F) non valido o contiene caratteri extra.\n");
-		return 0;
+		return (0);
 	}
 	directives->found_f++;
-	return 1;
+	return (1);
 }
 
-int	validate_ceiling_color(const char *line, Directives *directives) {
-	if (has_extra_characters(line) || !is_valid_color(line)) {
+int	validate_ceiling_color(const char *line, Directives *directives)
+{
+	if (has_extra_characters(line) || !is_valid_color(line))
+	{
 		printf("Errore: colore del soffitto (C) non valido o contiene caratteri extra.\n");
-		return 0;
+		return (0);
 	}
 	directives->found_c++;
-	return 1;
+	return (1);
 }
 
-int	validate_map_line(const char *line) {
-	if (line[0] != '1' && line[0] != '0' && line[0] != ' ' && line[0] != 'N' && line[0] != 'S' && line[0] != 'W' && line[0] != 'E') {
+int	validate_map_line(const char *line)
+
+{
+	if (line[0] != '1' && line[0] != '0' && line[0] != ' ' && line[0] != 'N' && line[0] != 'S' && line[0] != 'W' && line[0] != 'E')
+	{
 		printf("Errore: linea non riconosciuta o fuori ordine: '%s'\n", line);
-		return 0;
+		return (0);
 	}
-	return 1;
+	return (1);
 }
 
-int	check_directives_count(Directives *directives) {
+int	check_directives_count(Directives *directives)
+{
 	printf("NO: %d\nSO: %d\nWE: %d\nEA: %d\nF: %d\nC: %d\n",
 		directives->found_no, directives->found_so, directives->found_we,
 		directives->found_ea, directives->found_f, directives->found_c);
 	if (directives->found_no != 1 || directives->found_so != 1 || directives->found_we != 1 ||
-		directives->found_ea != 1 || directives->found_f != 1 || directives->found_c != 1) {
+			directives->found_ea != 1 || directives->found_f != 1 || directives->found_c != 1)
+	{
 		printf("Errore: mancano alcune direttive obbligatorie o sono duplicate.\n");
-		return 0;
+		return (0);
 	}
-	return 1;
+	return (1);
 }
 
 int	validate_line(const char *line, Directives *directives) {
