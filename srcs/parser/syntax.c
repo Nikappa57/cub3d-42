@@ -6,7 +6,7 @@
 /*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 21:09:20 by lottavi           #+#    #+#             */
-/*   Updated: 2024/12/22 15:28:17 by lgaudino         ###   ########.fr       */
+/*   Updated: 2024/12/22 15:49:13 by lgaudino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	has_extra_characters(const char *line)
 	i = 0;
 	while (line[i])
 	{
-		if (!isdigit(line[i]) && line[i] != ','
+		if (!ft_isdigit(line[i]) && line[i] != ','
 			&& line[i] != ' ' && line[i] != '\n' && line[i] != '\0')
 		{
 			return (1);

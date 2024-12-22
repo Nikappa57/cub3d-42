@@ -6,7 +6,7 @@
 /*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 19:34:52 by lottavi           #+#    #+#             */
-/*   Updated: 2024/12/21 22:47:54 by lgaudino         ###   ########.fr       */
+/*   Updated: 2024/12/22 15:54:18 by lgaudino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ char	*allocate_and_copy(const char *src)
 
 	if (!src)
 		return (NULL);
-	dest = (char *)malloc(strlen(src) + 1);
+	dest = (char *)malloc(ft_strlen(src) + 1);
 	if (dest)
 	{
 		ft_strcpy(dest, src);
