@@ -6,7 +6,7 @@
 /*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 21:09:20 by lottavi           #+#    #+#             */
-/*   Updated: 2024/12/22 14:11:54 by lottavi          ###   ########.fr       */
+/*   Updated: 2024/12/22 14:15:46 by lottavi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,17 +86,14 @@ int	validate_line(const char *line, t_directives *directives)
 
 int	validate_cub_file(const char *filename)
 {
-	int			fd;
-	char		*line;
+	int				fd;
+	char			*line;
 	t_directives	directives;
 
 	directives = (t_directives){0, 0, 0, 0, 0, 0};
 	fd = open(filename, O_RDONLY);
 	if (fd < 0)
-	{
-		perror("Errore nell'apertura del file");
-		return (0);
-	}
+		return (perror("Errore nell'apertura del file"), (0));
 	line = get_next_line(fd);
 	while (line != NULL)
 	{
