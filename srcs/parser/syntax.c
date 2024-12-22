@@ -6,7 +6,7 @@
 /*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 21:09:20 by lottavi           #+#    #+#             */
-/*   Updated: 2024/12/22 13:48:35 by lottavi          ###   ########.fr       */
+/*   Updated: 2024/12/22 13:52:13 by lottavi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,47 +113,57 @@ int	check_directives_count(Directives *directives)
 	return (1);
 }
 
-int	validate_line(const char *line, Directives *directives) {
-	if (strncmp(line, "NO ", 3) == 0) {
+int	validate_line(const char *line, Directives *directives)
+{
+	if (strncmp(line, "NO ", 3) == 0)
 		directives->found_no++;
-	} else if (strncmp(line, "SO ", 3) == 0) {
+	else if (strncmp(line, "SO ", 3) == 0)
 		directives->found_so++;
-	} else if (strncmp(line, "WE ", 3) == 0) {
+	else if (strncmp(line, "WE ", 3) == 0)
 		directives->found_we++;
-	} else if (strncmp(line, "EA ", 3) == 0) {
+	else if (strncmp(line, "EA ", 3) == 0)
 		directives->found_ea++;
-	} else if (strncmp(line, "F ", 2) == 0) {
-		if (!validate_floor_color(line + 2, directives)) return 0;
-	} else if (strncmp(line, "C ", 2) == 0) {
-		if (!validate_ceiling_color(line + 2, directives)) return 0;
-	} else if (*line == '\0' || *line == '\n') {
-		return 1;
-	} else {
-		if (!validate_map_line(line)) return 0;
+	else if (strncmp(line, "F ", 2) == 0)
+	{
+		if (!validate_floor_color(line + 2, directives))
+			return (0);
 	}
-	return 1;
+	else if (strncmp(line, "C ", 2) == 0)
+	{
+		if (!validate_ceiling_color(line + 2, directives))
+			return (0);
+	}
+	else if (*line == '\0' || *line == '\n')
+		return (1);
+	else
+		if (!validate_map_line(line))
+		return (0);
+	return (1);
 }
 
-int	validate_cub_file(const char *filename) {
-	int fd = open(filename, O_RDONLY);
-	if (fd < 0) {
+int	validate_cub_file(const char *filename)
+{
+	int		fd;
+	char	*line;
+
+	fd = open(filename, O_RDONLY);
+	if (fd < 0)
+	{
 		perror("Errore nell'apertura del file");
 		return 0;
 	}
-
-	char *line;
 	Directives directives = {0, 0, 0, 0, 0, 0};
-
-	while ((line = get_next_line(fd)) != NULL) {
+	while ((line = get_next_line(fd)) != NULL)
+	{
 		line[strcspn(line, "\n")] = '\0';
-		if (!validate_line(line, &directives)) {
+		if (!validate_line(line, &directives))
+		{
 			free(line);
 			close(fd);
-			return 0;
+			return (0);
 		}
 		free(line);
 	}
-
 	close(fd);
-	return check_directives_count(&directives);
+	return (check_directives_count(&directives));
 }
