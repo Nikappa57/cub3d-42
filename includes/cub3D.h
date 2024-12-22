@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3D.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 12:12:50 by lorenzogaud       #+#    #+#             */
-/*   Updated: 2024/12/22 14:52:55 by lottavi          ###   ########.fr       */
+/*   Updated: 2024/12/22 15:18:53 by lgaudino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,8 @@ typedef struct s_directives
 	int	found_ea;
 	int	found_f;
 	int	found_c;
+	int	is_map;
+	int	dir_count;
 }	t_directives;
 
 typedef enum e_dir
@@ -190,7 +192,7 @@ bool			is_player_position_valid(t_state *state, t_map *map);
 int				check_cub_file_syntax(const char *file_path);
 int				validate_cub_file(const char *filename);
 int				validate_line(const char *line, t_directives *directives);
-int				validate_map_line(const char *line);
+int				validate_map_line(const char *line, t_directives *directives);
 int				has_extra_characters(const char *line);
 
 //syntax_utils
