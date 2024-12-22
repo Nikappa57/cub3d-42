@@ -6,44 +6,64 @@
 /*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 21:09:20 by lottavi           #+#    #+#             */
-/*   Updated: 2024/12/22 13:43:43 by lottavi          ###   ########.fr       */
+/*   Updated: 2024/12/22 13:47:02 by lottavi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3D.h"
 
-int	is_valid_number(const char *str) {
-	if (!str || *str == '\0') return 0;
-	for (int i = 0; str[i]; i++) {
-		if (!isdigit(str[i])) return 0;
+int	is_valid_number(const char *str)
+{
+	int	i;
+
+	if (!str || *str == '\0')
+		return (0);
+	i = 0;
+	while (str[i]) {
+		if (!isdigit(str[i]))
+			return (0);
+		i++;
 	}
-	return 1;
+	return (1);
 }
 
-int	is_valid_color(const char *str) {
-	char *token;
-	char buffer[MAX_LINE_LENGTH];
-	strncpy(buffer, str, MAX_LINE_LENGTH);
+int	is_valid_color(const char *str)
+{
+	char	*token;
+	char	buffer[MAX_LINE_LENGTH];
+	int		count;
+	int		value;
 
-	int count = 0;
+	strncpy(buffer, str, MAX_LINE_LENGTH);
+	count = 0;
 	token = strtok(buffer, ",");
-	while (token) {
-		if (!is_valid_number(token)) return 0;
-		int value = atoi(token);
-		if (value < 0 || value > 255) return 0;
+	while (token)
+	{
+		if (!is_valid_number(token))
+			return (0);
+		value = ft_atoi(token);
+		if (value < 0 || value > 255)
+			return (0);
 		count++;
 		token = strtok(NULL, ",");
 	}
-	return count == 3;
+	return (count == 3);
 }
 
-int	has_extra_characters(const char *line) {
-	for (int i = 0; line[i]; i++) {
-		if (!isdigit(line[i]) && line[i] != ',' && line[i] != ' ' && line[i] != '\n' && line[i] != '\0') {
-			return 1;
+int	has_extra_characters(const char *line)
+{
+	int	i;
+
+	i = 0;
+	while (line[i])
+	{
+		if (!isdigit(line[i]) && line[i] != ',' && line[i] != ' ' && line[i] != '\n' && line[i] != '\0')
+		{
+			return (1);
 		}
+		i++;
 	}
-	return 0;
+	return (0);
 }
 
 int	validate_floor_color(const char *line, Directives *directives) {
