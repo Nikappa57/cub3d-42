@@ -6,16 +6,16 @@
 #    By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/28 17:04:44 by lgaudino          #+#    #+#              #
-#    Updated: 2024/12/22 15:29:58 by lgaudino         ###   ########.fr        #
+#    Updated: 2024/12/22 15:44:16 by lgaudino         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME 				=	cub3D
 
-INCLUDES			=	-I includes -I $(LIBFT_DIR)/includes/ -I mlx_linux/
+INCLUDES			=	-I includes -I $(LIBFT_DIR)includes/ -I mlx_linux/
 
 LIBFT				=	$(LIBFT_DIR)libft.a
-LIBFT_DIR			=	libft
+LIBFT_DIR			=	libft/
 MLX_DIR				=	mlx_linux/
 LIB_FLAGS			=	-L $(LIBFT_DIR) -lft -L $(MLX_DIR) -lmlx_Linux -L /usr/lib -lXext -lX11 -lm -lz
 
