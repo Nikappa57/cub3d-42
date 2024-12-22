@@ -6,7 +6,7 @@
 /*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/22 14:03:17 by lottavi           #+#    #+#             */
-/*   Updated: 2024/12/22 14:53:39 by lottavi          ###   ########.fr       */
+/*   Updated: 2024/12/22 15:00:09 by lottavi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ int	validate_floor_color(const char *line, t_directives *directives)
 {
 	if (has_extra_characters(line) || !is_valid_color(line))
 	{
-		printf("Errore: colore del pavimento (F) non valido\n");
+		printf("Error\n F color invalid!\n");
 		return (0);
 	}
 	directives->found_f++;
@@ -84,7 +84,7 @@ int	validate_ceiling_color(const char *line, t_directives *directives)
 {
 	if (has_extra_characters(line) || !is_valid_color(line))
 	{
-		printf("Errore: colore del soffitto (C) non valido\n");
+		printf("Error\n C color invalid\n");
 		return (0);
 	}
 	directives->found_c++;

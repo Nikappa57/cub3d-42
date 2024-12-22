@@ -6,7 +6,7 @@
 /*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 21:09:20 by lottavi           #+#    #+#             */
-/*   Updated: 2024/12/22 14:54:36 by lottavi          ###   ########.fr       */
+/*   Updated: 2024/12/22 15:00:17 by lottavi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int	validate_map_line(const char *line)
 	if (line[0] != '1' && line[0] != '0' && line[0] != ' '
 		&& line[0] != 'N' && line[0] != 'S' && line[0] != 'W' && line[0] != 'E')
 	{
-		printf("Errore: linea non riconosciuta o fuori ordine: '%s'\n", line);
+		printf("Error:\nWrong line: '%s'\n", line);
 		return (0);
 	}
 	return (1);
@@ -50,7 +50,7 @@ int	check_directives_count(t_directives *directives)
 		|| directives->found_we != 1 || directives->found_ea != 1
 		|| directives->found_f != 1 || directives->found_c != 1)
 	{
-		printf("Errore: mancano alcune direttive obbligatorie.\n");
+		printf("Error\nDirectives error!\n");
 		return (0);
 	}
 	return (1);
@@ -93,7 +93,7 @@ int	validate_cub_file(const char *filename)
 	directives = (t_directives){0, 0, 0, 0, 0, 0};
 	fd = open(filename, O_RDONLY);
 	if (fd < 0)
-		return (perror("Errore nell'apertura del file"), (0));
+		return (perror("Error\nCannot open file!"), (0));
 	line = get_next_line(fd);
 	while (line != NULL)
 	{
