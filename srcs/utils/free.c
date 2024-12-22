@@ -1,27 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error.c                                            :+:      :+:    :+:   */
+/*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/28 20:24:01 by lgaudino          #+#    #+#             */
-/*   Updated: 2024/12/22 00:27:44 by lottavi          ###   ########.fr       */
+/*   Created: 2024/12/21 22:13:00 by lgaudino          #+#    #+#             */
+/*   Updated: 2024/12/22 14:02:35 by lottavi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3D.h"
 
-void	exit_error(t_cub3d *cube, char *message)
+void	free_ptr(void *ptr)
 {
-	ft_putstr_fd("Error\n", 2);
-	ft_putstr_fd(message, 2);
-	ft_putchar_fd('\n', 2);
-	clear_exit(cube, 1);
+	if (ptr)
+		free(ptr);
 }
 
-void	exit_perror(t_cub3d *cube, char *message)
+void	free_str_arr(char **ptr)
 {
-	perror(message);
-	clear_exit(cube, 1);
+	char	**tmp;
+
+	tmp = ptr;
+	if (ptr)
+	{
+		while (*ptr)
+		{
+			free(*ptr);
+			ptr++;
+		}
+		free(tmp);
+	}
 }

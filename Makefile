@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+         #
+#    By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/11/28 17:04:44 by lgaudino          #+#    #+#              #
-#    Updated: 2024/12/20 12:15:17 by lottavi          ###   ########.fr        #
+#    Updated: 2024/12/22 15:29:58 by lgaudino         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,12 +15,12 @@ NAME 				=	cub3D
 INCLUDES			=	-I includes -I $(LIBFT_DIR)/includes/ -I mlx_linux/
 
 LIBFT				=	$(LIBFT_DIR)libft.a
-LIBFT_DIR			=	libft/
+LIBFT_DIR			=	libft
 MLX_DIR				=	mlx_linux/
 LIB_FLAGS			=	-L $(LIBFT_DIR) -lft -L $(MLX_DIR) -lmlx_Linux -L /usr/lib -lXext -lX11 -lm -lz
 
 CC					=	gcc
-CFLAGS				=	-Wall -Wextra -Werror -g
+CFLAGS				=	-Wall -Wextra -Werror -gdwarf-4
 RM					=	/bin/rm -f
 NORM				=	norminette
 
@@ -54,6 +54,7 @@ clean:
 					make clean -C $(LIBFT_DIR)
 					make clean -C $(MLX_DIR)
 
+bonus:				all
 
 fclean:				clean
 					$(RM) $(NAME)

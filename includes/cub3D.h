@@ -6,7 +6,7 @@
 /*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 12:12:50 by lorenzogaud       #+#    #+#             */
-/*   Updated: 2024/12/20 16:25:45 by lgaudino         ###   ########.fr       */
+/*   Updated: 2024/12/22 15:18:53 by lgaudino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,14 +27,20 @@
 # include <fcntl.h>
 # include <string.h>
 # include <ctype.h>
+# include <errno.h>
 
 /* macro */
 # ifndef M_PI
 #  define M_PI 3.14159265358979323846
 # endif
 
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 1024
+# endif
+
 /* Constants */
 
+# define MAX_LINE_LENGTH 1024
 # define WIN_WIDTH			800
 # define WIN_HEIGHT			600
 # define WIN_TITLE			"cub3D"
@@ -47,6 +53,18 @@
 /* data structure */
 
 // direction
+
+typedef struct s_directives
+{
+	int	found_no;
+	int	found_so;
+	int	found_we;
+	int	found_ea;
+	int	found_f;
+	int	found_c;
+	int	is_map;
+	int	dir_count;
+}	t_directives;
 
 typedef enum e_dir
 {
@@ -111,6 +129,7 @@ typedef struct s_state
 	t_dir		move_x;
 	t_dir		move_y;
 	t_rot		rot;
+	t_map		*map;
 }				t_state;
 
 typedef struct s_dda
@@ -161,25 +180,58 @@ int				load_texture(t_cub3d *cube, t_img *t, const char *path);
 int				init_textures(t_cub3d *cube, const char *map_path);
 int				read_config(const char *map_path, t_config *config);
 int				parse_color(const char *line);
+void			free_textures(t_cub3d *cube);
+void			parse_config_line(char **split_line, t_config *config, int *i);
+char			*allocate_and_copy(const char *src);
+int				open_config_file(const char *file_path);
+int				read_config(const char *file_path, t_config *config);
+void			parse_config_line(char **split_line, t_config *config, int *i);
+bool			is_player_position_valid(t_state *state, t_map *map);
+
+//syntax
+int				check_cub_file_syntax(const char *file_path);
+int				validate_cub_file(const char *filename);
+int				validate_line(const char *line, t_directives *directives);
+int				validate_map_line(const char *line, t_directives *directives);
+int				has_extra_characters(const char *line);
+
+//syntax_utils
+int				validate_ceiling_color(const char *line,
+					t_directives *directives);
+int				validate_floor_color(const char *line,
+					t_directives *directives);
+int				is_valid_color(const char *str);
+int				is_valid_number(const char *str);
 
 //map
+char			*skip_texture(int fd);
 int				init_map(t_map *map, const char *map_path);
+int				init_map_dimensions(t_map *map, const char *map_path);
 
 //player
-void			parse_player(t_state *state, const char *map_path);
-void			parse_line(t_state *state, const char *line, int row,
-					int *player_count);
+int				parse_player(t_state *state, const char *map_path);
+void			parse_line(t_state *state, const char *line, int row);
 void			set_position_and_direction(t_state *state, char direction_char,
 					int col, int row);
 bool			is_map_enclosed(t_state *state, t_map *map);
+int				init_state(t_state *state, const char *map_path);
+bool			**allocate_visited(int width, int height);
+void			free_visited(bool **visited, int height);
 
 //utils
-void			*ft_calloc(size_t count, size_t size);
 bool			flood_fill(t_map *map, int x, int y, bool **visited);
-void			skip_texture_info(FILE *file);
+int				skip_texture_info(int fd);
 void			skip_spaces(const int *line, int *len);
 void			free_map(t_map *map);
 char			*skip_spaces_and_tabs(char *str);
+char			*get_next_line(int fd);
+char			*ft_strcpy(char *dest, const char *src);
+char			*ft_strtok(char *str, const char *delimiters);
+
+//utils2
+size_t			ft_strcspn(const char *s, const char *reject);
+int				ft_strcmp(char *s1, char *s2);
+ssize_t			fd_getline(char **line, size_t *len, int fd);
 
 /* exit */
 
@@ -207,7 +259,6 @@ int				cube_loop(t_cub3d *cube);
 void			dda_distance(t_cub3d *cube, int x);
 int				window_bound(int p, int max);
 bool			is_wall(t_map map, t_point p);
-int				min(int a, int b);
 void			vector_to_screen(t_vector v, t_point *r, int size);
 t_color			get_color(t_dda dda);
 t_dir			get_dir(t_vector dir, int side);
@@ -239,5 +290,6 @@ double			v_distance_pow2(t_vector v1, t_vector v2);
 
 void			draw_line(t_img *img, t_point start, t_point end,
 					t_color color);
-
+void			free_ptr(void *ptr);
+void			free_str_arr(char **ptr);
 #endif
