@@ -6,7 +6,7 @@
 /*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 21:09:20 by lottavi           #+#    #+#             */
-/*   Updated: 2024/12/22 14:07:25 by lottavi          ###   ########.fr       */
+/*   Updated: 2024/12/22 14:11:54 by lottavi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int	validate_map_line(const char *line)
 	return (1);
 }
 
-int	check_directives_count(Directives *directives)
+int	check_directives_count(t_directives *directives)
 {
 	printf("NO: %d\nSO: %d\nWE: %d\nEA: %d\nF: %d\nC: %d\n",
 		directives->found_no, directives->found_so, directives->found_we,
@@ -56,7 +56,7 @@ int	check_directives_count(Directives *directives)
 	return (1);
 }
 
-int	validate_line(const char *line, Directives *directives)
+int	validate_line(const char *line, t_directives *directives)
 {
 	if (strncmp(line, "NO ", 3) == 0)
 		directives->found_no++;
@@ -88,9 +88,9 @@ int	validate_cub_file(const char *filename)
 {
 	int			fd;
 	char		*line;
-	Directives	directives;
+	t_directives	directives;
 
-	directives = (Directives){0, 0, 0, 0, 0, 0};
+	directives = (t_directives){0, 0, 0, 0, 0, 0};
 	fd = open(filename, O_RDONLY);
 	if (fd < 0)
 	{

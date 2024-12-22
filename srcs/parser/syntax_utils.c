@@ -6,7 +6,7 @@
 /*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/22 14:03:17 by lottavi           #+#    #+#             */
-/*   Updated: 2024/12/22 14:04:04 by lottavi          ###   ########.fr       */
+/*   Updated: 2024/12/22 14:11:27 by lottavi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int	is_valid_color(const char *str)
 	return (count == 3);
 }
 
-int	validate_floor_color(const char *line, Directives *directives)
+int	validate_floor_color(const char *line, t_directives *directives)
 {
 	if (has_extra_characters(line) || !is_valid_color(line))
 	{
@@ -62,7 +62,7 @@ int	validate_floor_color(const char *line, Directives *directives)
 	return (1);
 }
 
-int	validate_ceiling_color(const char *line, Directives *directives)
+int	validate_ceiling_color(const char *line, t_directives *directives)
 {
 	if (has_extra_characters(line) || !is_valid_color(line))
 	{

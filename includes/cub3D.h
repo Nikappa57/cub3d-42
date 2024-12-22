@@ -6,7 +6,7 @@
 /*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/23 12:12:50 by lorenzogaud       #+#    #+#             */
-/*   Updated: 2024/12/22 14:06:18 by lottavi          ###   ########.fr       */
+/*   Updated: 2024/12/22 14:12:16 by lottavi          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,13 +36,11 @@
 
 #ifndef BUFFER_SIZE
 #define BUFFER_SIZE 1024
-#define MAX_LINE_LENGTH 1024
-
 #endif
-
 
 /* Constants */
 
+#define MAX_LINE_LENGTH 1024
 # define WIN_WIDTH			800
 # define WIN_HEIGHT			600
 # define WIN_TITLE			"cub3D"
@@ -64,7 +62,7 @@ typedef struct s_directives
 	int	found_ea;
 	int	found_f;
 	int	found_c;
-}	Directives;
+}	t_directives;
 
 typedef enum e_dir
 {
@@ -191,13 +189,13 @@ bool			is_player_position_valid(t_state *state, t_map *map);
 //syntax
 int				check_cub_file_syntax(const char *file_path);
 int				validate_cub_file(const char *filename);
-int				validate_line(const char *line, Directives *directives);
+int				validate_line(const char *line, t_directives *directives);
 int				validate_map_line(const char *line);
 int				has_extra_characters(const char *line);
 
 //syntax_utils
-int				validate_ceiling_color(const char *line, Directives *directives);
-int				validate_floor_color(const char *line, Directives *directives);
+int				validate_ceiling_color(const char *line, t_directives *directives);
+int				validate_floor_color(const char *line, t_directives *directives);
 int				is_valid_color(const char *str);
 int				is_valid_number(const char *str);
 
