@@ -6,7 +6,7 @@
 /*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 14:29:23 by lgaudino          #+#    #+#             */
-/*   Updated: 2024/12/20 14:37:42 by lgaudino         ###   ########.fr       */
+/*   Updated: 2024/12/22 14:37:39 by lgaudino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ bool	is_wall(t_map map, t_point p)
 			|| (p.y < 0)
 			|| (p.x >= map.w)
 			|| (p.y >= map.h))
-		|| (map.m[p.y][p.x] != 0));
+		|| (map.m[p.y][p.x] == 1));
 }
 
 /*

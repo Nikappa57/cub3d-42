@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lottavi <lottavi@student.42.fr>            +#+  +:+       +#+        */
+/*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 11:10:37 by lottavi           #+#    #+#             */
-/*   Updated: 2024/12/22 13:59:11 by lottavi          ###   ########.fr       */
+/*   Updated: 2024/12/22 14:38:25 by lgaudino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,8 @@ void	process_map(t_map *map, char *line, int row, int width)
 			{
 				if (line[i] == '1')
 					map->m[row][col++] = 1;
+				else if (line[i] == ' ')
+					map->m[row][col++] = -1;
 				else
 					map->m[row][col++] = 0;
 			}

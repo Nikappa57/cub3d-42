@@ -6,7 +6,7 @@
 /*   By: lgaudino <lgaudino@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/20 11:14:35 by lottavi           #+#    #+#             */
-/*   Updated: 2024/12/22 14:30:38 by lgaudino         ###   ########.fr       */
+/*   Updated: 2024/12/22 14:39:13 by lgaudino         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int	skip_texture_info(int fd)
 
 bool	flood_fill(t_map *map, int x, int y, bool **visited)
 {
-	if (x < 0 || y < 0 || x >= map->w || y >= map->h)
+	if (x < 0 || y < 0 || x >= map->w || y >= map->h || map->m[y][x] == -1)
 	{
 		printf("\033[0;31[DEBUG FF]cehck: (%d, %d)\033[0m\n", map->w, map->h);
 		printf("\033[0;31[DEBUG FF]Out of bounds: (%d, %d)\033[0m\n", x, y);
